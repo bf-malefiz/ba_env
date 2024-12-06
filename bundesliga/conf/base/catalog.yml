@@ -1,0 +1,12 @@
+
+
+
+
+D1_24-25:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/D1_24-25.csv
+
+
+preprocessed_league_data:
+  type: pandas.ParquetDataset
+  filepath: data/03_primary/preprocessed_league_data.pq
