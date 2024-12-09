@@ -1,19 +1,22 @@
-import pandas as pd
-import numpy as np
 from collections import OrderedDict
 
-GOALS_HOME='FTHG'
-GOALS_AWAY='FTAG'
+import numpy as np
+import pandas as pd
+
+GOALS_HOME = "FTHG"
+GOALS_AWAY = "FTAG"
+
 
 def _get_teams(df: pd.DataFrame) -> np.array:
-    t1 = df.HomeTeam.unique().astype('U')
-    t2 = df.AwayTeam.unique().astype('U')
-    teams = np.unique(np.concatenate((t1,t2)))
+    t1 = df.HomeTeam.unique().astype("U")
+    t2 = df.AwayTeam.unique().astype("U")
+    teams = np.unique(np.concatenate((t1, t2)))
 
     assert len(teams) == 18
-    #nb_teams = len(teams)
+    # nb_teams = len(teams)
 
     return teams
+
 
 def _build_team_lexicon(teams: np.array) -> OrderedDict:
     team_indices = OrderedDict()
@@ -28,14 +31,14 @@ def _get_goal_results(df: pd.DataFrame, team_indices: np.array):
     for index, r in df.iterrows():
         home_team = r.HomeTeam
         away_team = r.AwayTeam
-        goals=r[GOALS_HOME]
+        goals = r[GOALS_HOME]
         home_goals.append((team_indices[home_team], team_indices[away_team], goals))
     for index, r in df.iterrows():
         home_team = r.HomeTeam
         away_team = r.AwayTeam
-        goals=r[GOALS_AWAY]
+        goals = r[GOALS_AWAY]
         away_goals.append((team_indices[home_team], team_indices[away_team], goals))
-    
+
     return home_goals, away_goals
 
 
@@ -44,8 +47,9 @@ def _vectorized_data(home_goals_, away_goals_):
     away_id = np.array([hg[1] for hg in home_goals_])
     home_goals = np.array([hg[2] for hg in home_goals_])
     away_goals = np.array([ag[2] for ag in away_goals_])
-    toto = np.where(home_goals == away_goals, 0,
-                        np.where(home_goals > away_goals, 1, 2))
+    toto = np.where(
+        home_goals == away_goals, 0, np.where(home_goals > away_goals, 1, 2)
+    )
     return home_id, away_id, home_goals, away_goals, toto
 
 
