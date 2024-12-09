@@ -6,7 +6,15 @@ D1_24-25:
   type: pandas.CSVDataset
   filepath: data/01_raw/D1_24-25.csv
 
+team_indices:
+  type: pandas.ParquetDataset
+  filepath: data/03_primary/team_indices.pq
 
 preprocessed_league_data:
   type: pandas.ParquetDataset
   filepath: data/03_primary/preprocessed_league_data.pq
+
+
+model_input_table:
+  type: pandas.ParquetDataset
+  filepath: data/05_model_input/model_input_table.pq
