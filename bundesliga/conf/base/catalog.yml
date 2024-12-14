@@ -18,3 +18,12 @@ preprocessed_league_data:
 model_input_table:
   type: pandas.ParquetDataset
   filepath: data/05_model_input/model_input_table.pq
+
+
+test_netcdf:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/06_models/test_netcdf.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
