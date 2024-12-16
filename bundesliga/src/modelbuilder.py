@@ -1,11 +1,9 @@
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Union
 
 import arviz as az
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pymc as pm
-import xarray as xr
 from numpy.random import RandomState
 from pymc_experimental.model_builder import ModelBuilder
 
@@ -18,9 +16,11 @@ az.style.use("arviz-darkgrid")
 
 
 class FootballModel(ModelBuilder):
-    # def __init__(self, model_config, model_coords):
-    #     self.model_config = model_config
-    #     self.model_coords = model_coords
+    # def __init__(self, X):
+    #     self.X = X
+    #     self.y = None
+    #     self.model_config = None
+    #     self.model_coords = None
     #     self.model = None
 
     # Give the model a name
@@ -49,61 +49,65 @@ class FootballModel(ModelBuilder):
         kwargs : dict
             Additional keyword arguments that may be used for model configuration.
         """
-        # Check the type of X and y and adjust access accordingly
-        X_values = X[["home_id", "away_id"]].values
-        goals = goals.values if isinstance(goals, pd.Series) else goals
 
-        self._generate_and_preprocess_model_data(X_values, goals)
+        self._generate_and_preprocess_model_data(X, goals)
 
         with pm.Model(coords=self.model_coords) as self.model:
             # Create mutable data containers
-            x_data = pm.Data("x_data", X_values)
-            home_goals_data = pm.Data(
-                "home_goals_data", goals[:, 0]
-            )  # check tuple unpacking
-            away_goals_data = pm.Data("away_goals_data", goals[:, 1])
+            team_idx = pm.Data(
+                "team_idx",
+                self.X[["home_id", "away_id"]].values,
+                dims=("match", "field"),
+            )
+            goals = pm.Data(
+                "goals",
+                self.y[["home_goals", "away_goals"]],
+                dims=("match", "field"),
+            )
 
             # prior parameters
-            shape_priors = self.model_config.get("shape_priors", 1)
-            # offence_mu_prior = avg_goals/2    3/2
-            offence_mu_prior = self.model_config.get(
-                "offence_mu_prior", average_goals / 2
-            )
-            offence_tau_prior = self.model_config.get("offence_tau_prior", 1.0)
-            defence_mu_prior = self.model_config.get("defence_mu_prior", 0.0)
-            defence_tau_prior = self.model_config.get("defence_tau_prior", 1.0)
+            off_mu_prior = self.model_config.get("off_mu_prior", 3 / 2)
+            def_mu_prior = self.model_config.get("def_mu_prior", 0.0)
+            off_tau_prior = self.model_config.get("off_tau_prior", 1.0)
+            def_tau_prior = self.model_config.get("def_tau_prior", 1.0)
 
             # priors
             offence = pm.Normal(
                 "offence",
-                tau=offence_tau_prior,
-                mu=offence_mu_prior,
-                shape=shape_priors,
+                mu=off_mu_prior,
+                sigma=off_tau_prior,
+                # shape=shape_priors, ### kann ich auf shapes verzichten, wenn dims verwendet werden?
+                dims="team",
             )
             defence = pm.Normal(
                 "defence",
-                tau=defence_tau_prior,
-                mu=defence_mu_prior,
-                shape=shape_priors,
+                mu=def_mu_prior,
+                tau=def_tau_prior,
+                dims="team",
             )
 
-            offence_home = offence[x_data[:, 0]]
-            defence_home = defence[x_data[:, 0]]
-            offence_away = offence[x_data[:, 1]]
-            defence_away = defence[x_data[:, 1]]
+            offence_home_away = offence[team_idx]
+            defence_home_away = defence[team_idx]
 
-            mu_home = offence_home - defence_away
-            mu_away = offence_away - defence_home
-            # note: use exponent in practice instead of switch
+            mu_home_away = offence_home_away - defence_home_away.eval()[:, [1, 0]]
+
+            mu_home = mu_home_away[:, 0]
+            mu_away = mu_home_away[:, 1]
+
+            # # note: use exponent in practice instead of switch
             mu_home = pm.math.switch(mu_home > min_mu, mu_home, min_mu)
             mu_away = pm.math.switch(mu_away > min_mu, mu_away, min_mu)
 
             # observed
-            pm.Poisson("home_goals", observed=goals[0], mu=mu_home)
-            pm.Poisson("away_goals", observed=goals[1], mu=mu_away)
+            pm.Poisson(
+                "home_goals", observed=goals["home_goals"], mu=mu_home, dims="match"
+            )
+            pm.Poisson(
+                "away_goals", observed=goals["away_goals"], mu=mu_away, dims="match"
+            )
 
             # # with model1_home_advantage:
-            # trace = pm.sample(draws=nb_samples, tune=tune)
+            football_idata = pm.sample()
             # posterior = trace.posterior.stack(sample=["chain", "draw"])
             # offence = posterior["offence"]
             # defence = posterior["defence"]
@@ -156,7 +160,7 @@ class FootballModel(ModelBuilder):
             "offence_tau_prior": 1.0,
             "defence_mu_prior": 0.0,
             "defence_tau_prior": 1.0,
-            "shape_priors": 18,  # toDo: check this for the number of teams
+            "shape_priors": 18,  # toDo: check this for the number of teams ( kann wegen coords wohl raus )
         }
         return model_config
 
@@ -207,19 +211,25 @@ class FootballModel(ModelBuilder):
     def _generate_and_preprocess_model_data(
         self,
         X: Union[pd.DataFrame, pd.Series],
-        home_goals: Union[pd.Series, np.ndarray],
-        away_goals: Union[pd.Series, np.ndarray],
+        goals: Union[pd.DataFrame, pd.Series],
     ) -> None:
         """
         Depending on the model, we might need to preprocess the data before fitting the model.
         all required preprocessing and conditional assignments should be defined here.
         """
+
+        def _get_teams(df: pd.DataFrame) -> np.array:
+            teams, uniques = pd.factorize(
+                X[["home_id", "away_id"]].values.flatten(), sort=True
+            )
+
+            return teams, uniques
+
         self.model_coords = {
-            "team": teams,
-            "match": np.arange(60),
+            "team": _get_teams(X)[1],
+            "match": np.arange(len(X)),
             "field": ["home", "away"],
         }
-
-        self.X_values = X
-        self.home_goals = home_goals
-        self.away_goals = away_goals
+        self.model_config = self.get_default_model_config()
+        self.X = X
+        self.y = goals

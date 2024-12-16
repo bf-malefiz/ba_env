@@ -73,7 +73,7 @@ def _vectorized_data(home_goals_, away_goals_) -> pd.DataFrame:
     return vectorized_data
 
 
-def preprocess_league_data(df: pd.DataFrame) -> pd.DataFrame:
+def preprocess_league_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     teams = _get_teams(df)
     team_indices = _build_team_lexicon(teams=teams)
     home_goals_, away_goals_ = _get_goal_results(df=df, team_indices=team_indices)
