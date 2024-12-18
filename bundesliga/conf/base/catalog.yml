@@ -20,9 +20,9 @@ model_input_table:
   filepath: data/05_model_input/model_input_table.pq
 
 
-test_netcdf:
+model_1_idata:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/06_models/test_netcdf.nc
+  filepath: data/06_models/model1_idata.nc
   save_args:
     mode: a
   load_args:

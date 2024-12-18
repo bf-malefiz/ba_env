@@ -14,7 +14,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=model_1,
                 inputs="model_input_table",
-                outputs=None,
+                outputs="model_1_idata",
                 name="model_1_node",
             ),
         ]

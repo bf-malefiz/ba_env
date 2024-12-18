@@ -50,7 +50,7 @@ class FootballModel(ModelBuilder):
             Additional keyword arguments that may be used for model configuration.
         """
 
-        self._generate_and_preprocess_model_data(X, goals)
+        # self._generate_and_preprocess_model_data(X, goals)
 
         with pm.Model(coords=self.model_coords) as self.model:
             # Create mutable data containers
@@ -59,12 +59,16 @@ class FootballModel(ModelBuilder):
                 self.X[["home_id", "away_id"]].values,
                 dims=("match", "field"),
             )
-            goals = pm.Data(
-                "goals",
-                self.y[["home_goals", "away_goals"]],
-                dims=("match", "field"),
+            home_goals = pm.Data(
+                "home_goals",
+                self.y["home_goals"].values,
+                dims="match",
             )
-
+            away_goals = pm.Data(
+                "away_goals",
+                self.y["away_goals"].values,
+                dims="match",
+            )
             # prior parameters
             off_mu_prior = self.model_config.get("off_mu_prior", 3 / 2)
             def_mu_prior = self.model_config.get("def_mu_prior", 0.0)
@@ -99,12 +103,8 @@ class FootballModel(ModelBuilder):
             mu_away = pm.math.switch(mu_away > min_mu, mu_away, min_mu)
 
             # observed
-            pm.Poisson(
-                "home_goals", observed=goals["home_goals"], mu=mu_home, dims="match"
-            )
-            pm.Poisson(
-                "away_goals", observed=goals["away_goals"], mu=mu_away, dims="match"
-            )
+            pm.Poisson("obs_home_goals", observed=home_goals, mu=mu_home, dims="match")
+            pm.Poisson("obs_away_goals", observed=away_goals, mu=mu_away, dims="match")
 
             # # with model1_home_advantage:
             football_idata = pm.sample()
@@ -119,8 +119,7 @@ class FootballModel(ModelBuilder):
     def _data_setter(
         self,
         X: Union[pd.DataFrame, pd.Series],
-        home_goals: Union[pd.Series, np.ndarray],
-        away_goals: Union[pd.Series, np.ndarray],
+        goals: Union[pd.Series, np.ndarray],
     ) -> None:
         if isinstance(X, pd.DataFrame):
             x_values = X[["home_id", "away_id"]].values
@@ -130,21 +129,9 @@ class FootballModel(ModelBuilder):
 
         with self.model:
             pm.set_data({"x_data": x_values})
-            if home_goals is not None:
+            if goals is not None:
                 pm.set_data(
-                    {
-                        "home_goals": home_goals.values
-                        if isinstance(home_goals, pd.Series)
-                        else home_goals
-                    }
-                )
-            if away_goals is not None:
-                pm.set_data(
-                    {
-                        "away_goals": away_goals.values
-                        if isinstance(away_goals, pd.Series)
-                        else away_goals
-                    }
+                    {"goals": goals.values if isinstance(goals, pd.Series) else goals}
                 )
 
     @staticmethod
@@ -172,10 +159,10 @@ class FootballModel(ModelBuilder):
         It will be used during fitting in case the user doesn't provide any sampler_config of their own.
         """
         sampler_config: dict = {
-            "draws": 1_000,
-            "tune": 1_00,  # 10% of draws
-            "chains": 3,
-            "target_accept": 0.95,
+            "draws": 2_000,
+            "tune": 2_00,  # 10% of draws
+            "chains": 1,
+            "target_accept": 0.85,
         }
         return sampler_config
 
@@ -211,7 +198,7 @@ class FootballModel(ModelBuilder):
     def _generate_and_preprocess_model_data(
         self,
         X: Union[pd.DataFrame, pd.Series],
-        goals: Union[pd.DataFrame, pd.Series],
+        goals: Union[pd.Series, np.ndarray],
     ) -> None:
         """
         Depending on the model, we might need to preprocess the data before fitting the model.
@@ -232,4 +219,7 @@ class FootballModel(ModelBuilder):
         }
         self.model_config = self.get_default_model_config()
         self.X = X
-        self.y = goals
+        goals_list = goals.tolist()
+        # print("goals-shape: ", goals)
+
+        self.y = pd.DataFrame(goals_list, columns=["home_goals", "away_goals"])
