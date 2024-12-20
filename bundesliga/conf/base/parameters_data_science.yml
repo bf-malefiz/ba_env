@@ -3,3 +3,48 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.19.10/configuration/parameters.html
+active_modelling_pipeline:
+  model_parameters:
+    test_size: 0.2
+    random_state: 42
+    features: 
+      - 'home_id'
+      - 'away_id'
+    targets:
+      - 'home_goals'
+      - 'away_goals'
+    model_config:
+      offence_mu_prior: 0.0
+      offence_tau_prior: 1.0
+      defence_mu_prior: 0.0
+      defence_tau_prior: 1.0
+      shape_priors: 18
+    sampler_config:
+      chains: 1
+      draws: 2000
+      tune: 200 # toDo: 10% of draws
+      target_accept: 0.95
+      random_seed: 42
+
+candidate_modelling_pipeline:
+  model_parameters:
+    test_size: 0.2
+    random_state: 42
+    features: 
+      - 'home_id'
+      - 'away_id'
+    targets:
+      - 'home_goals'
+      - 'away_goals'
+    model_config:
+      offence_mu_prior: 0.0
+      offence_tau_prior: 1.0
+      defence_mu_prior: 0.0
+      defence_tau_prior: 1.0
+      shape_priors: 18
+    sampler_config:
+      chains: 1
+      draws: 2000
+      tune: 200 # toDo: 10% of draws
+      target_accept: 0.95
+      random_seed: 42
