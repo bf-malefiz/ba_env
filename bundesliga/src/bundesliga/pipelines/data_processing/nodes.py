@@ -69,17 +69,6 @@ def vectorize_data(goals) -> pd.DataFrame:
     return vectorized_data
 
 
-# def preprocess_league_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
-#     teams = _get_teams(df)
-#     team_indices = _build_team_lexicon(teams=teams)
-#     home_goals_, away_goals_ = _get_goal_results(df=df, team_indices=team_indices)
-
-#     # list of tuples
-#     # (home_team-index, away_team_index, scored_goals of home team resp. away team)
-
-#     return vectorize_data(home_goals_, away_goals_), team_indices
-
-
 def extract_features(
     vectorized_data: pd.DataFrame, parameters: pd.DataFrame
 ) -> pd.DataFrame:
