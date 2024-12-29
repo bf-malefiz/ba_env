@@ -5,14 +5,13 @@ import arviz as az
 import numpy as np
 import pandas as pd
 import pymc as pm
+import pytensor.tensor as pt
 from numpy.random import RandomState
 from pymc_experimental.model_builder import ModelBuilder
 
-RANDOM_SEED = 8927
 min_mu = 0.0001
 average_goals = 3.0
 
-rng = np.random.default_rng(RANDOM_SEED)
 az.style.use("arviz-darkgrid")
 
 
@@ -49,20 +48,30 @@ class pymc_FootballModel(ModelBuilder):
     def _data_setter(
         self,
         X: Union[pd.DataFrame, pd.Series],
-        goals: Union[pd.Series, np.ndarray],
+        y: Union[pd.Series, np.ndarray] = None,
     ) -> None:
         if isinstance(X, pd.DataFrame):
-            x_values = X[["home_id", "away_id"]].values
+            x_data_home_values = X["home_id"].values
+            x_data_away_values = X["away_id"].values
         else:
-            # Assuming "input" is the first column
-            x_values = X[:, 0]
+            # # Assuming "input" is the first column
+            # x_values = X[:, 0]
+            x_data_home_values = X[:, 0]
+            x_data_away_values = X[:, 1]
 
         with self.model:
-            pm.set_data({"x_data": x_values})
-            if goals is not None:
+            self.model_coords["match"] = np.arange(len(X))
+            pm.set_data(
+                {"x_data_home": x_data_home_values}, coords={"match": np.arange(len(X))}
+            )
+            pm.set_data(
+                {"x_data_away": x_data_away_values}, coords={"match": np.arange(len(X))}
+            )
+
+            if y is not None:
                 pm.set_data(
-                    {"goals": goals.values if isinstance(goals, pd.Series) else goals}
-                )
+                    {"goals": y.values if isinstance(y, pd.Series) else y}
+                )  # toDO: check if this is correct, as it should set home and away goals? when do we need to set the data?
 
     @staticmethod
     def get_default_model_config() -> dict:
@@ -90,7 +99,7 @@ class pymc_FootballModel(ModelBuilder):
 
     @property
     def output_var(self):
-        return "y"
+        return "home_goals"
 
     @property
     def _serializable_model_config(self) -> dict[str, Union[int, float, dict]]:
@@ -137,7 +146,8 @@ class pymc_FootballModel(ModelBuilder):
         self.model_coords = {
             "team": _get_teams(X)[1],
             "match": np.arange(len(X)),
-            "field": ["home", "away"],
+            "id": ["home_id", "away_id"],
+            "goals": ["home_goals", "away_goals"],
         }
         self.X = X
         goals_list = goals.tolist()

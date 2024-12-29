@@ -6,6 +6,29 @@
 active_modelling_pipeline:
   model_parameters:
     test_size: 0.2
+    random_seed: 42
+    model_config:
+      prior_params:
+        off_mu: 1.75
+        off_tau: 1.0
+        def_mu: 0.0
+        def_tau: 1.0
+      features: 
+        - 'home_id'
+        - 'away_id'
+      targets:
+        - 'home_goals'
+        - 'away_goals'
+    sampler_config:
+      chains: 2
+      draws: 2000
+      tune: 200 # toDo: 10% of draws
+      target_accept: 0.85
+      random_seed: 42
+
+candidate_modelling_pipeline:
+  model_parameters:
+    test_size: 0.2
     random_state: 42
     features: 
       - 'home_id'
@@ -21,31 +44,8 @@ active_modelling_pipeline:
         def_tau: 1.0
     sampler_config:
       chains: 1
-      draws: 2000
-      tune: 200 # toDo: 10% of draws
-      target_accept: 0.95
-      random_seed: 42
-
-candidate_modelling_pipeline:
-  model_parameters:
-    test_size: 0.2
-    random_state: 42
-    features: 
-      - 'home_id'
-      - 'away_id'
-    targets:
-      - 'home_goals'
-      - 'away_goals'
-    model_config:
-      offence_mu_prior: 0.0
-      offence_tau_prior: 1.0
-      defence_mu_prior: 0.0
-      defence_tau_prior: 1.0
-      shape_priors: 18
-    sampler_config:
-      chains: 1
-      draws: 2000
-      tune: 200 # toDo: 10% of draws
+      draws: 4000
+      tune: 400 # toDo: 10% of draws
       target_accept: 0.95
       random_seed: 42
 

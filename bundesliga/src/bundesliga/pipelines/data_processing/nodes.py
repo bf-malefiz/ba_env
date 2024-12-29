@@ -7,19 +7,13 @@ GOALS_HOME = "FTHG"
 GOALS_AWAY = "FTAG"
 
 
-def _get_teams(df: pd.DataFrame) -> np.array:
+def build_team_lexicon(df: pd.DataFrame) -> pd.DataFrame:
     team1 = df["HomeTeam"].unique().astype("U")
     team2 = df["AwayTeam"].unique().astype("U")
     teams = np.unique(np.concatenate((team1, team2)))
 
-    assert len(teams) == 18
-    # nb_teams = len(teams)
-
-    return teams
-
-
-def _build_team_lexicon(teams: np.array) -> pd.DataFrame:
     team_indices = OrderedDict()
+
     for i, t in enumerate(teams):
         team_indices[t] = i
     lex = pd.DataFrame(list(team_indices.items()), columns=["team", "index"])
@@ -27,7 +21,7 @@ def _build_team_lexicon(teams: np.array) -> pd.DataFrame:
     return lex
 
 
-def _get_goal_results(df: pd.DataFrame, team_indices: pd.DataFrame):
+def get_goal_results(df: pd.DataFrame, team_indices: pd.DataFrame):
     home_goals = list()
     away_goals = list()
     for _, r in df.iterrows():
@@ -49,14 +43,16 @@ def _get_goal_results(df: pd.DataFrame, team_indices: pd.DataFrame):
             )
         )
 
-    return home_goals, away_goals
+    goals = pd.DataFrame({"home_goals": home_goals, "away_goals": away_goals})
+
+    return goals
 
 
-def _vectorized_data(home_goals_, away_goals_) -> pd.DataFrame:
-    home_id = np.array([hg[0] for hg in home_goals_])
-    away_id = np.array([hg[1] for hg in home_goals_])
-    home_goals = np.array([hg[2] for hg in home_goals_])
-    away_goals = np.array([ag[2] for ag in away_goals_])
+def vectorize_data(goals) -> pd.DataFrame:
+    home_id = np.array([hg[0] for hg in goals["home_goals"]])
+    away_id = np.array([hg[1] for hg in goals["home_goals"]])
+    home_goals = np.array([hg[2] for hg in goals["home_goals"]])
+    away_goals = np.array([ag[2] for ag in goals["away_goals"]])
     toto = np.where(
         home_goals == away_goals, 0, np.where(home_goals > away_goals, 1, 2)
     )
@@ -73,18 +69,41 @@ def _vectorized_data(home_goals_, away_goals_) -> pd.DataFrame:
     return vectorized_data
 
 
-def preprocess_league_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
-    teams = _get_teams(df)
-    team_indices = _build_team_lexicon(teams=teams)
-    home_goals_, away_goals_ = _get_goal_results(df=df, team_indices=team_indices)
+# def preprocess_league_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
+#     teams = _get_teams(df)
+#     team_indices = _build_team_lexicon(teams=teams)
+#     home_goals_, away_goals_ = _get_goal_results(df=df, team_indices=team_indices)
 
-    # list of tuples
-    # (home_team-index, away_team_index, scored_goals of home team resp. away team)
+#     # list of tuples
+#     # (home_team-index, away_team_index, scored_goals of home team resp. away team)
 
-    return _vectorized_data(home_goals_, away_goals_), team_indices
+#     return vectorize_data(home_goals_, away_goals_), team_indices
 
 
-def create_model_input_data(df: pd.DataFrame) -> pd.DataFrame:
-    # merge if we use more then D1 Bundesliga data
-    model_input_table = df
-    return model_input_table
+def extract_features(
+    vectorized_data: pd.DataFrame, parameters: pd.DataFrame
+) -> pd.DataFrame:
+    feature_data = vectorized_data[parameters["model_config"]["features"]]
+
+    return feature_data
+
+
+def extract_x_data(feature_data: pd.DataFrame, timeframe=None) -> pd.DataFrame:
+    if not timeframe:
+        x_data = feature_data
+    else:
+        raise NotImplementedError
+    return x_data
+
+
+def extract_y_data(
+    vectorized_data: pd.DataFrame, parameters: pd.DataFrame, timeframe=None
+) -> pd.Series:
+    if not timeframe:
+        y_data = vectorized_data[parameters["model_config"]["targets"]].apply(
+            lambda row: (row["home_goals"], row["away_goals"]), axis=1
+        )
+        return y_data
+
+    else:
+        raise NotImplementedError

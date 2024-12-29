@@ -5,47 +5,62 @@ generated using Kedro 0.19.10
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import create_model_input_data, preprocess_league_data
+from .nodes import (
+    build_team_lexicon,
+    extract_features,
+    extract_x_data,
+    extract_y_data,
+    get_goal_results,
+    vectorize_data,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    return pipeline(
+    dataset = "D1_24-25"
+    pipeline_instance = pipeline(
         [
             node(
-                func=preprocess_league_data,
-                inputs="D1_24-25",
-                outputs=["preprocessed_league_data", "team_indices"],
-                name="preprocess_league_data_node",
+                func=build_team_lexicon,
+                inputs=dataset,
+                outputs="team_lexicon",
+                name="build_team_lexicon_node",
             ),
             node(
-                func=create_model_input_data,
-                inputs="preprocessed_league_data",
-                outputs="model_input_table",
-                name="model_input_data_node",
+                func=get_goal_results,
+                inputs=[dataset, "team_lexicon"],
+                outputs="goals",
+                name="get_goal_results_node",
             ),
-            # node(
-            #     func=_get_teams,
-            #     input="D1_24-25",
-            #     outputs="preprocessed_teams",
-            #     name="preprocessed_teams_node"
-            # ),
-            # node(
-            #     func=_build_team_lexicon,
-            #     input="D1_24-25",
-            #     outputs="preprocessed_lexicon",
-            #     name="preprocessed_lexicon_node"
-            # ),
-            # node(
-            #     func=_get_goal_results,
-            #     input="D1_24-25",
-            #     outputs="preprocessed_goal_results",
-            #     name="preprocessed_goal_results_node"
-            # ),
-            # node(
-            #     func=_vectorized_data,
-            #     input="D1_24-25",
-            #     outputs="preprocessed_data_vectorized",
-            #     name="preprocessed_data_vectorized_node"
-            # ),
+            node(
+                func=vectorize_data,
+                inputs="goals",
+                outputs="vectorized_data",
+                name="vectorize_data_node",
+            ),
+            node(
+                func=extract_features,
+                inputs=["vectorized_data", "params:model_parameters"],
+                outputs="feature_data",
+                name="extract_features_node",
+            ),
+            node(
+                func=extract_x_data,
+                inputs="feature_data",
+                outputs="x_data",
+                name="extract_x_data_node",
+            ),
+            node(
+                func=extract_y_data,
+                inputs=["vectorized_data", "params:model_parameters"],
+                outputs="y_data",
+                name="extract_y_data_node",
+            ),
         ]
     )
+
+    active_pp_pipeline = pipeline(
+        pipe=pipeline_instance,
+        inputs=dataset,
+        namespace="active_pp_pipeline",
+    )
+    return active_pp_pipeline

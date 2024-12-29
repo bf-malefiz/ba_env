@@ -2,19 +2,29 @@ D1_24-25:
   type: pandas.CSVDataset
   filepath: data/01_raw/D1_24-25.csv
 
-team_indices:
+active_pp_pipeline.goals:
   type: pandas.ParquetDataset
-  filepath: data/03_primary/team_indices.pq
+  filepath: data/02_intermediate/goals.pq
 
-preprocessed_league_data:
+active_pp_pipeline.team_lexicon:
   type: pandas.ParquetDataset
-  filepath: data/03_primary/preprocessed_league_data.pq
+  filepath: data/03_primary/team_lexicon.pq
 
-
-model_input_table:
+active_pp_pipeline.vectorized_data:
   type: pandas.ParquetDataset
-  filepath: data/05_model_input/model_input_table.pq
+  filepath: data/03_primary/vectorized_data.pq
 
+active_pp_pipeline.feature_data:
+  type: pandas.ParquetDataset
+  filepath: data/04_feature/feature_data.pq
+
+active_pp_pipeline.x_data:
+  type: pandas.ParquetDataset
+  filepath: data/05_model_input/x_data.pq
+
+active_pp_pipeline.y_data:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/y_data.csv
 
 active_modelling_pipeline.model_1_idata:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
@@ -23,10 +33,26 @@ active_modelling_pipeline.model_1_idata:
     mode: a
   load_args:
     decode_times: False
-  
+
+active_modelling_pipeline.model_1_samples:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/06_models/model_1_samples_active.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
 candidate_modelling_pipeline.model_1_idata:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
   filepath: data/06_models/model_1_idata_candidate.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
+candidate_modelling_pipeline.model_1_samples:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/06_models/model_1_samples_candidate.nc
   save_args:
     mode: a
   load_args:

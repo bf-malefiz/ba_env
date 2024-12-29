@@ -4,7 +4,8 @@ import arviz as az
 import numpy as np
 import pandas as pd
 import pymc as pm
-from model_interface import pymc_FootballModel
+import pytensor.tensor as pt
+from model_interfaces import pymc_FootballModel
 from numpy.random import RandomState
 from pymc_experimental.model_builder import ModelBuilder
 
@@ -17,13 +18,6 @@ az.style.use("arviz-darkgrid")
 
 
 class FootballModel(pymc_FootballModel):
-    # def __init__(self, X):
-    #     self.X = X
-    #     self.y = None
-    #     self.model_config = None
-    #     self.model_coords = None
-    #     self.model = None
-
     # Give the model a name
     _model_type = "FootballModel_1"
 
@@ -55,21 +49,32 @@ class FootballModel(pymc_FootballModel):
 
         with pm.Model(coords=self.model_coords) as self.model:
             # Create mutable data containers
-            team_idx = pm.Data(
-                "team_idx",
-                self.X[["home_id", "away_id"]].values,
-                dims=("match", "field"),
-            )
-            home_goals = pm.Data(
-                "home_goals",
-                self.y["home_goals"].values,
+            x_data_home = pm.Data(
+                "x_data_home",
+                X["home_id"].values,
                 dims="match",
             )
-            away_goals = pm.Data(
-                "away_goals",
-                self.y["away_goals"].values,
+            x_data_away = pm.Data(
+                "x_data_away",
+                X["away_id"].values,
                 dims="match",
             )
+            y_data_home = pm.Data(
+                "y_data_home",
+                goals["home_goals"].values,
+                dims="match",
+            )
+            y_data_away = pm.Data(
+                "y_data_away",
+                goals["away_goals"].values,
+                dims="match",
+            )
+
+            # goals = pm.Data(
+            #     "goals",
+            #     self.y[["home_goals", "away_goals"]],
+            #     dims=("match", "field"),
+            # )
             # prior parameters
             prior_params = self.model_config["prior_params"]
             off_mu = prior_params["off_mu"]
@@ -92,41 +97,37 @@ class FootballModel(pymc_FootballModel):
                 dims="team",
             )
 
-            offence_home_away = offence[team_idx]
-            defence_home_away = defence[team_idx]
+            # offence_home_away = offence[team_idx]
+            # defence_home_away = defence[team_idx]
+            # mu_home = mu_home_away[:, 0]
+            # mu_away = mu_home_away[:, 1]
+            # mu_home_away = offence_home_away - defence_home_away.eval()[:, [1, 0]]
+            offence_home = offence[x_data_home]
+            defence_home = defence[x_data_home]
+            offence_away = offence[x_data_away]
+            defence_away = defence[x_data_away]
 
-            mu_home_away = offence_home_away - defence_home_away.eval()[:, [1, 0]]
-
-            mu_home = mu_home_away[:, 0]
-            mu_away = mu_home_away[:, 1]
+            mu_home = offence_home - defence_away
+            mu_away = offence_away - defence_home
 
             # # note: use exponent in practice instead of switch
             mu_home = pm.math.switch(mu_home > min_mu, mu_home, min_mu)
             mu_away = pm.math.switch(mu_away > min_mu, mu_away, min_mu)
 
             # observed
-            pm.Poisson("obs_home_goals", observed=home_goals, mu=mu_home, dims="match")
-            pm.Poisson("obs_away_goals", observed=away_goals, mu=mu_away, dims="match")
+            pm.Poisson("home_goals", observed=y_data_home, mu=mu_home, dims="match")
+            pm.Poisson("away_goals", observed=y_data_away, mu=mu_away, dims="match")
 
-            # # with model1_home_advantage:
-            football_idata = pm.sample()
-            # posterior = trace.posterior.stack(sample=["chain", "draw"])
-            # offence = posterior["offence"]
-            # defence = posterior["defence"]
-            # # home_advantage = posterior["home_advantage"]
-            # # pm.predictions_to_inference_data
-
-            # samples = pm.sample_posterior_predictive(trace)
+            # toDo: koennen wir die Poisson zusammenfuegen? goals ueber home+away
+            # pm.Poisson(
+            #     "home_points",
+            #     observed=goals,
+            #     mu=pt.stack((mu_home, mu_away)).T,
+            #     dims=("match", "field"),
+            # )
 
 
 class FootballModel_2(pymc_FootballModel):
-    # def __init__(self, X):
-    #     self.X = X
-    #     self.y = None
-    #     self.model_config = None
-    #     self.model_coords = None
-    #     self.model = None
-
     # Give the model a name
     _model_type = "FootballModel"
 
