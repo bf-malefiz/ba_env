@@ -2,31 +2,31 @@ D1_24-25:
   type: pandas.CSVDataset
   filepath: data/01_raw/D1_24-25.csv
 
-active_pp_pipeline.goals:
+goals:
   type: pandas.ParquetDataset
   filepath: data/02_intermediate/goals.pq
 
-active_pp_pipeline.team_lexicon:
+team_lexicon:
   type: pandas.ParquetDataset
   filepath: data/03_primary/team_lexicon.pq
 
-active_pp_pipeline.vectorized_data:
+vectorized_data:
   type: pandas.ParquetDataset
   filepath: data/03_primary/vectorized_data.pq
 
-active_pp_pipeline.feature_data:
+feature_data:
   type: pandas.ParquetDataset
   filepath: data/04_feature/feature_data.pq
 
-active_pp_pipeline.x_data:
+x_data:
   type: pandas.ParquetDataset
   filepath: data/05_model_input/x_data.pq
 
-active_pp_pipeline.y_data:
-  type: pandas.CSVDataset
-  filepath: data/05_model_input/y_data.csv
+y_data:
+  type: pandas.ParquetDataset
+  filepath: data/05_model_input/y_data.pq
 
-active_modelling_pipeline.model_1_idata:
+active_modelling_pipeline.fit_idata:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
   filepath: data/06_models/model_1_idata_active.nc
   save_args:
@@ -34,7 +34,7 @@ active_modelling_pipeline.model_1_idata:
   load_args:
     decode_times: False
 
-active_modelling_pipeline.model_1_samples:
+active_modelling_pipeline.fit_samples:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
   filepath: data/06_models/model_1_samples_active.nc
   save_args:

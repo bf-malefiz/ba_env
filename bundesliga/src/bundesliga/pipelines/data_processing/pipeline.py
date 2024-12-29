@@ -61,6 +61,14 @@ def create_pipeline(**kwargs) -> Pipeline:
     active_pp_pipeline = pipeline(
         pipe=pipeline_instance,
         inputs=dataset,
+        outputs=[
+            "x_data",
+            "y_data",
+            "feature_data",
+            "vectorized_data",
+            "goals",
+            "team_lexicon",
+        ],
         namespace="active_pp_pipeline",
     )
     return active_pp_pipeline

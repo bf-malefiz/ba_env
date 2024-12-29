@@ -87,11 +87,9 @@ def extract_x_data(feature_data: pd.DataFrame, timeframe=None) -> pd.DataFrame:
 
 def extract_y_data(
     vectorized_data: pd.DataFrame, parameters: pd.DataFrame, timeframe=None
-) -> pd.Series:
+) -> pd.DataFrame:
     if not timeframe:
-        y_data = vectorized_data[parameters["model_config"]["targets"]].apply(
-            lambda row: (row["home_goals"], row["away_goals"]), axis=1
-        )
+        y_data = vectorized_data[parameters["model_config"]["targets"]]
         return y_data
 
     else:
