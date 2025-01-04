@@ -34,13 +34,47 @@ active_modelling_pipeline.fit_idata:
   load_args:
     decode_times: False
 
-active_modelling_pipeline.fit_samples:
+active_modelling_pipeline.offence:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/06_models/model_1_samples_active.nc
+  filepath: data/07_model_output/offence.nc
   save_args:
     mode: a
   load_args:
     decode_times: False
+active_modelling_pipeline.defence:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/07_model_output/defence.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
+active_modelling_pipeline.offence_means:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/07_model_output/offence_means.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+active_modelling_pipeline.defence_means:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/07_model_output/defence_means.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
+offence_defence_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/offence_defence_plot.png
+  save_args:
+    format: png
+
+goal_diffs_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/goal_diffs_plot.png
+  save_args:
+    format: png
 
 candidate_modelling_pipeline.model_1_idata:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset

@@ -25,6 +25,10 @@ active_model_parameters:
     tune: 200 # toDo: 10% of draws
     target_accept: 0.85
     random_seed: 42
+  plot_params:
+    max_goals: 8
+    team_1: 'Augsburg'
+    team_2: 'Bochum'
 
 candidate_modelling_pipeline:
   model_parameters:

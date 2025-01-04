@@ -5,7 +5,7 @@ generated using Kedro 0.19.10
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import fit
+from .nodes import fit, plot_goal_diffs, plot_offence_defence, posterior, team_means
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -13,10 +13,45 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=fit,
-                inputs=["x_data", "y_data", "params:model_parameters"],
-                outputs="fit_idata",
-                # outputs=["fit_idata", "fit_samples"],
+                inputs=["x_data", "y_data", "team_lexicon", "params:model_parameters"],
+                outputs="",
+                # outputs="fit_idata",
                 name="fit_node",
+            ),
+            node(
+                func=posterior,
+                inputs="fit_idata",
+                outputs=["offence", "defence"],
+                name="posterior_node",
+            ),
+            node(
+                func=team_means,
+                inputs="offence",
+                outputs="offence_means",
+                name="team_means_off_node",
+            ),
+            node(
+                func=team_means,
+                inputs="defence",
+                outputs="defence_means",
+                name="team_means_def_node",
+            ),
+            node(
+                func=plot_offence_defence,
+                inputs=["offence", "defence", "team_lexicon"],
+                outputs="offence_defence_plot",
+                name="plot_offence_defence_node",
+            ),
+            node(
+                func=plot_goal_diffs,
+                inputs=[
+                    "offence",
+                    "defence",
+                    "team_lexicon",
+                    "params:model_parameters",
+                ],
+                outputs="goal_diffs_plot",
+                name="plot_goal_diffs_node",
             ),
         ],
         # tags="tag1",  # Optional, each pipeline node will be tagged
@@ -30,8 +65,9 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             base_data_science,
         ],
-        inputs=["x_data", "y_data"],
+        inputs=["x_data", "y_data", "team_lexicon"],
         namespace="active_modelling_pipeline",
+        outputs=["output_plot", "goal_diffs_plot"],
         parameters={"params:model_parameters": "params:active_model_parameters"},
     )
 

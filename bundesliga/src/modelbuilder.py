@@ -18,6 +18,10 @@ az.style.use("arviz-darkgrid")
 
 
 class FootballModel(pymc_FootballModel):
+    def __init__(self, model_config=None, sampler_config=None, team_lexicon=None):
+        self.team_lexicon = team_lexicon
+        super().__init__(model_config, sampler_config)
+
     # Give the model a name
     _model_type = "FootballModel_1"
 

@@ -8,37 +8,32 @@ GOALS_AWAY = "FTAG"
 
 
 def build_team_lexicon(df: pd.DataFrame) -> pd.DataFrame:
-    team1 = df["HomeTeam"].unique().astype("U")
-    team2 = df["AwayTeam"].unique().astype("U")
-    teams = np.unique(np.concatenate((team1, team2)))
+    home_team = df["HomeTeam"].unique().astype("U")
+    # team2 = df["AwayTeam"].unique().astype("U") toDO: check if this is necessary
 
-    team_indices = OrderedDict()
-
-    for i, t in enumerate(teams):
-        team_indices[t] = i
-    lex = pd.DataFrame(list(team_indices.items()), columns=["team", "index"])
-    lex.set_index("team", inplace=True)
+    team_indices = enumerate(np.unique(home_team))
+    lex = pd.DataFrame(team_indices, columns=["index", "team"]).set_index("team")
     return lex
 
 
-def get_goal_results(df: pd.DataFrame, team_indices: pd.DataFrame):
+def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame):
     home_goals = list()
     away_goals = list()
     for _, r in df.iterrows():
-        home_team = r.HomeTeam
+        home_team_name = r.HomeTeam
+        away_team_name = r.AwayTeam
 
-        away_team = r.AwayTeam
         home_goals.append(
             (
-                team_indices.loc[home_team, "index"],
-                team_indices.loc[away_team, "index"],
+                lexicon.index.get_loc(home_team_name),
+                lexicon.index.get_loc(away_team_name),
                 r[GOALS_HOME],
             )
         )
         away_goals.append(
             (
-                team_indices.loc[home_team, "index"],
-                team_indices.loc[away_team, "index"],
+                lexicon.index.get_loc(home_team_name),
+                lexicon.index.get_loc(away_team_name),
                 r[GOALS_AWAY],
             )
         )
