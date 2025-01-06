@@ -5,17 +5,58 @@ generated using Kedro 0.19.10
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import fit, plot_goal_diffs, plot_offence_defence, posterior, team_means
+from .nodes import (
+    fit,
+    init_model,
+    plot_goal_diffs,
+    plot_offence_defence,
+    posterior,
+    team_means,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
+    pipe_init_model = pipeline(
+        [
+            node(
+                func=init_model,
+                inputs={
+                    "team_lexicon": "team_lexicon",
+                    "parameters": "params:model_parameters",
+                    "toto": "toto",
+                },
+                outputs="tmp_model",
+                name="init_model_node",
+            ),
+        ]
+    )
+    # init_model2 = pipeline(
+    #     [
+    #         node(
+    #             func=init_model,
+    #             inputs={
+    #                 "team_lexicon": "team_lexicon",
+    #                 "parameters": "params:model_parameters",
+    #                 "toto": "toto",
+    #             },
+    #             outputs="tmp_model",
+    #             name="init_model_node",
+    #         ),
+    #     ]
+    # )
     base_data_science = pipeline(
         [
             node(
                 func=fit,
-                inputs=["x_data", "y_data", "team_lexicon", "params:model_parameters"],
-                outputs="",
-                # outputs="fit_idata",
+                inputs=[
+                    "tmp_model",
+                    "x_data",
+                    "y_data",
+                    "team_lexicon",
+                    "params:model_parameters",
+                ],
+                # outputs="",
+                outputs="fit_idata",
                 name="fit_node",
             ),
             node(
@@ -36,6 +77,10 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="defence_means",
                 name="team_means_def_node",
             ),
+        ],
+    )
+    reporting = pipeline(
+        [
             node(
                 func=plot_offence_defence,
                 inputs=["offence", "defence", "team_lexicon"],
@@ -53,24 +98,25 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="goal_diffs_plot",
                 name="plot_goal_diffs_node",
             ),
-        ],
-        # tags="tag1",  # Optional, each pipeline node will be tagged
-        # namespace="",  # Optional
-        # inputs={},  # Optional
-        # outputs={},  # Optional
-        # parameters={"params:model_parameters"},  # Optional
+        ]
     )
 
+    # ds_pipeline_1 = pipeline(
+    #     [init_model1, base_data_science, reporting],
+    #     inputs=["x_data", "y_data", "team_lexicon"],
+    #     namespace="active_modelling_pipeline",
+    #     outputs=["offence_defence_plot", "goal_diffs_plot"],
+    #     parameters={"params:model_parameters": "params:active_model_parameters"},
+    #     tags="active_modelling",
+    # )
     ds_pipeline_1 = pipeline(
-        [
-            base_data_science,
-        ],
-        inputs=["x_data", "y_data", "team_lexicon"],
+        [pipe_init_model, base_data_science, reporting],
+        inputs=["x_data", "y_data", "toto", "team_lexicon"],
         namespace="active_modelling_pipeline",
-        outputs=["output_plot", "goal_diffs_plot"],
+        outputs=["offence_defence_plot", "goal_diffs_plot"],
         parameters={"params:model_parameters": "params:active_model_parameters"},
+        tags="active_modelling",
     )
-
     # ds_pipeline_2 = pipeline(
     #     pipe=pipeline_instance,
     #     inputs="model_input_table",

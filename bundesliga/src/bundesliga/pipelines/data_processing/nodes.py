@@ -89,3 +89,7 @@ def extract_y_data(
 
     else:
         raise NotImplementedError
+
+
+def extract_toto(vectorized_data: pd.DataFrame) -> pd.DataFrame:
+    return pd.DataFrame(vectorized_data["toto"], columns=["toto"])

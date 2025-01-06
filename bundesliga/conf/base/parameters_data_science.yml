@@ -5,6 +5,42 @@
 # Link: https://docs.kedro.org/en/0.19.10/configuration/parameters.html
 
 active_model_parameters:
+  model: 'f2'
+  test_size: 0.2
+  random_seed: 42
+  model_config:
+    prior_params:
+      score:
+        tau: 1.0
+        mu: 0.0
+      offence_defence_diff:
+        tau: 1.0
+        mu: 1.75 #avg/2
+      home_advantage:
+        tau: 10.0
+        mu: 0.0
+      weights:
+        tau: 100.0
+        mu: [0.0, 0.25, -0.25]
+    features: 
+      - 'home_id'
+      - 'away_id'
+    targets:
+      - 'home_goals'
+      - 'away_goals'
+  sampler_config:
+    chains: 2
+    draws: 2000
+    tune: 200 # toDo: 10% of draws
+    target_accept: 0.85
+    random_seed: 42
+  plot_params:
+    max_goals: 8
+    team_1: 'Augsburg'
+    team_2: 'Bochum'
+
+inactive_model_parameters:
+  model: 'f1'
   test_size: 0.2
   random_seed: 42
   model_config:

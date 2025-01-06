@@ -8,6 +8,7 @@ from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import (
     build_team_lexicon,
     extract_features,
+    extract_toto,
     extract_x_data,
     extract_y_data,
     get_goal_results,
@@ -55,6 +56,12 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="y_data",
                 name="extract_y_data_node",
             ),
+            node(
+                func=extract_toto,
+                inputs=["vectorized_data"],
+                outputs="toto",
+                name="extract_toto_node",
+            ),
         ]
     )
 
@@ -68,6 +75,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             "vectorized_data",
             "goals",
             "team_lexicon",
+            "toto",
         ],
         namespace="active_pp_pipeline",
     )

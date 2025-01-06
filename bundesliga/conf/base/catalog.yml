@@ -26,6 +26,10 @@ y_data:
   type: pandas.ParquetDataset
   filepath: data/05_model_input/y_data.pq
 
+toto:
+  type: pandas.ParquetDataset
+  filepath: data/05_model_input/toto.pq
+  
 active_modelling_pipeline.fit_idata:
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
   filepath: data/06_models/model_1_idata_active.nc

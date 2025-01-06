@@ -11,16 +11,10 @@ import pandas as pd
 import pymc as pm
 import xarray as xr
 from IPython.core.pylabtools import figsize
-from kedro.io import DataCatalog
 from kedro_datasets_experimental.netcdf import NetCDFDataset
 from matplotlib import pyplot as plt
-from model_interfaces import pymc_FootballModel
-from modelbuilder import FootballModel
+from modelbuilder import FootballModel, FootballModel_2
 from utils import get_diffs, get_goal_distribution, get_probs_winner, get_teams
-
-"""PYMC Model 1
-    """
-
 
 # nb_teams = len(teams)
 # model1 = pm.Model()
@@ -30,34 +24,46 @@ min_mu = 0.0001
 low = 10e-8  # Constant
 
 
-def _init_model(
-    model: str, team_lexicon, parameters: t.Dict, **kwargs
-) -> FootballModel:
-    if model == "pymc":
+def init_model(team_lexicon, parameters: t.Dict, **kwargs) -> FootballModel:
+    model = parameters["model"]
+
+    if model == "f1":
         return FootballModel(
             model_config=parameters["model_config"],
             sampler_config=parameters["sampler_config"],
             team_lexicon=team_lexicon,
+        )
+    if model == "f2":
+        try:
+            kwargs["toto"]
+        except KeyError:
+            raise ValueError("f2 model requires toto as keyword argument.")
+
+        return FootballModel_2(
+            model_config=parameters["model_config"],
+            sampler_config=parameters["sampler_config"],
+            team_lexicon=team_lexicon,
+            toto=kwargs["toto"],
         )
     else:
         raise ValueError(f"Model {model} not supported.")
 
 
 def fit(
-    x_data, y_data: pd.DataFrame, team_lexicon, parameters: t.Dict, model="pymc"
+    model, x_data, y_data: pd.DataFrame, team_lexicon, parameters: t.Dict
 ) -> xr.Dataset:
-    model = _init_model(model, team_lexicon, parameters)
+    # model = init_model(parameters["model_config"]["model"], team_lexicon, parameters)
     goals = y_data.apply(lambda row: (row["home_goals"], row["away_goals"]), axis=1)
 
-    # idata = model.fit(
-    #     X=x_data,
-    #     y=goals,
-    #     random_seed=parameters["random_seed"],
-    # )
-    idata = NetCDFDataset(
-        filepath="data/06_models/model_1_idata_active.nc",
-        load_args=dict(decode_times=False),
-    ).load()
+    idata = model.fit(
+        X=x_data,
+        y=goals,
+        random_seed=parameters["random_seed"],
+    )
+    # idata = NetCDFDataset(
+    #     filepath="data/06_models/model_1_idata_active.nc",
+    #     load_args=dict(decode_times=False),
+    # ).load()
     return az.convert_to_dataset(idata)
 
 

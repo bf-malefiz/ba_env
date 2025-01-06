@@ -74,11 +74,6 @@ class FootballModel(pymc_FootballModel):
                 dims="match",
             )
 
-            # goals = pm.Data(
-            #     "goals",
-            #     self.y[["home_goals", "away_goals"]],
-            #     dims=("match", "field"),
-            # )
             # prior parameters
             prior_params = self.model_config["prior_params"]
             off_mu = prior_params["off_mu"]
@@ -132,13 +127,20 @@ class FootballModel(pymc_FootballModel):
 
 
 class FootballModel_2(pymc_FootballModel):
+    def __init__(
+        self, model_config=None, sampler_config=None, team_lexicon=None, toto=None
+    ):
+        self.team_lexicon = team_lexicon
+        self.toto = toto
+        super().__init__(model_config, sampler_config)
+
     # Give the model a name
-    _model_type = "FootballModel"
+    _model_type = "FootballModel_2"
 
     # And a version
     version = "0.1"
 
-    def build_model(self, X: pd.DataFrame, goals: pd.Series, **kwargs):
+    def build_model(self, X: pd.DataFrame, goals: pd.Series, *args):
         """
         build_model creates the PyMC model
 
@@ -163,22 +165,32 @@ class FootballModel_2(pymc_FootballModel):
 
         with pm.Model(coords=self.model_coords) as self.model:
             # //////////////////////////////////////////////
-            team_idx = pm.Data(
-                "team_idx",
-                self.X[["home_id", "away_id"]].values,
-                dims=("match", "field"),
-            )
-            home_goals = pm.Data(
-                "home_goals",
-                self.y["home_goals"].values,
-                dims="match",
-            )
-            away_goals = pm.Data(
-                "away_goals",
-                self.y["away_goals"].values,
-                dims="match",
-            )
 
+            x_data_home = pm.Data(
+                "x_data_home",
+                X["home_id"].values,
+                dims="match",
+            )
+            x_data_away = pm.Data(
+                "x_data_away",
+                X["away_id"].values,
+                dims="match",
+            )
+            y_data_home = pm.Data(
+                "y_data_home",
+                goals["home_goals"].values,
+                dims="match",
+            )
+            y_data_away = pm.Data(
+                "y_data_away",
+                goals["away_goals"].values,
+                dims="match",
+            )
+            toto_data = pm.Data(
+                "toto_data",
+                self.toto.values.flatten(),
+                dims="match",
+            )
             # prior parameters
             prior_params = self.model_config["prior_params"]
             prior_score_params = prior_params["score"]
@@ -205,40 +217,35 @@ class FootballModel_2(pymc_FootballModel):
             )
 
             # softmax regression weights for winner predicton:
+            w_mu = tuple(weights.get("mu", (0.0, 0.0, 0.0)))
             weights = pm.Normal(
                 "weights",
-                mu=weights.get("mu", (0, 0, 0)),
+                mu=w_mu,
                 tau=weights.get("tau", 0.0),
                 shape=weights.get("shape", 3),
             )
 
-            score_home = score[team_idx["home_id"]] + home_advantage
+            score_home = score[x_data_home] + home_advantage
 
-            offence_home = score_home + offence_defence_diff[team_idx["home_id"]]
-            defence_home = (
-                score[team_idx["home_id"]] - offence_defence_diff[team_idx["home_id"]]
-            )
-            offence_away = (
-                score[team_idx["away_id"]] + offence_defence_diff[team_idx["away_id"]]
-            )
-            defence_away = (
-                score[team_idx["away_id"]] - offence_defence_diff[team_idx["away_id"]]
-            )
+            offence_home = score_home + offence_defence_diff[x_data_home]
+            defence_home = score[x_data_home] - offence_defence_diff[x_data_home]
+            offence_away = score[x_data_away] + offence_defence_diff[x_data_away]
+            defence_away = score[x_data_away] - offence_defence_diff[x_data_away]
 
             mu_home = pm.math.exp(offence_home - defence_away)
             mu_away = pm.math.exp(offence_away - defence_home)
-            home_value = pm.math.switch(mu_home < min_mu, min_mu, mu_home)
-            away_value = pm.math.switch(mu_away < min_mu, min_mu, mu_away)
+            # toDo: ungenutzte variablen?
+            # home_value = pm.math.switch(mu_home < min_mu, min_mu, mu_home)
+            # away_value = pm.math.switch(mu_away < min_mu, min_mu, mu_away)
 
-            pm.Poisson("home_goals", observed=home_goals, mu=mu_home, dims="match")
-            pm.Poisson("away_goals", observed=away_goals, mu=mu_away, dims="match")
+            pm.Poisson("home_goals", observed=y_data_home, mu=mu_home, dims="match")
+            pm.Poisson("away_goals", observed=y_data_away, mu=mu_away, dims="match")
 
-            # home_away_score_diff = score_home - score[away_id]
-            # home_away_score_diff = home_away_score_diff.reshape((-1, 1)).repeat(
-            #     3, axis=1
-            # )
+            home_away_score_diff = score_home - score[x_data_away]
+            home_away_score_diff = home_away_score_diff.reshape((-1, 1)).repeat(
+                3, axis=1
+            )
 
-            # pred = pm.math.exp(home_away_score_diff * weights)
-            # pred = (pred.T / pm.math.sum(pred, axis=1)).T
-            # pm.Categorical("toto", p=pred, observed=toto)
-            football_idata = pm.sample()
+            pred = pm.math.exp(home_away_score_diff * weights)
+            pred = (pred.T / pm.math.sum(pred, axis=1)).T
+            pm.Categorical("toto", p=pred, observed=toto_data)
