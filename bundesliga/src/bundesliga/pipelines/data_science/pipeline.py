@@ -19,28 +19,29 @@ from .nodes import (
 def create_pipeline(**kwargs) -> Pipeline:
     pipe_fit = pipeline(
         [
+            # node(
+            #     func=init_model,
+            #     inputs={
+            #         "team_lexicon": "team_lexicon",
+            #         "parameters": "params:model_parameters",
+            #         "toto": "toto",
+            #     },
+            #     outputs="tmp_model",
+            #     name="init_model_node",
+            #     tags=["training"],
+            # ),
             node(
-                func=init_model,
+                func=fit,
                 inputs={
+                    "x_data": "x_data",
+                    "y_data": "y_data",
                     "team_lexicon": "team_lexicon",
                     "parameters": "params:model_parameters",
                     "toto": "toto",
                 },
-                outputs="tmp_model",
-                name="init_model_node",
-            ),
-            node(
-                func=fit,
-                inputs=[
-                    "tmp_model",
-                    "x_data",
-                    "y_data",
-                    "team_lexicon",
-                    "params:model_parameters",
-                ],
-                # outputs="",
                 outputs="fit_idata",
                 name="fit_node",
+                tags=["training", "inference"],
             ),
         ]
     )
@@ -55,18 +56,21 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "defence",
                 ],
                 name="posterior_f1_node",
+                tags=["training"],
             ),
             node(
                 func=team_means,
                 inputs="offence",
                 outputs="offence_means",
                 name="team_means_off_node",
+                tags=["training"],
             ),
             node(
                 func=team_means,
                 inputs="defence",
                 outputs="defence_means",
                 name="team_means_def_node",
+                tags=["training"],
             ),
         ],
     )
@@ -83,6 +87,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "home_advantage",
                 ],
                 name="posterior_f2_node",
+                tags=["training"],
             ),
             # node(
             #     func=team_means,
@@ -127,21 +132,21 @@ def create_pipeline(**kwargs) -> Pipeline:
         namespace="active_pipe_f1",
         outputs=["offence_defence_plot", "goal_diffs_plot"],
         parameters={"params:model_parameters": "params:f1_active_model_parameters"},
-        tags="active_pipe_f1",
+        # tags=["training"],
     )
-    active_pipe_f2 = pipeline(
-        [pipe_fit, pipe_data_science_f2],
-        inputs=["x_data", "y_data", "toto", "team_lexicon"],
-        namespace="active_pipe_f2",
-        outputs=[
-            "fit_idata",
-            "weights",
-            "offence_defence_diff",
-            "score",
-            "home_advantage",
-        ],
-        parameters={"params:model_parameters": "params:f2_active_model_parameters"},
-        tags="active_pipe_f2",
-    )
+    # active_pipe_f2 = pipeline(
+    #     [pipe_fit, pipe_data_science_f2],
+    #     inputs=["x_data", "y_data", "toto", "team_lexicon"],
+    #     namespace="active_pipe_f2",
+    #     outputs=[
+    #         "fit_idata",
+    #         "weights",
+    #         "offence_defence_diff",
+    #         "score",
+    #         "home_advantage",
+    #     ],
+    #     parameters={"params:model_parameters": "params:f2_active_model_parameters"},
+    #     # tags=["training"],
+    # )
 
-    return active_pipe_f1 + active_pipe_f2
+    return active_pipe_f1
