@@ -67,19 +67,31 @@ def fit(
     return az.convert_to_dataset(idata)
 
 
-def posterior(idata: netCDF4.Dataset) -> xr.Dataset:
+def posterior_f1(idata: netCDF4.Dataset) -> xr.Dataset:
     idata = az.convert_to_inference_data(idata)
-
     posterior = idata.posterior.stack(sample=["chain", "draw"])
 
     offence = posterior["offence"]
     defence = posterior["defence"]
-    # home_advantage = posterior["home_advantage"]
 
-    offence_reset = offence.reset_index("sample")
-    defence_reset = defence.reset_index("sample")
+    return offence.reset_index("sample"), defence.reset_index("sample")
 
-    return offence_reset, defence_reset
+
+def posterior_f2(idata: netCDF4.Dataset) -> xr.Dataset:
+    idata = az.convert_to_inference_data(idata)
+    posterior = idata.posterior.stack(sample=["chain", "draw"])
+
+    weights = posterior["weights"]
+    offence_defence_diff = posterior["offence_defence_diff"]
+    score = posterior["score"]
+    home_advantage = posterior["home_advantage"]
+
+    return (
+        weights.reset_index("sample"),
+        offence_defence_diff.reset_index("sample"),
+        score.reset_index("sample"),
+        home_advantage.reset_index("sample"),
+    )
 
 
 def team_means(idata: netCDF4.Dataset) -> xr.Dataset:
@@ -111,14 +123,10 @@ def plot_offence_defence(offence, defence, team_lexicon, **kwargs):
         title = "Offence of " + teamname
 
         axes[i, 0].set_title(title)
-        axes[i, 0].hist(
-            offence.offence[i], bins=bins, range=(0, 4.2), **plot_hist_param
-        )
+        axes[i, 0].hist(offence[i], bins=bins, range=(0, 4.2), **plot_hist_param)
         title = "Defence of " + teamname
         axes[i, 1].set_title(title)
-        axes[i, 1].hist(
-            defence.defence[i], bins=bins, range=(-2.0, 2.2), **plot_hist_param
-        )
+        axes[i, 1].hist(defence[i], bins=bins, range=(-2.0, 2.2), **plot_hist_param)
 
         if i >= show_teams:
             break
@@ -135,7 +143,7 @@ def plot_goal_diffs(offence, defence, team_lexicon, parameters: t.Dict):
     team_1 = team_lexicon.loc[plot_params["team_1"], "index"]
     team_2 = team_lexicon.loc[plot_params["team_2"], "index"]
 
-    diff_ij, diff_ji = get_diffs(team_1, team_2, offence.offence, defence.defence)
+    diff_ij, diff_ji = get_diffs(team_1, team_2, offence, defence)
     poisson_goals_1 = get_goal_distribution(diff_ij, max_goals)
     poisson_goals_2 = get_goal_distribution(diff_ji, max_goals)
     # Create the figure and axes objects, specify the size and the dots per inches

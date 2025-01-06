@@ -10,13 +10,14 @@ from .nodes import (
     init_model,
     plot_goal_diffs,
     plot_offence_defence,
-    posterior,
+    posterior_f1,
+    posterior_f2,
     team_means,
 )
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    pipe_init_model = pipeline(
+    pipe_fit = pipeline(
         [
             node(
                 func=init_model,
@@ -28,24 +29,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="tmp_model",
                 name="init_model_node",
             ),
-        ]
-    )
-    # init_model2 = pipeline(
-    #     [
-    #         node(
-    #             func=init_model,
-    #             inputs={
-    #                 "team_lexicon": "team_lexicon",
-    #                 "parameters": "params:model_parameters",
-    #                 "toto": "toto",
-    #             },
-    #             outputs="tmp_model",
-    #             name="init_model_node",
-    #         ),
-    #     ]
-    # )
-    base_data_science = pipeline(
-        [
             node(
                 func=fit,
                 inputs=[
@@ -59,11 +42,19 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="fit_idata",
                 name="fit_node",
             ),
+        ]
+    )
+
+    pipe_data_science_f1 = pipeline(
+        [
             node(
-                func=posterior,
+                func=posterior_f1,
                 inputs="fit_idata",
-                outputs=["offence", "defence"],
-                name="posterior_node",
+                outputs=[
+                    "offence",
+                    "defence",
+                ],
+                name="posterior_f1_node",
             ),
             node(
                 func=team_means,
@@ -79,7 +70,36 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
         ],
     )
-    reporting = pipeline(
+
+    pipe_data_science_f2 = pipeline(
+        [
+            node(
+                func=posterior_f2,
+                inputs="fit_idata",
+                outputs=[
+                    "weights",
+                    "offence_defence_diff",
+                    "score",
+                    "home_advantage",
+                ],
+                name="posterior_f2_node",
+            ),
+            # node(
+            #     func=team_means,
+            #     inputs="offence",
+            #     outputs="offence_means",
+            #     name="team_means_off_node",
+            # ),
+            # node(
+            #     func=team_means,
+            #     inputs="defence",
+            #     outputs="defence_means",
+            #     name="team_means_def_node",
+            # ),
+        ],
+    )
+
+    reporting_f1 = pipeline(
         [
             node(
                 func=plot_offence_defence,
@@ -101,27 +121,27 @@ def create_pipeline(**kwargs) -> Pipeline:
         ]
     )
 
-    # ds_pipeline_1 = pipeline(
-    #     [init_model1, base_data_science, reporting],
-    #     inputs=["x_data", "y_data", "team_lexicon"],
-    #     namespace="active_modelling_pipeline",
-    #     outputs=["offence_defence_plot", "goal_diffs_plot"],
-    #     parameters={"params:model_parameters": "params:active_model_parameters"},
-    #     tags="active_modelling",
-    # )
-    ds_pipeline_1 = pipeline(
-        [pipe_init_model, base_data_science, reporting],
+    active_pipe_f1 = pipeline(
+        [pipe_fit, pipe_data_science_f1, reporting_f1],
         inputs=["x_data", "y_data", "toto", "team_lexicon"],
-        namespace="active_modelling_pipeline",
+        namespace="active_pipe_f1",
         outputs=["offence_defence_plot", "goal_diffs_plot"],
-        parameters={"params:model_parameters": "params:active_model_parameters"},
-        tags="active_modelling",
+        parameters={"params:model_parameters": "params:f1_active_model_parameters"},
+        tags="active_pipe_f1",
     )
-    # ds_pipeline_2 = pipeline(
-    #     pipe=pipeline_instance,
-    #     inputs="model_input_table",
-    #     namespace="candidate_modelling_pipeline",
-    # )
+    active_pipe_f2 = pipeline(
+        [pipe_fit, pipe_data_science_f2],
+        inputs=["x_data", "y_data", "toto", "team_lexicon"],
+        namespace="active_pipe_f2",
+        outputs=[
+            "fit_idata",
+            "weights",
+            "offence_defence_diff",
+            "score",
+            "home_advantage",
+        ],
+        parameters={"params:model_parameters": "params:f2_active_model_parameters"},
+        tags="active_pipe_f2",
+    )
 
-    # return ds_pipeline_1 + ds_pipeline_2
-    return ds_pipeline_1
+    return active_pipe_f1 + active_pipe_f2
