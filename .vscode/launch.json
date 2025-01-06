@@ -5,7 +5,19 @@
     "version": "0.2.0",
     "configurations": [
 
-        
+
+        {
+            "name": "kedro run",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "module": "kedro",
+            "args": ["run"],
+            "cwd": "${workspaceFolder}/bundesliga",
+            "justMyCode": false
+            // Any other arguments should be passed as a comma-seperated-list
+            // e.g "args": ["run", "--pipeline", "pipeline_name"]
+        },
         {
             "name": "-processing pipeline",
             "type": "debugpy",
@@ -24,6 +36,17 @@
             "console": "integratedTerminal",
             "module": "kedro",
             "args": ["run", "--pipeline", "data_science"],
+            "cwd": "${workspaceFolder}/bundesliga",
+            "justMyCode": false
+            // Any other arguments should be passed as a comma-seperated-list
+            // e.g "args": ["run", "--pipeline", "pipeline_name"]
+        },{
+            "name": "-from node",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "module": "kedro",
+            "args": ["run", "--pipeline", "data_science","--from-nodes", "active_modelling_pipeline.init_model_node"],
             "cwd": "${workspaceFolder}/bundesliga",
             "justMyCode": false
             // Any other arguments should be passed as a comma-seperated-list

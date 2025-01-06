@@ -4,7 +4,7 @@
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.19.10/configuration/parameters.html
 
-active_model_parameters:
+f2_active_model_parameters:
   model: 'f2'
   test_size: 0.2
   random_seed: 42
@@ -39,7 +39,7 @@ active_model_parameters:
     team_1: 'Augsburg'
     team_2: 'Bochum'
 
-inactive_model_parameters:
+f1_active_model_parameters:
   model: 'f1'
   test_size: 0.2
   random_seed: 42
@@ -65,59 +65,3 @@ inactive_model_parameters:
     max_goals: 8
     team_1: 'Augsburg'
     team_2: 'Bochum'
-
-candidate_modelling_pipeline:
-  model_parameters:
-    test_size: 0.2
-    random_state: 42
-    features: 
-      - 'home_id'
-      - 'away_id'
-    targets:
-      - 'home_goals'
-      - 'away_goals'
-    model_config:
-      prior_params:
-        off_mu: 0.0
-        off_tau: 1.0
-        def_mu: 0.0
-        def_tau: 1.0
-    sampler_config:
-      chains: 1
-      draws: 4000
-      tune: 400 # toDo: 10% of draws
-      target_accept: 0.95
-      random_seed: 42
-
-
-test_modelling_pipeline:
-  model_parameters:
-    test_size: 0.2
-    random_state: 42
-    features: 
-      - 'home_id'
-      - 'away_id'
-    targets:
-      - 'home_goals'
-      - 'away_goals'
-    model_config:
-      prior_params:
-        score: 
-          tau: 1.0
-          mu: 0.0
-        offence_defence_diff: 
-          tau: 1.0
-          mu: 1.5
-        home_advantage: 
-          tau: 10.0
-          mu: 0.0
-        weights: 
-          tau: 100.0
-          mu: [0.0, 0.25, -0.25]
-          shape: 3.0
-    sampler_config:
-      chains: 1
-      draws: 2000
-      tune: 200 # toDo: 10% of draws
-      target_accept: 0.95
-      random_seed: 42
