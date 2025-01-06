@@ -1,5 +1,5 @@
 example/**
 bundesliga/notebooks/test2.ipynb
 bundesliga/notebooks/testing.ipynb
-bundesliga/session_store.db
-bundesliga/session_store.db
+bundesliga/mlflow_runs/** 
+
