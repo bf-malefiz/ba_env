@@ -50,12 +50,36 @@ def init_model(team_lexicon, parameters: t.Dict, **kwargs) -> FootballModel:
 
 
 def fit(
-    model, x_data, y_data: pd.DataFrame, team_lexicon, parameters: t.Dict
+    x_data, y_data: pd.DataFrame, team_lexicon, parameters: t.Dict, **kwargs
 ) -> xr.Dataset:
+    def _init_model() -> FootballModel:
+        model = parameters["model"]
+
+        if model == "f1":
+            return FootballModel(
+                model_config=parameters["model_config"],
+                sampler_config=parameters["sampler_config"],
+                team_lexicon=team_lexicon,
+            )
+        if model == "f2":
+            try:
+                kwargs["toto"]
+            except KeyError:
+                raise ValueError("f2 model requires toto as keyword argument.")
+
+            return FootballModel_2(
+                model_config=parameters["model_config"],
+                sampler_config=parameters["sampler_config"],
+                team_lexicon=team_lexicon,
+                toto=kwargs["toto"],
+            )
+        else:
+            raise ValueError(f"Model {model} not supported.")
+
     # model = init_model(parameters["model_config"]["model"], team_lexicon, parameters)
     goals = y_data.apply(lambda row: (row["home_goals"], row["away_goals"]), axis=1)
 
-    idata = model.fit(
+    idata = _init_model().fit(
         X=x_data,
         y=goals,
         random_seed=parameters["random_seed"],
