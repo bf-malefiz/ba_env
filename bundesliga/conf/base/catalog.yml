@@ -41,37 +41,56 @@ toto:
   dataset:
     type: pandas.ParquetDataset
     filepath: data/05_model_input/toto.pq
-  
-active_modelling_pipeline.fit_idata:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/06_models/model_1_idata_active.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False
 
-active_modelling_pipeline.offence:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/07_model_output/offence.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False
-active_modelling_pipeline.defence:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/07_model_output/defence.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False
+# predictions:
+#   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+#   dataset:
+#     type: pickle.PickleDataset
+#     filepath: data/06_models/model_1_idata_active.pkl
+#     backend: pickle
+predictions:
 
-active_modelling_pipeline.offence_means:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/06_models/model_1_idata_active.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
+
+fit_idata:
+
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/06_models/model_1_idata_active.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
+# fit_idata:
+#   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+#   dataset:
+#     type: pickle.PickleDataset
+#     filepath: data/06_models/model_1_idata_active.pkl
+#     backend: pickle
+
+offence:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/07_model_output/offence.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+    
+defence:
+  type: kedro_datasets_experimental.netcdf.NetCDFDataset
+  filepath: data/07_model_output/defence.nc
+  save_args:
+    mode: a
+  load_args:
+    decode_times: False
+
+offence_means:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: kedro_datasets_experimental.netcdf.NetCDFDataset
@@ -80,7 +99,7 @@ active_modelling_pipeline.offence_means:
       mode: a
     load_args:
       decode_times: False
-active_modelling_pipeline.defence_means:
+defence_means:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: kedro_datasets_experimental.netcdf.NetCDFDataset
@@ -105,23 +124,3 @@ goal_diffs_plot:
     filepath: data/08_reporting/goal_diffs_plot.png
     save_args:
       format: png
-
-candidate_modelling_pipeline.model_1_idata:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/06_models/model_1_idata_candidate.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False
-
-candidate_modelling_pipeline.model_1_samples:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/06_models/model_1_samples_candidate.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False

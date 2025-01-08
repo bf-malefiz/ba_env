@@ -65,3 +65,9 @@ f1_active_model_parameters:
     max_goals: 8
     team_1: 'Augsburg'
     team_2: 'Bochum'
+sampler_config:
+  chains: 2
+  draws: 2000
+  tune: 200 # toDo: 10% of draws
+  target_accept: 0.85
+  random_seed: 42

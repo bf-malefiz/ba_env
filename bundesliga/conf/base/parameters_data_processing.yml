@@ -3,7 +3,7 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.19.10/configuration/parameters.html
-active_pp_pipeline:
+etl_pipeline:
   model_parameters:
     test_size: 0.2
     random_seed: 42
