@@ -81,10 +81,21 @@ class pymc_FootballModel(ModelBuilder):
         It supports more complex data structures like lists, dictionaries, etc.
         It will be passed to the class instance on initialization, in case the user doesn't provide any model_config of their own.
         """
+        model_config = {
+            "prior_params": {
+                "off_mu": 1.75,
+                "off_tau": 1.0,
+                "def_mu": 0.0,
+                "def_tau": 1.0,
+            },
+            "features": ["home_id", "away_id"],
+            "targets": ["home_goals", "away_goals"],
+        }
 
-        raise ValueError(
-            "Model config not present. Add a model config to the parameters_data_science.yml."
-        )
+        return model_config
+        # raise ValueError(
+        #     "Model config not present. Add a model config to the parameters_data_science.yml."
+        # )
 
     @staticmethod
     def get_default_sampler_config() -> dict:
@@ -93,9 +104,17 @@ class pymc_FootballModel(ModelBuilder):
         The sampler config dict is used to send parameters to the sampler .
         It will be used during fitting in case the user doesn't provide any sampler_config of their own.
         """
-        raise ValueError(
-            "Sampler config not present. Add a sampler config to the parameters_data_science.yml."
-        )
+        sampler_config = {
+            "chains": 2,
+            "draws": 2000,
+            "tune": 200,  # toDo: 10% of draws,
+            "target_accept": 0.85,
+            "random_seed": 42,
+        }
+        return sampler_config
+        # raise ValueError(
+        #     "Sampler config not present. Add a sampler config to the parameters_data_science.yml."
+        # )
 
     @property
     def output_var(self):

@@ -13,7 +13,7 @@
             "console": "integratedTerminal",
             "module": "kedro",
             "args": ["run"],
-            "cwd": "${workspaceFolder}/bundesliga",
+            "cwd": "${workspaceFolder}",
             "justMyCode": false
             // Any other arguments should be passed as a comma-seperated-list
             // e.g "args": ["run", "--pipeline", "pipeline_name"]
@@ -25,7 +25,7 @@
             "console": "integratedTerminal",
             "module": "kedro",
             "args": ["run", "--pipeline", "data_processing"],
-            "cwd": "${workspaceFolder}/bundesliga",
+            "cwd": "${workspaceFolder}",
             "justMyCode": false
             // Any other arguments should be passed as a comma-seperated-list
             // e.g "args": ["run", "--pipeline", "pipeline_name"]
