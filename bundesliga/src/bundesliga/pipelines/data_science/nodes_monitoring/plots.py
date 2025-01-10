@@ -5,15 +5,12 @@ generated using Kedro 0.19.10
 import typing as t
 
 import arviz as az
-import netCDF4
 import numpy as np
 import pandas as pd
 import pymc as pm
-import xarray as xr
 from IPython.core.pylabtools import figsize
 from kedro_datasets_experimental.netcdf import NetCDFDataset
 from matplotlib import pyplot as plt
-from modelbuilder import FootballModel, FootballModel_2
 from utils import get_diffs, get_goal_distribution, get_probs_winner, get_teams
 
 # nb_teams = len(teams)
