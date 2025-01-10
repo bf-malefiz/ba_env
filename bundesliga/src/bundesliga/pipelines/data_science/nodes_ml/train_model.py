@@ -3,7 +3,7 @@ import typing as t
 import arviz as az
 import pandas as pd
 import xarray as xr
-from modelbuilder import FootballModel, FootballModel_2
+from bundesliga.model.modelbuilder import FootballModel, FootballModel_2
 
 # def create_training_data(features, labels, test_size, random_state):
 #     x_train, x_test, y_train, y_test = train_test_split(
@@ -42,19 +42,22 @@ def fit(
     goals = y_data.apply(lambda row: (row["home_goals"], row["away_goals"]), axis=1)
 
     model = _init_model()
-    idata = model.fit(
+
+    model.fit(
         X=x_data,
         y=goals,
         random_seed=parameters["random_seed"],
     )
-    ds = az.convert_to_dataset(idata)
-    # idata = NetCDFDataset(
-    #     filepath="data/06_models/model_1_idata_active.nc",
-    #     load_args=dict(decode_times=False),
-    # ).load()
-    s = az.convert_to_dataset(model.idata)
-    sidata = model.sample_posterior_predictive(
-        x_data, extend_idata=True, combined=True, var_names=["home_goals", "away_goals"]
-    )
+    return model
 
-    return az.convert_to_dataset(idata)
+
+def predict(model, x_data):
+    trace = model.sample_posterior_predictive(
+        x_data,
+        extend_idata=False,
+        combined=True,
+        var_names=["home_goals", "away_goals"],
+    )
+    i = model.predict(x_data)
+    
+    return az.convert_to_dataset(trace)

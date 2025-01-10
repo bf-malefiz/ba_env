@@ -2,6 +2,10 @@ D1_24-25:
   type: pandas.CSVDataset
   filepath: data/01_raw/D1_24-25.csv
 
+datasets_list:
+  type: yaml.YAMLDataset
+  filepath: data/01_raw/datasets_list.yml
+
 goals:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
@@ -48,20 +52,20 @@ toto:
 #     type: pickle.PickleDataset
 #     filepath: data/06_models/model_1_idata_active.pkl
 #     backend: pickle
-predictions:
+# predictions:
+
+#   type: kedro_datasets_experimental.netcdf.NetCDFDataset
+#   filepath: data/06_models/model_1_idata_active.nc
+#   save_args:
+#     mode: a
+#   load_args:
+#     decode_times: False
+
+
+trace:
 
   type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/06_models/model_1_idata_active.nc
-  save_args:
-    mode: a
-  load_args:
-    decode_times: False
-
-
-fit_idata:
-
-  type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/06_models/model_1_idata_active.nc
+  filepath: data/06_models/trace.nc
   save_args:
     mode: a
   load_args:
