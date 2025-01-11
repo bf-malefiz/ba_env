@@ -4,24 +4,23 @@
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.19.10/configuration/parameters.html
 etl_pipeline:
-  model_parameters:
-    test_size: 0.2
+  test_size: 0.2
+  random_seed: 42
+  model_config:
+    prior_params:
+      off_mu: 1.75
+      off_tau: 1.0
+      def_mu: 0.0
+      def_tau: 1.0
+    features: 
+      - 'home_id'
+      - 'away_id'
+    targets:
+      - 'home_goals'
+      - 'away_goals'
+  sampler_config:
+    chains: 2
+    draws: 2000
+    tune: 200 # toDo: 10% of draws
+    target_accept: 0.85
     random_seed: 42
-    model_config:
-      prior_params:
-        off_mu: 1.75
-        off_tau: 1.0
-        def_mu: 0.0
-        def_tau: 1.0
-      features: 
-        - 'home_id'
-        - 'away_id'
-      targets:
-        - 'home_goals'
-        - 'away_goals'
-    sampler_config:
-      chains: 2
-      draws: 2000
-      tune: 200 # toDo: 10% of draws
-      target_accept: 0.85
-      random_seed: 42

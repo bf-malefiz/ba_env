@@ -4,7 +4,6 @@ import arviz as az
 import numpy as np
 import pandas as pd
 import pymc as pm
-import pytensor.tensor as pt
 from bundesliga.model.interfaces import pymc_FootballModel
 from bundesliga.model.modelbase import FootballModelBase
 from numpy.random import RandomState
@@ -97,11 +96,6 @@ class FootballModel(pymc_FootballModel, FootballModelBase):
                 dims="team",
             )
 
-            # offence_home_away = offence[team_idx]
-            # defence_home_away = defence[team_idx]
-            # mu_home = mu_home_away[:, 0]
-            # mu_away = mu_home_away[:, 1]
-            # mu_home_away = offence_home_away - defence_home_away.eval()[:, [1, 0]]
             offence_home = offence[x_data_home]
             defence_home = defence[x_data_home]
             offence_away = offence[x_data_away]

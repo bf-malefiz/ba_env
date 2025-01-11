@@ -27,7 +27,7 @@ SESSION_STORE_CLASS = SQLiteStore
 SESSION_STORE_ARGS = {"path": str(Path(__file__).parents[2])}
 
 # Directory that holds configuration.
-# CONF_SOURCE = "conf"
+CONF_SOURCE = "conf"
 
 # Class that manages how configuration is loaded.
 from kedro.config import OmegaConfigLoader  # noqa: E402
@@ -37,10 +37,11 @@ CONFIG_LOADER_CLASS = OmegaConfigLoader
 CONFIG_LOADER_ARGS = {
     "base_env": "base",
     "default_run_env": "local",
-    #       "config_patterns": {
-    #           "spark" : ["spark*/"],
-    #           "parameters": ["parameters*", "parameters*/**", "**/parameters*"],
-    #       }
+    # "config_patterns": {
+    #     "spark": ["spark*/"],
+    #     "parameters": ["parameters*", "parameters*/**", "**/parameters*"],
+    #     "datasets": ["datasets*", "datasets*/**", "**/datasets*"],
+    # },
 }
 
 # Class that manages Kedro's library components.
