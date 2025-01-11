@@ -1,130 +1,105 @@
-D1_24-25:
+"{dataset}#CSV":
   type: pandas.CSVDataset
-  filepath: data/01_raw/D1_24-25.csv
+  filepath: data/01_raw/football-datasets/{dataset}.csv
+  load_args:
+    sep: ","
+    index_col: 0
+    encoding: "cp1252"
 
-datasets_list:
-  type: yaml.YAMLDataset
-  filepath: data/01_raw/datasets_list.yml
-
-goals:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/02_intermediate/goals.pq
-
-team_lexicon:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/03_primary/team_lexicon.pq
-
-vectorized_data:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/03_primary/vectorized_data.pq
-
-feature_data:
-  type: pandas.ParquetDataset
-  filepath: data/04_feature/feature_data.pq
-
-x_data:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/05_model_input/x_data.pq
-
-y_data:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/05_model_input/y_data.pq
-
-toto:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/05_model_input/toto.pq
-
-# predictions:
-#   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-#   dataset:
-#     type: pickle.PickleDataset
-#     filepath: data/06_models/model_1_idata_active.pkl
-#     backend: pickle
-# predictions:
-
-#   type: kedro_datasets_experimental.netcdf.NetCDFDataset
-#   filepath: data/06_models/model_1_idata_active.nc
-#   save_args:
-#     mode: a
+# current_partition:
+#   type: pandas.CSVDataset
 #   load_args:
-#     decode_times: False
+#     sep: ","
+#     index_col: 0
+#     encoding: "cp1252"
+#   filepath: data/01_raw/current_partition.csv
+#   save_args:
+#     mode: "w"
 
 
-trace:
+# current_partition_name:
+#   type: MemoryDataset
 
-  type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/06_models/trace.nc
-  save_args:
-    mode: a
-  load_args:
-    decode_times: False
-
-# fit_idata:
-#   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+# all_seasons:
+#   type: partitions.PartitionedDataset
+#   path: data/01_raw/football-datasets
 #   dataset:
-#     type: pickle.PickleDataset
-#     filepath: data/06_models/model_1_idata_active.pkl
-#     backend: pickle
+#     type: pandas.CSVDataset
+#     load_args:
+#       sep: ","
+#       index_col: 0
+#       encoding: "cp1252"
 
-offence:
-  type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/07_model_output/offence.nc
-  save_args:
-    mode: a
-  load_args:
-    decode_times: False
-    
-defence:
-  type: kedro_datasets_experimental.netcdf.NetCDFDataset
-  filepath: data/07_model_output/defence.nc
-  save_args:
-    mode: a
-  load_args:
-    decode_times: False
-
-offence_means:
+"{dataset}.goals":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/07_model_output/offence_means.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False
-defence_means:
+    type: pandas.ParquetDataset
+    filepath: data/02_intermediate/{dataset}/goals.pq
+
+"{dataset}.team_lexicon":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
-    type: kedro_datasets_experimental.netcdf.NetCDFDataset
-    filepath: data/07_model_output/defence_means.nc
-    save_args:
-      mode: a
-    load_args:
-      decode_times: False
+    type: pandas.ParquetDataset
+    filepath: data/03_primary/{dataset}/team_lexicon.pq
 
-offence_defence_plot:
+"{dataset}.vectorized_data":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/03_primary/{dataset}/vectorized_data.pq
+
+"{dataset}.feature_data":
+  type: pandas.ParquetDataset
+  filepath: data/04_feature/{dataset}/feature_data.pq
+
+"{dataset}.x_data":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/05_model_input/{dataset}/x_data.pq
+
+"{dataset}.y_data":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/05_model_input/{dataset}/y_data.pq
+
+"{dataset}.toto":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/05_model_input/{dataset}/toto.pq
+
+"{dataset}.idata":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/07_model_output/{dataset}/idata.pq
+
+"{dataset}.offence_means":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/07_model_output/{dataset}/offence_means.nc
+
+"{dataset}.defence_means":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/07_model_output/{dataset}/defence_means.nc
+
+"{dataset}.offence_defence_plot":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/offence_defence_plot.png
+    filepath: data/08_reporting/{dataset}/offence_defence_plot.png
     save_args:
       format: png
 
-goal_diffs_plot:
+"{dataset}.goal_diffs_plot":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/goal_diffs_plot.png
+    filepath: data/08_reporting/{dataset}/goal_diffs_plot.png
     save_args:
       format: png

@@ -30,8 +30,8 @@ f2_active_model_parameters:
       - 'away_goals'
   sampler_config:
     chains: 2
-    draws: 2000
-    tune: 200 # toDo: 10% of draws
+    draws: 100
+    tune: 10 # toDo: 10% of draws
     target_accept: 0.85
     random_seed: 42
   plot_params:
@@ -57,8 +57,8 @@ f1_active_model_parameters:
       - 'away_goals'
   sampler_config:
     chains: 2
-    draws: 2000
-    tune: 200 # toDo: 10% of draws
+    draws: 100
+    tune: 10 # toDo: 10% of draws
     target_accept: 0.85
     random_seed: 42
   plot_params:
@@ -67,7 +67,7 @@ f1_active_model_parameters:
     team_2: 'Bochum'
 sampler_config:
   chains: 2
-  draws: 2000
-  tune: 200 # toDo: 10% of draws
+  draws: 100
+  tune: 10 # toDo: 10% of draws
   target_accept: 0.85
   random_seed: 42

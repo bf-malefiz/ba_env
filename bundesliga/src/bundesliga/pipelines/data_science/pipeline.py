@@ -3,6 +3,10 @@ This is a boilerplate pipeline 'data_science'
 generated using Kedro 0.19.10
 """
 
+from pathlib import Path
+
+from kedro.config import OmegaConfigLoader
+from kedro.framework.project import settings
 from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes_ml.posteriors import posterior_f1, posterior_f2, team_means
@@ -10,7 +14,32 @@ from .nodes_ml.train_model import fit, predict
 from .nodes_monitoring.plots import plot_goal_diffs, plot_offence_defence
 
 
+def load_datasets_from_config():
+    project_path = Path(__file__).parent.parent.parent.parent.parent
+    conf_path = str(project_path / settings.CONF_SOURCE)
+    conf_loader = OmegaConfigLoader(conf_source=conf_path)
+    return conf_loader["parameters"]["datasets"]
+
+
+def create_pipelines_from_config(dataset_list, base_pipeline):
+    pipelines = []
+    for dataset in dataset_list:
+        pipelines.append(
+            pipeline(
+                base_pipeline,
+                parameters={
+                    "params:model_parameters": "params:f1_active_model_parameters"
+                },
+                namespace=dataset,
+            )
+        )
+
+    return pipeline(pipelines)
+
+
 def create_pipeline(**kwargs) -> Pipeline:
+    datasets = load_datasets_from_config()
+
     pipeline_training = pipeline(
         [
             node(
@@ -26,47 +55,24 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="fit_node",
                 tags=["training"],
             ),
+        ]
+    )
+    pipeline_predict = pipeline(
+        [
             node(
                 func=predict,
                 inputs={
                     "model": "model",
                     "x_data": "x_data",
+                    "parameters": "params:model_parameters",
                 },
-                outputs="trace",
+                outputs="idata",
                 name="predict_node",
                 tags=["training"],
             ),
         ]
     )
 
-    # pipe_data_science_f2 = pipeline(
-    #     [],
-    # )
-
-    # reporting_f1 = pipeline(
-    #     [
-    #         node(
-    #             func=posterior_f1,
-    #             inputs="fit_idata",
-    #             outputs=[
-    #                 "offence",
-    #                 "defence",
-    #             ],
-    #             name="posterior_f1_node",
-    #             tags=["training", "reporting"],
-    #         ),
-    # node(
-    #     func=posterior_f2,
-    #     inputs="fit_idata",
-    #     outputs=[
-    #         "weights",
-    #         "offence_defence_diff",
-    #         "score",
-    #         "home_advantage",
-    #     ],
-    #     name="posterior_f2_node",
-    #     tags=["training", "reporting"],
-    # ),
     # node(
     #     func=team_means,
     #     inputs="offence",
@@ -116,22 +122,9 @@ def create_pipeline(**kwargs) -> Pipeline:
     # )
 
     active_pipe_f1 = pipeline(
-        pipeline_training,
-        inputs=["x_data", "y_data", "toto", "team_lexicon"],
-        outputs=["trace"],
-        # outputs=["offence_defence_plot", "goal_diffs_plot"],
-        parameters={"params:model_parameters": "params:f1_active_model_parameters"},
-        # tags=["training"],
+        [pipeline_training, pipeline_predict],
     )
-    # active_pipe_f1 = pipeline(
-    #     [pipeline_training, pipe_data_science_f1],
-    #     inputs=["x_data", "y_data", "toto", "team_lexicon"],
-    #     namespace="active_pipe_f1",
-    #     outputs={"fit_idata": "fit_idata", "predictions": "predictions"},
-    #     parameters={"params:model_parameters": "params:f1_active_model_parameters"},
-    #     # tags=["training"],
-    # )
-
+    return create_pipelines_from_config(datasets, active_pipe_f1)
     # active_pipe_f2 = pipeline(
     #     [pipe_fit, pipe_data_science_f2],
     #     inputs=["x_data", "y_data", "toto", "team_lexicon"],
@@ -146,5 +139,3 @@ def create_pipeline(**kwargs) -> Pipeline:
     #     parameters={"params:model_parameters": "params:f2_active_model_parameters"},
     #     # tags=["training"],
     # )
-
-    return active_pipe_f1
