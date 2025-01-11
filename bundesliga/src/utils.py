@@ -1,8 +1,39 @@
+from pathlib import Path
+
 import numpy as np
 import scipy.stats
+from kedro.config import OmegaConfigLoader
+from kedro.framework.project import settings
+from kedro.pipeline import pipeline
 
 min_mu = 0.0001
 low = 10e-8  # Constant
+
+
+def load_datasets_from_config():
+    project_path = Path(__file__).parent.parent
+    conf_path = str(project_path / settings.CONF_SOURCE)
+    conf_loader = OmegaConfigLoader(conf_source=conf_path)
+    return conf_loader["parameters"]["datasets"]
+
+
+def create_pipelines_from_config(dataset_list, pipeline_root, base_pipeline):
+    if pipeline_root == "etl":
+        params = "params:etl_pipeline"
+    elif pipeline_root == "training":
+        params = "params:f1_active_model_parameters"
+
+    pipelines = []
+    for dataset in dataset_list:
+        pipelines.append(
+            pipeline(
+                base_pipeline,
+                parameters={"params:model_parameters": params},
+                namespace=dataset,
+            )
+        )
+
+    return pipeline(pipelines)
 
 
 def get_teams(model):
