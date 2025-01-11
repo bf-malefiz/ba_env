@@ -8,33 +8,33 @@ from pathlib import Path
 from kedro.config import OmegaConfigLoader
 from kedro.framework.project import settings
 from kedro.pipeline import Pipeline, node, pipeline
+from utils import create_pipelines_from_config, load_datasets_from_config
 
 from .nodes_ml.posteriors import posterior_f1, posterior_f2, team_means
 from .nodes_ml.train_model import fit, predict
 from .nodes_monitoring.plots import plot_goal_diffs, plot_offence_defence
 
+# def load_datasets_from_config():
+#     project_path = Path(__file__).parent.parent.parent.parent.parent
+#     conf_path = str(project_path / settings.CONF_SOURCE)
+#     conf_loader = OmegaConfigLoader(conf_source=conf_path)
+#     return conf_loader["parameters"]["datasets"]
 
-def load_datasets_from_config():
-    project_path = Path(__file__).parent.parent.parent.parent.parent
-    conf_path = str(project_path / settings.CONF_SOURCE)
-    conf_loader = OmegaConfigLoader(conf_source=conf_path)
-    return conf_loader["parameters"]["datasets"]
 
+# def create_pipelines_from_config(dataset_list, base_pipeline):
+#     pipelines = []
+#     for dataset in dataset_list:
+#         pipelines.append(
+#             pipeline(
+#                 base_pipeline,
+#                 parameters={
+#                     "params:model_parameters": "params:f1_active_model_parameters"
+#                 },
+#                 namespace=dataset,
+#             )
+#         )
 
-def create_pipelines_from_config(dataset_list, base_pipeline):
-    pipelines = []
-    for dataset in dataset_list:
-        pipelines.append(
-            pipeline(
-                base_pipeline,
-                parameters={
-                    "params:model_parameters": "params:f1_active_model_parameters"
-                },
-                namespace=dataset,
-            )
-        )
-
-    return pipeline(pipelines)
+#     return pipeline(pipelines)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -121,10 +121,11 @@ def create_pipeline(**kwargs) -> Pipeline:
     #     ]
     # )
 
-    active_pipe_f1 = pipeline(
-        [pipeline_training, pipeline_predict],
+    active_pipe_f1 = pipeline_training + pipeline_predict
+
+    return create_pipelines_from_config(
+        dataset_list=datasets, pipeline_root="training", base_pipeline=active_pipe_f1
     )
-    return create_pipelines_from_config(datasets, active_pipe_f1)
     # active_pipe_f2 = pipeline(
     #     [pipe_fit, pipe_data_science_f2],
     #     inputs=["x_data", "y_data", "toto", "team_lexicon"],

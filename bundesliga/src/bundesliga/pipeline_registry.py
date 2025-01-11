@@ -21,5 +21,5 @@ def register_pipelines() -> Dict[str, Pipeline]:
         "etl": etl_pipeline,
         "training": ml_pipeline,
         "reporting_pipeline": reporting_pipeline,
-        "__default__": [etl_pipeline, ml_pipeline],
+        "__default__": etl_pipeline + ml_pipeline,
     }

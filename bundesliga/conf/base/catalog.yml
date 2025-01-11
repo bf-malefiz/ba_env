@@ -1,4 +1,4 @@
-"{dataset}#CSV":
+"{dataset}.CSV":
   type: pandas.CSVDataset
   filepath: data/01_raw/football-datasets/{dataset}.csv
   load_args:
