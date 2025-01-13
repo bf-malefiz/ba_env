@@ -65,9 +65,9 @@ def vectorize_data(goals) -> pd.DataFrame:
 
 
 def extract_features(
-    vectorized_data: pd.DataFrame, parameters: pd.DataFrame
+    vectorized_data: pd.DataFrame,
 ) -> pd.DataFrame:
-    feature_data = vectorized_data[parameters["model_config"]["features"]]
+    feature_data = vectorized_data[["home_id", "away_id"]]
 
     return feature_data
 
@@ -80,11 +80,9 @@ def extract_x_data(feature_data: pd.DataFrame, timeframe=None) -> pd.DataFrame:
     return x_data
 
 
-def extract_y_data(
-    vectorized_data: pd.DataFrame, parameters: pd.DataFrame, timeframe=None
-) -> pd.DataFrame:
+def extract_y_data(vectorized_data: pd.DataFrame, timeframe=None) -> pd.DataFrame:
     if not timeframe:
-        y_data = vectorized_data[parameters["model_config"]["targets"]]
+        y_data = vectorized_data[["home_goals", "away_goals"]]
         return y_data
 
     else:

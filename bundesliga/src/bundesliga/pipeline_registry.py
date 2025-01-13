@@ -15,11 +15,11 @@ from bundesliga.pipelines.data_science.pipeline import (
 def register_pipelines() -> Dict[str, Pipeline]:
     etl_pipeline = create_etl_pipeline()
     ml_pipeline = create_ml_pipeline()
-    reporting_pipeline = ml_pipeline.only_nodes_with_tags("reporting")
+    # reporting_pipeline = ml_pipeline.only_nodes_with_tags("reporting")
 
     return {
         "etl": etl_pipeline,
         "training": ml_pipeline,
-        "reporting_pipeline": reporting_pipeline,
+        # "reporting_pipeline": reporting_pipeline,
         "__default__": etl_pipeline + ml_pipeline,
     }

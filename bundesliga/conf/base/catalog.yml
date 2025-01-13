@@ -1,4 +1,4 @@
-"{dataset}.CSV":
+"{namespace}.{dataset}.CSV":
   type: pandas.CSVDataset
   filepath: data/01_raw/football-datasets/{dataset}.csv
   load_args:
@@ -30,76 +30,96 @@
 #       index_col: 0
 #       encoding: "cp1252"
 
-"{dataset}.goals":
+"{variant}.{dataset}.goals":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
     filepath: data/02_intermediate/{dataset}/goals.pq
 
-"{dataset}.team_lexicon":
+"{variant}.{dataset}.team_lexicon":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/03_primary/{dataset}/team_lexicon.pq
+    filepath: data/03_primary/{dataset}/{variant}/team_lexicon.pq
 
-"{dataset}.vectorized_data":
+"{variant}.{dataset}.vectorized_data":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/03_primary/{dataset}/vectorized_data.pq
+    filepath: data/03_primary/{dataset}/{variant}/vectorized_data.pq
 
-"{dataset}.feature_data":
+"{variant}.{dataset}.feature_data":
   type: pandas.ParquetDataset
-  filepath: data/04_feature/{dataset}/feature_data.pq
+  filepath: data/04_feature/{dataset}/{variant}/feature_data.pq
 
-"{dataset}.x_data":
+"{variant}.{dataset}.x_data":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/05_model_input/{dataset}/x_data.pq
+    filepath: data/05_model_input/{dataset}/{variant}/x_data.pq
 
-"{dataset}.y_data":
+"{variant}.{dataset}.x_data_fit_{day}":
+  type: MemoryDataset
+
+"{variant}.{dataset}.x_data_pred_{day}":
+  type: MemoryDataset
+
+"{variant}.{dataset}.day_{day}":
+  type: MemoryDataset
+
+"{variant}.{dataset}.y_data":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/05_model_input/{dataset}/y_data.pq
+    filepath: data/05_model_input/{dataset}/{variant}/y_data.pq
 
-"{dataset}.toto":
+"{variant}.{dataset}.y_data_fit_{day}":
+  type: MemoryDataset
+
+"{variant}.{dataset}.y_data_pred_{day}":
+  type: MemoryDataset
+
+"{variant}.{dataset}.toto":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/05_model_input/{dataset}/toto.pq
+    filepath: data/05_model_input/{dataset}/{variant}/toto.pq
 
-"{dataset}.idata":
+"{variant}.{dataset}.results":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.CSVDataset
+    filepath: data/08_reporting/{dataset}/{variant}/results.csv
+    save_args:
+      mode: "a"
+      # header: False
+      
+
+
+"{variant}.{dataset}.offence_means":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/07_model_output/{dataset}/idata.pq
+    filepath: data/07_model_output/{dataset}/{variant}/offence_means.nc
 
-"{dataset}.offence_means":
+"{variant}.{dataset}.defence_means":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/07_model_output/{dataset}/offence_means.nc
+    filepath: data/07_model_output/{dataset}/{variant}/defence_means.nc
 
-"{dataset}.defence_means":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/07_model_output/{dataset}/defence_means.nc
-
-"{dataset}.offence_defence_plot":
+"{variant}.{dataset}.offence_defence_plot":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/{dataset}/offence_defence_plot.png
+    filepath: data/08_reporting/{dataset}/{variant}/offence_defence_plot.png
     save_args:
       format: png
 
-"{dataset}.goal_diffs_plot":
+"{variant}.{dataset}.goal_diffs_plot":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/{dataset}/goal_diffs_plot.png
+    filepath: data/08_reporting/{dataset}/{variant}/goal_diffs_plot.png
     save_args:
       format: png

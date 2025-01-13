@@ -3,75 +3,130 @@ This is a boilerplate pipeline 'data_science'
 generated using Kedro 0.19.10
 """
 
-from pathlib import Path
-
-from kedro.config import OmegaConfigLoader
-from kedro.framework.project import settings
 from kedro.pipeline import Pipeline, node, pipeline
-from utils import create_pipelines_from_config, load_datasets_from_config
+from utils import load_config, split_time_data
 
-from .nodes_ml.posteriors import posterior_f1, posterior_f2, team_means
-from .nodes_ml.train_model import fit, predict
-from .nodes_monitoring.plots import plot_goal_diffs, plot_offence_defence
+from bundesliga import settings
 
-# def load_datasets_from_config():
-#     project_path = Path(__file__).parent.parent.parent.parent.parent
-#     conf_path = str(project_path / settings.CONF_SOURCE)
-#     conf_loader = OmegaConfigLoader(conf_source=conf_path)
-#     return conf_loader["parameters"]["datasets"]
+# from .nodes_ml.posteriors import posterior_f1, posterior_f2, team_means
+from .nodes_ml.train_model import fit, init_model, predict
 
-
-# def create_pipelines_from_config(dataset_list, base_pipeline):
-#     pipelines = []
-#     for dataset in dataset_list:
-#         pipelines.append(
-#             pipeline(
-#                 base_pipeline,
-#                 parameters={
-#                     "params:model_parameters": "params:f1_active_model_parameters"
-#                 },
-#                 namespace=dataset,
-#             )
-#         )
-
-#     return pipeline(pipelines)
+# from .nodes_monitoring.plots import plot_goal_diffs, plot_offence_defence
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    datasets = load_datasets_from_config()
+    datasets_list = load_config()["parameters"]["datasets"]
 
-    pipeline_training = pipeline(
+    pipes = []
+    for namespace, variants in settings.DYNAMIC_PIPELINES_MAPPING.items():
+        for variant in variants:
+            for dataset_name in datasets_list:
+                pipes.append(
+                    pipeline(
+                        pipeline(
+                            create_walk_forward_pipeline(51),
+                            namespace=dataset_name,
+                        ),
+                        parameters={
+                            f"params:{dataset_name}.model_options": f"params:{namespace}.{variant}.model_options"
+                        },
+                        namespace=f"{namespace}",
+                        tags=[variant, namespace],
+                    )
+                )
+
+    return sum(pipes)
+
+
+def create_pipelines_with_dataset_namespace(dataset_name, base_pipeline):
+    pipelines = []
+    pipelines.append(
+        pipeline(
+            base_pipeline,
+            namespace=dataset_name,
+            tags=dataset_name,
+        )
+    )
+
+    return pipeline(pipelines)
+
+
+def create_subpipeline_for_day(day: int) -> Pipeline:
+    """
+    Erzeugt Knoten [split -> fit -> predict -> evaluate] für Tag = `day`.
+    """
+    return Pipeline(
         [
             node(
-                func=fit,
+                func=init_model,
+                inputs={
+                    "parameters": "params:model_options",
+                },
+                outputs=f"init_model_{day}",
+                name=f"init_model_node_{day}",
+            ),
+            node(
+                func=lambda: str(day),
+                inputs=None,
+                outputs=f"day_{day}",
+                name=f"day_node_{day}",
+            ),
+            node(
+                func=split_time_data,
                 inputs={
                     "x_data": "x_data",
                     "y_data": "y_data",
-                    "team_lexicon": "team_lexicon",
-                    "parameters": "params:model_parameters",
-                    "toto": "toto",
+                    "current_day": f"day_{day}",
                 },
-                outputs="model",
-                name="fit_node",
-                tags=["training"],
+                outputs=[
+                    f"x_data_fit_{day}",
+                    f"y_data_fit_{day}",
+                    f"x_data_pred_{day}",
+                    f"y_data_pred_{day}",
+                ],
+                name=f"split_node_{day}",
             ),
-        ]
-    )
-    pipeline_predict = pipeline(
-        [
+            node(
+                func=fit,
+                inputs={
+                    "x_data": f"x_data_fit_{day}",
+                    "y_data": f"y_data_fit_{day}",
+                    "model": f"init_model_{day}",
+                    "team_lexicon": "team_lexicon",
+                    "parameters": "params:model_options",
+                    # "toto": f"toto_{day}",
+                },
+                outputs=[f"model_{day}", f"idata_{day}"],
+                name=f"fit_node_{day}",
+            ),
             node(
                 func=predict,
                 inputs={
-                    "model": "model",
-                    "x_data": "x_data",
-                    "parameters": "params:model_parameters",
+                    "model": f"model_{day}",
+                    "x_data": f"x_data_pred_{day}",
+                    "idata": f"idata_{day}",
+                    "parameters": "params:model_options",
                 },
-                outputs="idata",
-                name="predict_node",
-                tags=["training"],
+                outputs=f"results",
+                name=f"predict_node_{day}",
             ),
-        ]
+        ],
     )
+
+
+def create_walk_forward_pipeline(max_day: int) -> Pipeline:
+    """
+    Baut eine Pipeline, die für day=1..max_day Sub-Pipelines kaskadiert.
+    => Ein einziger Pipeline-Lauf deckt alle Tage ab.
+    """
+    subpipelines = []
+    for day in range(50, max_day + 1):
+        if day % 3 == 0:
+            subpipelines.append(create_subpipeline_for_day(day))
+
+    # Sub-Pipelines zu einer großen Pipeline zusammenfassen
+    # walk_forward_pipeline_collection = reduce(lambda p1, p2: p1 + p2, subpipelines)
+    return subpipelines
 
     # node(
     #     func=team_means,
@@ -121,11 +176,6 @@ def create_pipeline(**kwargs) -> Pipeline:
     #     ]
     # )
 
-    active_pipe_f1 = pipeline_training + pipeline_predict
-
-    return create_pipelines_from_config(
-        dataset_list=datasets, pipeline_root="training", base_pipeline=active_pipe_f1
-    )
     # active_pipe_f2 = pipeline(
     #     [pipe_fit, pipe_data_science_f2],
     #     inputs=["x_data", "y_data", "toto", "team_lexicon"],
