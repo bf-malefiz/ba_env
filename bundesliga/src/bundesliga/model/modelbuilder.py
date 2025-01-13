@@ -48,29 +48,32 @@ class FootballModel(pymc_FootballModel, FootballModelBase):
         kwargs : dict
             Additional keyword arguments that may be used for model configuration.
         """
+        if isinstance(X, pd.DataFrame):
+            X = X[["home_id", "away_id"]]
 
-        # self._generate_and_preprocess_model_data(X, goals)
+        y = goals.values if isinstance(goals, pd.Series) else goals
+        self._generate_and_preprocess_model_data(X, y)
 
         with pm.Model(coords=self.model_coords) as self.model:
             # Create mutable data containers
             x_data_home = pm.Data(
                 "x_data_home",
-                X["home_id"].values,
+                self.X["home_id"].values,
                 dims="match",
             )
             x_data_away = pm.Data(
                 "x_data_away",
-                X["away_id"].values,
+                self.X["away_id"].values,
                 dims="match",
             )
             y_data_home = pm.Data(
                 "y_data_home",
-                goals["home_goals"].values,
+                self.y["home_goals"].values,
                 dims="match",
             )
             y_data_away = pm.Data(
                 "y_data_away",
-                goals["away_goals"].values,
+                self.y["away_goals"].values,
                 dims="match",
             )
 
