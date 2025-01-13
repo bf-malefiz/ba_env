@@ -50,20 +50,36 @@ class pymc_FootballModel(ModelBuilder):
             # x_values = X[:, 0]
             x_data_home_values = X[:, 0]
             x_data_away_values = X[:, 1]
+        input_length = len(x_data_home_values)
+        match_length = len(self.model_coords["match"])
+        new_match_range = np.arange(input_length) + match_length
+        dummy = np.ones(input_length, dtype=int)
 
         with self.model:
-            self.model_coords["match"] = np.arange(len(X))
+            self.model_coords["match"] = new_match_range
             pm.set_data(
-                {"x_data_home": x_data_home_values}, coords={"match": np.arange(len(X))}
+                {"x_data_home": x_data_home_values},
+                coords={"match": new_match_range},
             )
             pm.set_data(
-                {"x_data_away": x_data_away_values}, coords={"match": np.arange(len(X))}
+                {"x_data_away": x_data_away_values},
+                coords={"match": new_match_range},
             )
 
             if y is not None:
                 pm.set_data(
-                    {"goals": y.values if isinstance(y, pd.Series) else y}
-                )  # toDO: check if this is correct, as it should set home and away goals? when do we need to set the data?
+                    {"goals": y.values if isinstance(y, pd.Series) else y},
+                    coords={"match": new_match_range},
+                )
+            else:
+                pm.set_data(
+                    {"y_data_home": dummy},
+                    coords={"match": new_match_range},
+                )
+                pm.set_data(
+                    {"y_data_away": dummy},
+                    coords={"match": new_match_range},
+                )
 
     @staticmethod
     def get_default_model_config() -> dict:
@@ -110,7 +126,7 @@ class pymc_FootballModel(ModelBuilder):
 
     @property
     def output_var(self):
-        return "home_goals"
+        return "home_away_goals"
 
     @property
     def _serializable_model_config(self) -> dict[str, Union[int, float, dict]]:
@@ -154,6 +170,9 @@ class pymc_FootballModel(ModelBuilder):
 
             return teams, uniques
 
+        if isinstance(goals, pd.Series | np.ndarray):
+            goals = goals.tolist()
+
         self.model_coords = {
             "team": _get_teams(X)[1],
             "match": np.arange(len(X)),
@@ -161,9 +180,31 @@ class pymc_FootballModel(ModelBuilder):
             "goals": ["home_goals", "away_goals"],
         }
         self.X = X
-        goals_list = goals.tolist()
+        self.y = pd.DataFrame(goals, columns=["home_goals", "away_goals"])
 
-        self.y = pd.DataFrame(goals_list, columns=["home_goals", "away_goals"])
+    def predict_both_goals(
+        self,
+        X_pred: np.ndarray | pd.DataFrame | pd.Series,
+        idata,
+        extend_idata: bool = False,
+        **kwargs,
+    ) -> pd.DataFrame:
+        with self.model:
+            predictions = self.sample_posterior_predictive(
+                X_pred, extend_idata, combined=False, **kwargs
+            )
+        # with self.model:
+        #     predictions = pm.sample_posterior_predictive(
+        #         idata, predictions=True, extend_inferencedata=False
+        #     ).predictions
+        home_mean = predictions["home_goals"].mean(dim=["chain", "draw"]).data
+        away_mean = predictions["away_goals"].mean(dim=["chain", "draw"]).data
+        return pd.DataFrame(
+            {
+                "home_goals": home_mean,
+                "away_goals": away_mean,
+            }
+        )
 
 
 class pyro_FootballModel:
