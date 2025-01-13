@@ -1,39 +1,61 @@
+from copy import deepcopy
 from pathlib import Path
 
 import numpy as np
+import omegaconf
 import scipy.stats
 from kedro.config import OmegaConfigLoader
 from kedro.framework.project import settings
-from kedro.pipeline import pipeline
 
 min_mu = 0.0001
 low = 10e-8  # Constant
 
 
-def load_datasets_from_config():
-    project_path = Path(__file__).parent.parent
-    conf_path = str(project_path / settings.CONF_SOURCE)
+def split_time_data(x_data, y_data, current_day):
+    """
+    Gibt train_X, train_y, test_X, test_y zurück,
+    basierend auf der Spalte 'matchday' in X / y.
+    """
+    current_day = int(current_day)
+    x_data_slice = x_data[:current_day]
+    y_data_slice = y_data[:current_day]
+
+    x_nxt = x_data[current_day : current_day + 1]
+    y_nxt = y_data[current_day : current_day + 1]
+
+    return x_data_slice, y_data_slice, x_nxt, y_nxt
+
+
+def load_config():
+    proj_path = Path(__file__).parent.parent
+    conf_path = str(proj_path / settings.CONF_SOURCE)
     conf_loader = OmegaConfigLoader(conf_source=conf_path)
-    return conf_loader["parameters"]["datasets"]
+
+    return conf_loader
 
 
-def create_pipelines_from_config(dataset_list, pipeline_root, base_pipeline):
-    if pipeline_root == "etl":
-        params = "params:etl_pipeline"
-    elif pipeline_root == "training":
-        params = "params:f1_active_model_parameters"
+def merge_dicts(dict1, dict2):
+    """
+    Recursively merge two dictionaries.
 
-    pipelines = []
-    for dataset in dataset_list:
-        pipelines.append(
-            pipeline(
-                base_pipeline,
-                parameters={"params:model_parameters": params},
-                namespace=dataset,
-            )
-        )
+    Args:
+        dict1 (dict): The first dictionary to merge.
+        dict2 (dict): The second dictionary to merge.
 
-    return pipeline(pipelines)
+    Returns:
+        dict: The merged dictionary.
+    """
+    result = deepcopy(dict1)
+    for key, value in dict2.items():
+        if (
+            key in result
+            and isinstance(result[key], omegaconf.dictconfig.DictConfig)
+            and isinstance(value, omegaconf.dictconfig.DictConfig)
+        ):
+            result[key] = merge_dicts(result[key], value)
+        else:
+            result[key] = value
+    return result
 
 
 def get_teams(model):
