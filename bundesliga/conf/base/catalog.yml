@@ -6,30 +6,6 @@
     index_col: 0
     encoding: "cp1252"
 
-# current_partition:
-#   type: pandas.CSVDataset
-#   load_args:
-#     sep: ","
-#     index_col: 0
-#     encoding: "cp1252"
-#   filepath: data/01_raw/current_partition.csv
-#   save_args:
-#     mode: "w"
-
-
-# current_partition_name:
-#   type: MemoryDataset
-
-# all_seasons:
-#   type: partitions.PartitionedDataset
-#   path: data/01_raw/football-datasets
-#   dataset:
-#     type: pandas.CSVDataset
-#     load_args:
-#       sep: ","
-#       index_col: 0
-#       encoding: "cp1252"
-
 "{variant}.{dataset}.goals":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
@@ -48,35 +24,17 @@
     type: pandas.ParquetDataset
     filepath: data/03_primary/{dataset}/{variant}/vectorized_data.pq
 
-"{variant}.{dataset}.feature_data":
+
+"{variant}.{dataset}.train_data_{day}":
   type: pandas.ParquetDataset
-  filepath: data/04_feature/{dataset}/{variant}/feature_data.pq
+  filepath: data/04_feature/{dataset}/{variant}/train_data_{day}.pq
 
-"{variant}.{dataset}.x_data":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/05_model_input/{dataset}/{variant}/x_data.pq
 
-"{variant}.{dataset}.x_data_fit_{day}":
-  type: MemoryDataset
-
-"{variant}.{dataset}.x_data_pred_{day}":
-  type: MemoryDataset
+"{variant}.{dataset}.test_data_{day}":
+  type: pandas.ParquetDataset
+  filepath: data/04_feature/{dataset}/{variant}/test_data_{day}.pq
 
 "{variant}.{dataset}.day_{day}":
-  type: MemoryDataset
-
-"{variant}.{dataset}.y_data":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/05_model_input/{dataset}/{variant}/y_data.pq
-
-"{variant}.{dataset}.y_data_fit_{day}":
-  type: MemoryDataset
-
-"{variant}.{dataset}.y_data_pred_{day}":
   type: MemoryDataset
 
 "{variant}.{dataset}.toto":
@@ -84,6 +42,12 @@
   dataset:
     type: pandas.ParquetDataset
     filepath: data/05_model_input/{dataset}/{variant}/toto.pq
+
+"{variant}.{dataset}.predictions_{day}":
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  dataset:
+    type: pandas.ParquetDataset
+    filepath: data/07_model_output/{dataset}/{variant}/predictions_{day}.pq
 
 "{variant}.{dataset}.results":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
@@ -94,8 +58,6 @@
       mode: "a"
       # header: False
       
-
-
 "{variant}.{dataset}.offence_means":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:

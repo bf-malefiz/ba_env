@@ -8,6 +8,11 @@ from pymc_experimental.model_builder import ModelBuilder
 
 
 class pymc_FootballModel(ModelBuilder):
+    def __init__(self, parameters=None):
+        model_config = parameters["model_config"]
+        sampler_config = parameters["sampler_config"]
+        super().__init__(model_config, sampler_config)
+
     # Give the model a name
     _model_type = "FootballModel"
 
@@ -15,7 +20,7 @@ class pymc_FootballModel(ModelBuilder):
     version = "0.1"
 
     @abstractmethod
-    def build_model(self, X: pd.DataFrame, goals: pd.Series, **kwargs):
+    def build_model(self, X: pd.DataFrame, y: pd.Series, **kwargs):
         """
         build_model creates the PyMC model
 
@@ -68,7 +73,7 @@ class pymc_FootballModel(ModelBuilder):
 
             if y is not None:
                 pm.set_data(
-                    {"goals": y.values if isinstance(y, pd.Series) else y},
+                    {"y": y.values if isinstance(y, pd.Series) else y},
                     coords={"match": new_match_range},
                 )
             else:
@@ -126,7 +131,7 @@ class pymc_FootballModel(ModelBuilder):
 
     @property
     def output_var(self):
-        return "home_away_goals"
+        return "home_goals"
 
     @property
     def _serializable_model_config(self) -> dict[str, Union[int, float, dict]]:
@@ -156,7 +161,7 @@ class pymc_FootballModel(ModelBuilder):
     def _generate_and_preprocess_model_data(
         self,
         X: Union[pd.DataFrame, pd.Series],
-        goals: Union[pd.Series, np.ndarray],
+        y: Union[pd.Series, np.ndarray],
     ) -> None:
         """
         Depending on the model, we might need to preprocess the data before fitting the model.
@@ -170,48 +175,57 @@ class pymc_FootballModel(ModelBuilder):
 
             return teams, uniques
 
-        if isinstance(goals, pd.Series | np.ndarray):
-            goals = goals.tolist()
+        if isinstance(y, pd.Series | np.ndarray):
+            y = y.tolist()
 
         self.model_coords = {
             "team": _get_teams(X)[1],
             "match": np.arange(len(X)),
-            "id": ["home_id", "away_id"],
-            "goals": ["home_goals", "away_goals"],
+            "X": ["home_id", "away_id"],
+            "y": ["home_goals", "away_goals"],
         }
         self.X = X
-        self.y = pd.DataFrame(goals, columns=["home_goals", "away_goals"])
+        # self.y = pd.DataFrame(goals, columns=["home_goals", "away_goals"])
+        self.y = y
 
-    def predict_both_goals(
+    def train(self, X, y, **kwargs):
+        goals = y.apply(lambda row: (row["home_goals"], row["away_goals"]), axis=1)
+        toto = y["toto"].values
+
+        idata = self.fit(
+            X=X,
+            y=goals,
+            random_seed=self.sampler_config["random_seed"],
+            nchains=self.sampler_config["chains"],
+            draws=self.sampler_config["draws"],
+        )
+        return idata
+
+    def predict_toto_probabilities(
         self,
-        X_pred: np.ndarray | pd.DataFrame | pd.Series,
-        idata,
+        test_data: np.ndarray | pd.DataFrame | pd.Series,
         extend_idata: bool = False,
         **kwargs,
     ) -> pd.DataFrame:
-        with self.model:
-            predictions = self.sample_posterior_predictive(
-                X_pred, extend_idata, combined=False, **kwargs
-            )
-        # with self.model:
-        #     predictions = pm.sample_posterior_predictive(
-        #         idata, predictions=True, extend_inferencedata=False
-        #     ).predictions
-        home_mean = predictions["home_goals"].mean(dim=["chain", "draw"]).data
-        away_mean = predictions["away_goals"].mean(dim=["chain", "draw"]).data
-        return pd.DataFrame(
-            {
-                "home_goals": home_mean,
-                "away_goals": away_mean,
-            }
+        # def posterior_predictive_checks(model, idata, x_data):
+        #     with model.model:
+        #         ppc = pm.sample_posterior_predictive(idata, random_seed=42)
+
+        #     return ppc
+
+        pp = self.sample_posterior_predictive(
+            X_pred=test_data,
+            extend_idata=extend_idata,
+            combined=False,
+            random_seed=self.sampler_config["random_seed"],
+            **kwargs,
         )
+        team1_wins = pp["home_goals"] > pp["away_goals"]
+        team2_wins = pp["home_goals"] < pp["away_goals"]
+        tie = pp["home_goals"] == pp["away_goals"]
+        p1 = team1_wins.mean()
+        p2 = team2_wins.mean()
+        tie = tie.mean()
+        np.testing.assert_almost_equal(1, p1 + tie + p2)
 
-
-class pyro_FootballModel:
-    # Give the model a name
-    _model_type = "FootballModel"
-
-    # And a version
-    version = "0.1"
-
-    pass
+        return np.array([[tie, p1, p2]])
