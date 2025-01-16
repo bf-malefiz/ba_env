@@ -3,6 +3,7 @@ from pathlib import Path
 
 import numpy as np
 import omegaconf
+import pandas as pd
 import scipy.stats
 from kedro.config import OmegaConfigLoader
 from kedro.framework.project import settings
@@ -10,20 +11,45 @@ from kedro.framework.project import settings
 min_mu = 0.0001
 low = 10e-8  # Constant
 
+# def extract_features(
+#     vectorized_data: pd.DataFrame,
+# ) -> pd.DataFrame:
+#     feature_data = vectorized_data[["home_id", "away_id"]]
 
-def split_time_data(x_data, y_data, current_day):
+#     return feature_data
+
+
+# def extract_x_data(feature_data: pd.DataFrame, timeframe=None) -> pd.DataFrame:
+#     if not timeframe:
+#         x_data = feature_data
+#     else:
+#         raise NotImplementedError
+#     return x_data
+
+
+# def extract_y_data(vectorized_data: pd.DataFrame, timeframe=None) -> pd.DataFrame:
+#     if not timeframe:
+#         y_data = vectorized_data[["home_goals", "away_goals"]]
+#         return y_data
+
+#     else:
+#         raise NotImplementedError
+
+
+# def extract_toto(vectorized_data: pd.DataFrame) -> pd.DataFrame:
+#     return pd.DataFrame(vectorized_data["toto"], columns=["toto"])
+
+
+def split_time_data(vectorized_data: pd.DataFrame, current_day):
     """
     Gibt train_X, train_y, test_X, test_y zurück,
     basierend auf der Spalte 'matchday' in X / y.
     """
     current_day = int(current_day)
-    x_data_slice = x_data[:current_day]
-    y_data_slice = y_data[:current_day]
+    train_data = vectorized_data[:current_day]
+    test_data = vectorized_data[current_day : current_day + 1]
 
-    x_nxt = x_data[current_day : current_day + 1]
-    y_nxt = y_data[current_day : current_day + 1]
-
-    return x_data_slice, y_data_slice, x_nxt, y_nxt
+    return train_data, test_data
 
 
 def load_config():

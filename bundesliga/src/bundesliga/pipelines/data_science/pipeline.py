@@ -9,13 +9,17 @@ from utils import load_config, split_time_data
 from bundesliga import settings
 
 # from .nodes_ml.posteriors import posterior_f1, posterior_f2, team_means
-from .nodes_ml.train_model import fit, init_model, predict
+from .nodes_ml.train_model import evaluate, init_model, predict, train
 
 # from .nodes_monitoring.plots import plot_goal_diffs, plot_offence_defence
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    datasets_list = load_config()["parameters"]["datasets"]
+    config = load_config()
+    parameters = load_config()["parameters"]
+    datasets_list = parameters["datasets"]
+    start_day = parameters["model_options"]["start_day"]
+    walk_forward = parameters["model_options"]["walk_forward"]
 
     pipes = []
     for namespace, variants in settings.DYNAMIC_PIPELINES_MAPPING.items():
@@ -24,7 +28,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 pipes.append(
                     pipeline(
                         pipeline(
-                            create_walk_forward_pipeline(51),
+                            create_walk_forward_pipeline(start_day, walk_forward),
                             namespace=dataset_name,
                         ),
                         parameters={
@@ -58,14 +62,6 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
     return Pipeline(
         [
             node(
-                func=init_model,
-                inputs={
-                    "parameters": "params:model_options",
-                },
-                outputs=f"init_model_{day}",
-                name=f"init_model_node_{day}",
-            ),
-            node(
                 func=lambda: str(day),
                 inputs=None,
                 outputs=f"day_{day}",
@@ -74,25 +70,29 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
             node(
                 func=split_time_data,
                 inputs={
-                    "x_data": "x_data",
-                    "y_data": "y_data",
+                    "vectorized_data": "vectorized_data",
                     "current_day": f"day_{day}",
                 },
                 outputs=[
-                    f"x_data_fit_{day}",
-                    f"y_data_fit_{day}",
-                    f"x_data_pred_{day}",
-                    f"y_data_pred_{day}",
+                    f"train_data_{day}",
+                    f"test_data_{day}",
                 ],
                 name=f"split_node_{day}",
             ),
             node(
-                func=fit,
+                func=init_model,
                 inputs={
-                    "x_data": f"x_data_fit_{day}",
-                    "y_data": f"y_data_fit_{day}",
-                    "model": f"init_model_{day}",
                     "team_lexicon": "team_lexicon",
+                    "parameters": "params:model_options",
+                },
+                outputs=f"init_model_{day}",
+                name=f"init_model_node_{day}",
+            ),
+            node(
+                func=train,
+                inputs={
+                    "model": f"init_model_{day}",
+                    "train_data": f"train_data_{day}",
                     "parameters": "params:model_options",
                     # "toto": f"toto_{day}",
                 },
@@ -103,26 +103,35 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
                 func=predict,
                 inputs={
                     "model": f"model_{day}",
-                    "x_data": f"x_data_pred_{day}",
-                    "idata": f"idata_{day}",
+                    "test_data": f"test_data_{day}",
                     "parameters": "params:model_options",
                 },
-                outputs=f"results",
+                outputs=f"predictions_{day}",
                 name=f"predict_node_{day}",
+            ),
+            node(
+                func=evaluate,
+                inputs={
+                    "model": f"model_{day}",
+                    "day": f"day_{day}",
+                    "vectorized_data": "vectorized_data",
+                    "predictions": f"predictions_{day}",
+                },
+                outputs=f"s_{day}",
+                name=f"evaluate_node_{day}",
             ),
         ],
     )
 
 
-def create_walk_forward_pipeline(max_day: int) -> Pipeline:
+def create_walk_forward_pipeline(start_day: int, times_to_walk: int) -> Pipeline:
     """
     Baut eine Pipeline, die für day=1..max_day Sub-Pipelines kaskadiert.
     => Ein einziger Pipeline-Lauf deckt alle Tage ab.
     """
     subpipelines = []
-    for day in range(50, max_day + 1):
-        if day % 3 == 0:
-            subpipelines.append(create_subpipeline_for_day(day))
+    for day in range(start_day, start_day + times_to_walk + 1):
+        subpipelines.append(create_subpipeline_for_day(day))
 
     # Sub-Pipelines zu einer großen Pipeline zusammenfassen
     # walk_forward_pipeline_collection = reduce(lambda p1, p2: p1 + p2, subpipelines)
