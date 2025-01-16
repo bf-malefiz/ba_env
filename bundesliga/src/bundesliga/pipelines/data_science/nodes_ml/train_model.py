@@ -1,58 +1,85 @@
 import typing as t
 
 import arviz as az
+import bundesliga.model.pymc.pymc_simple_model as pm_simple
+import bundesliga.model.pymc.pymc_toto_model as pm_toto
+import bundesliga.model.pyro.pyro_simple_model as pyro_simple
+import matplotlib.pyplot as plt
 import pandas as pd
 import pymc as pm
 import xarray as xr
-from bundesliga.model.modelbuilder import FootballModel, FootballModel_2
 
 
-def split_time_data(x_data: pd.DataFrame, y_data: pd.DataFrame, current_day: int):
-    """
-    Gibt train_X, train_y, test_X, test_y zurück,
-    basierend auf der Spalte 'matchday' in X / y.
-    """
-    x_data = x_data[:current_day]
-    y_data = x_data[: current_day + 1]
-
-    return x_data, y_data
-
-
-def init_model(parameters: t.Dict, **kwargs) -> xr.Dataset:
+def init_model(team_lexicon, parameters: t.Dict, **kwargs) -> xr.Dataset:
     model = parameters["model"]
+    engine = parameters["engine"]
 
-    if model == "f1":
-        return FootballModel()
-    if model == "f2":
-        try:
-            kwargs["toto"]
-        except KeyError:
-            raise ValueError("f2 model requires toto as keyword argument.")
+    match engine:
+        case "pymc":
+            match model:
+                case "simple":
+                    return pm_simple.SimpleModel(parameters)
+                case "toto":
+                    try:
+                        kwargs["toto"]
+                    except KeyError:
+                        raise ValueError(
+                            "pm_toto.TotoModel requires 'toto' as keyword argument."
+                        )
+                    return pm_toto.TotoModel(toto=kwargs["toto"])
+        case "pyro":
+            match model:
+                case "simple":
+                    return pyro_simple.SimplePyroModel(team_lexicon, parameters)
+                case "toto":
+                    raise NotImplementedError("Pyro not implemented.")
+        case "stan":
+            match model:
+                case "simple":
+                    raise NotImplementedError("Stan not implemented.")
+                case "toto":
+                    raise NotImplementedError("Stan not implemented.")
+        case _:
+            raise ValueError(f"Model {model} not supported.")
 
-        return FootballModel_2(
-            toto=kwargs["toto"],
-        )
-    else:
-        raise ValueError(f"Model {model} not supported.")
 
+def train(model, train_data, parameters: t.Dict, **kwargs) -> xr.Dataset:
+    X = train_data[["home_id", "away_id"]]
+    y = train_data[["home_goals", "away_goals", "toto"]]
 
-def fit(
-    x_data, y_data: pd.DataFrame, model, parameters: t.Dict, **kwargs
-) -> xr.Dataset:
-    goals = y_data.apply(lambda row: (row["home_goals"], row["away_goals"]), axis=1)
-    idata = model.fit(
-        X=x_data,
-        y=goals,
-        random_seed=parameters["random_seed"],
-    )
+    idata = model.train(X=X, y=y, parameters=parameters)
 
     return model, idata
 
 
-def predict(model, idata, x_data, parameters):
-    with model.model:
-        pred_home_away_mean = model.predict_both_goals(
-            x_data, idata, extend_idata=False
-        )
+def predict(model, test_data, parameters, **kwargs) -> pd.DataFrame:
+    pp = model.predict_toto_probabilities(test_data)
 
-    return pred_home_away_mean
+    return pd.DataFrame(pp, columns=["tie", "home", "away"])
+
+
+def evaluate(model, day, vectorized_data, predictions):
+    az.style.use("arviz-doc")
+    az.load_arviz_data("non_centered_eight")
+
+    # a=az.plot_trace(idata)
+    # az.plot_ppc(
+    #     idata,
+    #     data_pairs={"match": "home_goals"},
+    #     alpha=0.03,
+    #     textsize=14,
+    #     num_pp_samples=1000,
+    #     random_seed=42,
+    # )
+    # az.plot_ppc(
+    #     idata,
+    #     alpha=0.03,
+    #     textsize=14,
+    #     num_pp_samples=10,
+    #     random_seed=42,
+    # )
+    # # az.plot_ppc(data, data_pairs={"match": "match"}, alpha=0.03, textsize=14)
+
+    # plt.show()
+    print("s")
+    return pd.DataFrame([[1], [1]], columns=["s"])

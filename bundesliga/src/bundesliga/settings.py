@@ -55,8 +55,8 @@ CONFIG_LOADER_ARGS = {
 DYNAMIC_PIPELINES_MAPPING = {
     # "etl": ["base"],
     # "goal_predictor": ["base"],
-    "pymc": ["f1"],
-    # "pymc2": ["f1"],
+    "pymc": ["simple"],
+    "pyro": ["simple"],
 }
 
 # Class that manages Kedro's library components.
