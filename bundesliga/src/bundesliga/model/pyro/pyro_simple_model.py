@@ -1,13 +1,11 @@
-# import gin
 import numpy as np
+import pandas as pd
 import pyro
 import pyro.distributions as dist
 import torch
 from bundesliga.model.pyro.pyro_model import PyroModel
-from torch.distributions import constraints
 
 
-# @gin.register
 class SimplePyroModel(PyroModel):
     def __init__(self, team_lexicon, parameters, prior_diff=np.log(1.5)):
         super().__init__(team_lexicon, parameters)
@@ -36,7 +34,21 @@ class SimplePyroModel(PyroModel):
         diff_ji = np.exp(team2_offence_samples - team1_defence_samples)
         return diff_ij, diff_ji
 
-    def get_probs_winner_from_goal_results(self, team1, team2):
+    def get_probs_winner_from_goal_results(self, goals_of_team_1, goals_of_team_2):
+        team1_wins = goals_of_team_1 > goals_of_team_2
+        team2_wins = goals_of_team_1 < goals_of_team_2
+        tie = goals_of_team_1 == goals_of_team_2
+
+        p1 = team1_wins.mean()
+        p2 = team2_wins.mean()
+        tie = tie.mean()
+        np.testing.assert_almost_equal(1.0, p1 + tie + p2)
+        return np.array([p1, p2, tie])
+
+    def predict_goals(self, test_data, **kwargs):
+        team1 = test_data["home_id"].values
+        team2 = test_data["away_id"].values
+
         diff_ij, diff_ji = SimplePyroModel.get_diffs(team1, team2)
         goals_of_team_1 = []
         goals_of_team_2 = []
@@ -47,25 +59,21 @@ class SimplePyroModel(PyroModel):
         goals_of_team_1 = np.array(goals_of_team_1)
         goals_of_team_2 = np.array(goals_of_team_2)
 
-        team1_wins = goals_of_team_1 > goals_of_team_2
-        team2_wins = goals_of_team_1 < goals_of_team_2
-        tie = goals_of_team_1 == goals_of_team_2
+        df = pd.DataFrame(
+            {"home_goals": goals_of_team_1, "away_goals": goals_of_team_2}
+        )
 
-        p1 = team1_wins.sum() / len(team1_wins)
-        p2 = team2_wins.sum() / len(team2_wins)
-        tie = tie.sum() / len(tie)
-        np.testing.assert_almost_equal(1, p1 + tie + p2)
-        return np.array([tie, p1, p2])
+        # xarr = df.to_xarray()
 
-    def predict_toto_probabilities(self, test_data, **kwargs):
-        home_teams = test_data["home_id"].values
-        away_teams = test_data["away_id"].values
-        predicted_probabilities = list()
-        for homeId, awayId in zip(home_teams, away_teams):
-            predicted_probabilities.append(
-                self.get_probs_winner_from_goal_results(homeId, awayId)
-            )
-        return np.array(predicted_probabilities)
+        return df
+
+    def predict_toto_probabilities(self, predictions, **kwargs):
+        predicted_probabilities = self.get_probs_winner_from_goal_results(
+            goals_of_team_1=predictions["home_goals"],
+            goals_of_team_2=predictions["away_goals"],
+        )
+
+        return np.array([predicted_probabilities])
 
     def get_model(self):
         nb_teams = len(self.team_lexicon)

@@ -1,18 +1,47 @@
-import arviz as az
-import pandas as pd
+import typing as Dict
+
+import mlflow
 
 # from model.modelbuilder import FootballModel
 
 
-def predict(idata, x_data, parameters):
-    pass
-    # x_data = pd.DataFrame(data={"home_team": [1, 4], "away_team": [2, 6]})
+def aggregate_eval_metrics(
+    *kwargs,
+):
+    """
+    all_daily_metrics: z. B. [{'winner_accuracy': 1.0, 'rmse_home': 1.2, ...}, {...}, ...]
+    """
+    model_definitions = kwargs[0]
+    engine = model_definitions["engine"]
+    dataset_name = model_definitions["dataset_name"]
+    variant = model_definitions["variant"]
+    all_daily_metrics = kwargs[1:]
 
-    # fname = "S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/data/06_models/model_1_idata_active.nc"
-    # model = FootballModel().load(fname)
-    # with model:
-    #     idata = model.sample_posterior_predictive(
-    #         x_data, var_names=["home_goals", "away_goals"]
-    #     )
+    accuracies = [
+        m["winner_accuracy"] for m in all_daily_metrics if "winner_accuracy" in m
+    ]
+    if accuracies:
+        avg_acc = sum(accuracies) / len(accuracies)
+    else:
+        avg_acc = 0.0
 
-    #     return az.convert_to_dataset(idata)
+    nested_run_name = f"Aggregated Accuracy | engine={engine} | model={variant} | season={dataset_name}"
+
+    with mlflow.start_run(run_name=nested_run_name, nested=True):
+        mlflow.log_metric("avg_winner_accuracy_over_all_days", avg_acc)
+        mlflow.log_params(
+            {
+                "season": dataset_name,
+                "model": variant,
+                "engine": engine,
+            }
+        )
+        mlflow.set_tags(
+            {
+                "model": variant,
+                "engine": engine,
+                "season": dataset_name,
+            }
+        )
+
+    return {"avg_winner_accuracy_over_all_days": avg_acc}
