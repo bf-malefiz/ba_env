@@ -84,7 +84,6 @@ class SimpleModel(pymc_FootballModel):
                 "offence",
                 mu=off_mu,
                 sigma=off_tau,
-                # shape=shape_priors, ### kann ich auf shapes verzichten, wenn dims verwendet werden?
                 dims="team",
             )
             defence = pm.Normal(

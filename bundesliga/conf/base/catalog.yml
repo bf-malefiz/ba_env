@@ -1,4 +1,4 @@
-"{namespace}.{dataset}.CSV":
+"{dataset}.CSV":
   type: pandas.CSVDataset
   filepath: data/01_raw/football-datasets/{dataset}.csv
   load_args:
@@ -6,23 +6,23 @@
     index_col: 0
     encoding: "cp1252"
 
-"{variant}.{dataset}.goals":
+"{dataset}.goals":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
     filepath: data/02_intermediate/{dataset}/goals.pq
 
-"{variant}.{dataset}.team_lexicon":
+"{dataset}.team_lexicon":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/03_primary/{dataset}/{variant}/team_lexicon.pq
+    filepath: data/03_primary/{dataset}/team_lexicon.pq
 
-"{variant}.{dataset}.vectorized_data":
+"{dataset}.vectorized_data":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
-    filepath: data/03_primary/{dataset}/{variant}/vectorized_data.pq
+    filepath: data/03_primary/{dataset}/vectorized_data.pq
 
 
 "{variant}.{dataset}.train_data_{day}":
@@ -39,15 +39,16 @@
 
 "{variant}.{dataset}.toto":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  artifact_path: toto
   dataset:
     type: pandas.ParquetDataset
     filepath: data/05_model_input/{dataset}/{variant}/toto.pq
 
 "{variant}.{dataset}.predictions_{day}":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/07_model_output/{dataset}/{variant}/predictions_{day}.pq
+  type: MemoryDataset
+
+"{variant}.{dataset}.metrics_{day}":
+  type: MemoryDataset
 
 "{variant}.{dataset}.results":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
@@ -57,31 +58,7 @@
     save_args:
       mode: "a"
       # header: False
-      
-"{variant}.{dataset}.offence_means":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/07_model_output/{dataset}/{variant}/offence_means.nc
-
-"{variant}.{dataset}.defence_means":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: pandas.ParquetDataset
-    filepath: data/07_model_output/{dataset}/{variant}/defence_means.nc
-
-"{variant}.{dataset}.offence_defence_plot":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/{dataset}/{variant}/offence_defence_plot.png
-    save_args:
-      format: png
-
-"{variant}.{dataset}.goal_diffs_plot":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  dataset:
-    type: matplotlib.MatplotlibWriter
-    filepath: data/08_reporting/{dataset}/{variant}/goal_diffs_plot.png
-    save_args:
-      format: png
+"{engine}.{dataset_name}.{variant}.modeldefinitions":
+    type: MemoryDataset
+"{engine}.{dataset_name}.{variant}.aggregated_metrics":
+    type: MemoryDataset

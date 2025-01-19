@@ -201,7 +201,7 @@ class pymc_FootballModel(ModelBuilder):
         )
         return idata
 
-    def predict_toto_probabilities(
+    def predict_goals(
         self,
         test_data: np.ndarray | pd.DataFrame | pd.Series,
         extend_idata: bool = False,
@@ -220,12 +220,30 @@ class pymc_FootballModel(ModelBuilder):
             random_seed=self.sampler_config["random_seed"],
             **kwargs,
         )
-        team1_wins = pp["home_goals"] > pp["away_goals"]
-        team2_wins = pp["home_goals"] < pp["away_goals"]
-        tie = pp["home_goals"] == pp["away_goals"]
+
+        home_goals = pp["home_goals"].mean(dim=["chain"]).values.flatten()
+        away_goals = pp["away_goals"].mean(dim=["chain"]).values.flatten()
+        # tie = home_goals == away_goals
+        df = pd.DataFrame({"home_goals": home_goals, "away_goals": away_goals})
+        return df
+
+    def predict_toto_probabilities(
+        self,
+        predictions,
+        **kwargs,
+    ) -> pd.DataFrame:
+        # def posterior_predictive_checks(model, idata, x_data):
+        #     with model.model:
+        #         ppc = pm.sample_posterior_predictive(idata, random_seed=42)
+
+        #     return ppc
+
+        team1_wins = predictions["home_goals"] > predictions["away_goals"]
+        team2_wins = predictions["home_goals"] < predictions["away_goals"]
+        tie = predictions["home_goals"] == predictions["away_goals"]
         p1 = team1_wins.mean()
         p2 = team2_wins.mean()
         tie = tie.mean()
         np.testing.assert_almost_equal(1, p1 + tie + p2)
 
-        return np.array([[tie, p1, p2]])
+        return np.array([[p1, p2, tie]])

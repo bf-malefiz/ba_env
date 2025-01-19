@@ -41,25 +41,10 @@ def create_pipeline(**kwargs) -> Pipeline:
     )
     datasets_list = load_config()["parameters"]["datasets"]
     dataset_pipelines = []
+
     for dataset_name in datasets_list:
         dataset_pipelines.append(
-            create_pipelines_with_dataset_namespace(dataset_name, data_processing)
+            pipeline(data_processing, namespace=dataset_name, tags=dataset_name)
         )
 
-    pipes = []
-    for namespace, _ in settings.DYNAMIC_PIPELINES_MAPPING.items():
-        pipes.append(
-            pipeline(
-                dataset_pipelines,
-                namespace=namespace,
-                tags=settings.DYNAMIC_PIPELINES_MAPPING[namespace],
-            )
-        )
-    return sum(pipes)
-
-
-def create_pipelines_with_dataset_namespace(dataset_name, base_pipeline):
-    pipelines = []
-    pipelines.append(pipeline(base_pipeline, namespace=dataset_name, tags=dataset_name))
-
-    return pipeline(pipelines)
+    return sum(dataset_pipelines)

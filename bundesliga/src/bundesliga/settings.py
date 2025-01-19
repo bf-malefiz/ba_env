@@ -4,16 +4,20 @@ https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
 
 from utils import merge_dicts
 
-# from hooks import NodeInputReplacementHook, PipelineParamHook
+from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
+
+# from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
+# from bundesliga.hooks.monitoring_hooks import PipelineMonitoringHooks
 
 # Instantiated project hooks.
 # For example, after creating a hooks.py and defining a ProjectHooks class there, do
 # from pandas_viz.hooks import ProjectHooks
 
 # Hooks are executed in a Last-In-First-Out (LIFO) order.
+# HOOKS = ()
 HOOKS = (
-    # NodeInputReplacementHook(),
-    # PipelineParamHook(),
+    ModelTrackingHooks(),
+    # PipelineMonitoringHooks(),
 )
 
 
@@ -55,8 +59,8 @@ CONFIG_LOADER_ARGS = {
 DYNAMIC_PIPELINES_MAPPING = {
     # "etl": ["base"],
     # "goal_predictor": ["base"],
-    "pymc": ["simple"],
     "pyro": ["simple"],
+    "pymc": ["simple"],
 }
 
 # Class that manages Kedro's library components.

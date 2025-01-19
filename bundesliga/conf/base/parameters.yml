@@ -10,8 +10,8 @@
 model_options:
   model: "" 
   engine: ""
-  start_day: 40
-  walk_forward: 1
+  start_day: 60
+  walk_forward: 20
   test_size: 0.2
   random_seed: 42
   model_config: #define in model specific config
@@ -34,8 +34,8 @@ pymc:
     sampler_config:
       chains: 1
       draws: 1000
-      tune: 500 # toDo: 10% of draws
-      target_accept: 0.95
+      tune: 100 # toDo: 10% of draws
+      target_accept: 0.85
       random_seed: 42
   
   simple:
