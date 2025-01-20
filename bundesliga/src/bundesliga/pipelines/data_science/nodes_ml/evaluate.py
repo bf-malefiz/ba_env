@@ -1,8 +1,4 @@
-import typing as Dict
-
 import mlflow
-
-# from model.modelbuilder import FootballModel
 
 
 def aggregate_eval_metrics(
