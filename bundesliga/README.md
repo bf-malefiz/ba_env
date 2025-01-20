@@ -60,6 +60,10 @@ mlflow ui
 
 located at http://localhost:5000/ after starting the ui in your terminal.
 
+## Seeds as parameter in MLFLOW
+
+To logg the seed the model is using it is neccessary to declare it in settings.py for mlflow and in parameters.yml for the sample_config.
+
 <!-- 
 ## How to test your Kedro project
 
