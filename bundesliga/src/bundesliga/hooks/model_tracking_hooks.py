@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 import mlflow
+from bundesliga import settings
 from kedro.framework.hooks import hook_impl
 from kedro.pipeline.node import Node
 
@@ -23,10 +24,6 @@ class ModelTrackingHooks:
         """Hook implementation to start an MLflow run
         with the same run_id as the Kedro pipeline run.
         """
-
-        node_names = set([node.short_name for node in pipeline.nodes])
-        run_params["node_names"] = node_names
-        mlflow.log_params(run_params)
 
     @hook_impl
     def before_node_run(self, node: Node, inputs: Dict[str, Any]) -> None:
@@ -69,22 +66,24 @@ class ModelTrackingHooks:
             }
 
             # Run-Name (z.B. "model: poisson Season: 2023 day: 2"):
-            run_name = (
-                f"engine: {engine} | model: {model} | season: {season} | day: {day}"
-            )
+            run_name = f"Solorun - engine: {engine} | model: {model} | season: {season} | day: {day} | seed: {settings.SEED}"
 
             active_run = mlflow.active_run()
             if active_run is not None:
                 # Falls wir nested logging wollen
-                with mlflow.start_run(run_name=run_name, nested=True):
+                with mlflow.start_run(run_name=run_name, nested=True) as run:
                     mlflow.log_params(
                         {
                             "day": day,
                             "season": season,
                             "model": model,
                             "engine": engine,
+                            "run": "solo",
+                            "seed": settings.SEED,
+                            "run_id": run.info.run_id,
                         }
                     )
+
                     mlflow.log_metrics(results)
                     mlflow.set_tags(
                         {
@@ -92,27 +91,9 @@ class ModelTrackingHooks:
                             "season": season,
                             "model": model,
                             "engine": engine,
-                        }
-                    )
-            else:
-                # Falls wider Erwarten kein aktiver Run da ist, kannst du
-                # selber einen starten, oder einfach loggen.
-                with mlflow.start_run(run_name=run_name):
-                    mlflow.log_params(
-                        {
-                            "day": day,
-                            "season": season,
-                            "model": model,
-                            "engine": engine,
-                        }
-                    )
-                    mlflow.log_metrics(results)
-                    mlflow.set_tags(
-                        {
-                            "day": day,
-                            "season": season,
-                            "model": model,
-                            "engine": engine,
+                            "run": "solo",
+                            "seed": settings.SEED,
+                            "run_id": run.info.run_id,
                         }
                     )
 

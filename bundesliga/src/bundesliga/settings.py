@@ -6,6 +6,7 @@ from utils import merge_dicts
 
 from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
 
+SEED = 100
 # from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
 # from bundesliga.hooks.monitoring_hooks import PipelineMonitoringHooks
 
@@ -59,8 +60,8 @@ CONFIG_LOADER_ARGS = {
 DYNAMIC_PIPELINES_MAPPING = {
     # "etl": ["base"],
     # "goal_predictor": ["base"],
-    "pyro": ["simple"],
     "pymc": ["simple"],
+    "pyro": ["simple"],
 }
 
 # Class that manages Kedro's library components.

@@ -37,7 +37,7 @@ def eval_pipeline(
 
     pipe_collection = []
 
-    for engine, variants in settings.DYNAMIC_PIPELINES_MAPPING.items():
+    for engine, variants in setting:
         for variant in variants:
             for dataset_name in dataset_list:
                 metrics_inputs = []
@@ -54,6 +54,7 @@ def eval_pipeline(
                                     "engine": e,
                                     "variant": v,
                                     "dataset_name": ds,
+                                    "seed": settings.SEED,
                                 },
                                 inputs=None,
                                 outputs=f"{engine}.{dataset_name}.{variant}.modeldefinitions",
