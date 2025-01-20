@@ -1,3 +1,4 @@
+import numpy as np
 import pyro
 import pyro.distributions as dist
 import pyro.infer
@@ -8,12 +9,14 @@ from bundesliga.model.model_interface import FootballModel
 class PyroModel(FootballModel):
     def __init__(self, team_lexicon, parameters):
         self.team_lexicon = team_lexicon
-        self.parameters = parameters
+        self.model_config = parameters["model_config"]
+        self.sampler_config = parameters["sampler_config"]
 
     def train(self, X, y, parameters):
         pyro.clear_param_store()
+        pyro.set_rng_seed(self.sampler_config["random_seed"])
+        np.random.seed(self.sampler_config["random_seed"])
 
-        model_config = self.parameters["model_config"]
         home_id, away_id, home_goals, away_goals, toto = (
             X["home_id"].values,
             X["away_id"].values,
@@ -22,8 +25,8 @@ class PyroModel(FootballModel):
             y["toto"].values,
         )
         adam_params = {
-            "lr": model_config["learning_rate"],
-            "betas": model_config["betas"],
+            "lr": self.model_config["learning_rate"],
+            "betas": self.model_config["betas"],
         }
         optimizer = pyro.optim.Adam(adam_params)
         self.model = self.get_model()

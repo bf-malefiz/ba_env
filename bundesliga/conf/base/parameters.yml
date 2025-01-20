@@ -10,13 +10,12 @@
 model_options:
   model: "" 
   engine: ""
-  start_day: 100
-  walk_forward: 0
+  start_day: 20
+  walk_forward: 2
   test_size: 0.2
-  random_seed: 42
   model_config: #define in model specific config
   sampler_config: #define in model specific config
-
+      random_seed: 100
 # -------------------------------
   plot_params:
     max_goals: 8
@@ -36,7 +35,7 @@ pymc:
       draws: 1000
       tune: 100 # toDo: 10% of draws
       target_accept: 0.85
-      random_seed: 42
+
   
   simple:
     _overrides:

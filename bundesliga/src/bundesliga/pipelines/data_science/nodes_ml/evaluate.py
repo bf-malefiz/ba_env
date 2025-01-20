@@ -11,6 +11,7 @@ def aggregate_eval_metrics(
     engine = model_definitions["engine"]
     dataset_name = model_definitions["dataset_name"]
     variant = model_definitions["variant"]
+    seed = model_definitions["seed"]
     all_daily_metrics = kwargs[1:]
 
     accuracies = [
@@ -23,13 +24,15 @@ def aggregate_eval_metrics(
 
     nested_run_name = f"Aggregated Accuracy | engine={engine} | model={variant} | season={dataset_name}"
 
-    with mlflow.start_run(run_name=nested_run_name, nested=True):
+    with mlflow.start_run(run_name=nested_run_name, nested=True) as run:
         mlflow.log_metric("avg_winner_accuracy_over_all_days", avg_acc)
         mlflow.log_params(
             {
                 "season": dataset_name,
                 "model": variant,
                 "engine": engine,
+                "seed": seed,
+                "run_id": run.info.run_id,
             }
         )
         mlflow.set_tags(
@@ -37,6 +40,8 @@ def aggregate_eval_metrics(
                 "model": variant,
                 "engine": engine,
                 "season": dataset_name,
+                "seed": seed,
+                "run_id": run.info.run_id,
             }
         )
 
