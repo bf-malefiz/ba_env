@@ -31,7 +31,7 @@ def eval_pipeline(
     startday,
     walks,
     setting,
-    dataset_list,
+    dataset_name,
 ) -> Pipeline:
     # 2) Erzeuge eine Node, die alle metrics_{day} einließt
 
@@ -39,39 +39,38 @@ def eval_pipeline(
 
     for engine, variants in setting:
         for variant in variants:
-            for dataset_name in dataset_list:
-                metrics_inputs = []
-                for day in range(startday, startday + walks):
-                    metrics_inputs.append(
-                        f"{engine}.{dataset_name}.{variant}.metrics_{day}"
-                    )
-
-                pipe_collection.append(
-                    pipeline(
-                        [
-                            node(
-                                func=lambda e=engine, v=variant, ds=dataset_name: {
-                                    "engine": e,
-                                    "variant": v,
-                                    "dataset_name": ds,
-                                    "seed": settings.SEED,
-                                },
-                                inputs=None,
-                                outputs=f"{engine}.{dataset_name}.{variant}.modeldefinitions",
-                                name=f"{engine}.{dataset_name}.{variant}.modeldef_node",
-                            ),
-                            node(
-                                func=aggregate_eval_metrics,
-                                inputs=[
-                                    f"{engine}.{dataset_name}.{variant}.modeldefinitions"
-                                ]
-                                + metrics_inputs,
-                                outputs=f"{engine}.{dataset_name}.{variant}.all_daily_metrics",
-                                name=f"{engine}.{dataset_name}.{variant}.aggregate_eval_metrics_node",
-                            ),
-                        ]
-                    )
+            metrics_inputs = []
+            for day in range(startday, startday + walks):
+                metrics_inputs.append(
+                    f"{engine}.{dataset_name}.{variant}.metrics_{day}"
                 )
+
+            pipe_collection.append(
+                pipeline(
+                    [
+                        node(
+                            func=lambda e=engine, v=variant, ds=dataset_name: {
+                                "engine": e,
+                                "variant": v,
+                                "dataset_name": ds,
+                                "seed": settings.SEED,
+                            },
+                            inputs=None,
+                            outputs=f"{engine}.{dataset_name}.{variant}.modeldefinitions",
+                            name=f"{engine}.{dataset_name}.{variant}.modeldef_node",
+                        ),
+                        node(
+                            func=aggregate_eval_metrics,
+                            inputs=[
+                                f"{engine}.{dataset_name}.{variant}.modeldefinitions"
+                            ]
+                            + metrics_inputs,
+                            outputs=f"{engine}.{dataset_name}.{variant}.all_daily_metrics",
+                            name=f"{engine}.{dataset_name}.{variant}.aggregate_eval_metrics_node",
+                        ),
+                    ]
+                )
+            )
     return pipeline(pipe_collection)
 
 

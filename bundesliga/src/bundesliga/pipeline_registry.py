@@ -50,7 +50,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
                         setting=[
                             (engine, [variant]),
                         ],
-                        dataset_list=datasets_list,
+                        dataset_name=dataset_name,
                     )
                 )
 
