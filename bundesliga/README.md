@@ -8,33 +8,59 @@ This is your new Kedro project with Kedro-Viz setup, which was generated using `
 
 Take a look at the [Kedro documentation](https://docs.kedro.org) to get started.
 
-## Rules and guidelines
-
-In order to get the best out of the template:
-
-* Don't remove any lines from the `.gitignore` file we provide
-* Make sure your results can be reproduced by following a [data engineering convention](https://docs.kedro.org/en/stable/faq/faq.html#what-is-data-engineering-convention)
-* Don't commit data to your repository
-* Don't commit any credentials or your local configuration to your repository. Keep all your credentials and local configuration in `conf/local/`
-
 ## How to install dependencies
 
-Declare any dependencies in `requirements.txt` for `pip` installation.
+First create your new conda environment and activate it. We use this to already install pymc dependencies.
 
-To install them, run:
+```
+conda create -c conda-forge -n your_env "pymc>=5"
+conda activate your_env
+```
+
+To install the required dependencies, run:
 
 ```
 pip install -r requirements.txt
 ```
 
-## How to run your Kedro pipeline
+## How to run the Kedro pipeline
 
-You can run your Kedro project with:
+First build neccessary files by running the etl pipeline:
 
 ```
-kedro run
+kedro run --pipeline "etl"
 ```
 
+After you can run either the whole pipeline with all engines defined in the settings.py (DYNAMIC_PIPELINES_MAPPING) or use the name to run it respectivly.
+
+```
+kedro run | kedro run --pipeline "pymc"
+```
+
+To define how many models and samples you want to draw go into parameters.py.
+
+Options:
+-   start_day = startingpoint for the model in the season to learn
+-   walk_forward = how many models the pipeline should initiate and train
+i.e start_day = 30 and walk_forward=2 will train and predict on match 30,31,32
+
+## Visualize kedro pipeline and evaluations
+
+To visualize the pipeline open kedro-viz in terminal. This will open your browser automatically.
+
+```
+kedro viz
+```
+
+To visualize the runs and logged metrics open the mlflow ui.
+
+```
+mlflow ui
+```
+
+located at http://localhost:5000/ after starting the ui in your terminal.
+
+<!-- 
 ## How to test your Kedro project
 
 Have a look at the files `src/tests/test_run.py` and `src/tests/pipelines/data_science/test_pipeline.py` for instructions on how to write your tests. Run the tests as follows:
@@ -43,8 +69,8 @@ Have a look at the files `src/tests/test_run.py` and `src/tests/pipelines/data_s
 pytest
 ```
 
-To configure the coverage threshold, look at the `.coveragerc` file.
-
+To configure the coverage threshold, look at the `.coveragerc` file. -->
+<!-- 
 ## Project dependencies
 
 To see and update the dependency requirements for your project use `requirements.txt`. Install the project requirements with `pip install -r requirements.txt`.
@@ -98,4 +124,4 @@ To automatically strip out all output cell contents before committing to `git`, 
 [Further information about using notebooks for experiments within Kedro projects](https://docs.kedro.org/en/develop/notebooks_and_ipython/kedro_and_notebooks.html).
 ## Package your Kedro project
 
-[Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/tutorial/package_a_project.html).
+[Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/tutorial/package_a_project.html). -->
