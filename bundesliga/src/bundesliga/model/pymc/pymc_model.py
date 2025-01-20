@@ -58,7 +58,7 @@ class pymc_FootballModel(ModelBuilder):
         input_length = len(x_data_home_values)
         match_length = len(self.model_coords["match"])
         new_match_range = np.arange(input_length) + match_length
-        dummy = np.ones(input_length, dtype=int)
+        dummy = np.ones(shape=(1, 2), dtype=int)
 
         with self.model:
             self.model_coords["match"] = new_match_range
@@ -78,12 +78,11 @@ class pymc_FootballModel(ModelBuilder):
                 )
             else:
                 pm.set_data(
-                    {"y_data_home": dummy},
-                    coords={"match": new_match_range},
-                )
-                pm.set_data(
-                    {"y_data_away": dummy},
-                    coords={"match": new_match_range},
+                    {"y_data": dummy},
+                    coords={
+                        "match": new_match_range,
+                        "y": ["home_goals", "away_goals"],
+                    },
                 )
 
     @staticmethod
@@ -106,9 +105,6 @@ class pymc_FootballModel(ModelBuilder):
         }
 
         return model_config
-        # raise ValueError(
-        #     "Model config not present. Add a model config to the parameters_data_science.yml."
-        # )
 
     @staticmethod
     def get_default_sampler_config() -> dict:
@@ -125,13 +121,10 @@ class pymc_FootballModel(ModelBuilder):
             "random_seed": 42,
         }
         return sampler_config
-        # raise ValueError(
-        #     "Sampler config not present. Add a sampler config to the parameters_data_science.yml."
-        # )
 
     @property
     def output_var(self):
-        return "home_goals"
+        return "goals"
 
     @property
     def _serializable_model_config(self) -> dict[str, Union[int, float, dict]]:
@@ -185,7 +178,6 @@ class pymc_FootballModel(ModelBuilder):
             "y": ["home_goals", "away_goals"],
         }
         self.X = X
-        # self.y = pd.DataFrame(goals, columns=["home_goals", "away_goals"])
         self.y = y
 
     def train(self, X, y, **kwargs):
@@ -207,22 +199,15 @@ class pymc_FootballModel(ModelBuilder):
         extend_idata: bool = False,
         **kwargs,
     ) -> pd.DataFrame:
-        # def posterior_predictive_checks(model, idata, x_data):
-        #     with model.model:
-        #         ppc = pm.sample_posterior_predictive(idata, random_seed=42)
-
-        #     return ppc
-
-        pp = self.sample_posterior_predictive(
+        pp = self.predict_posterior(
             X_pred=test_data,
-            extend_idata=extend_idata,
-            combined=False,
+            combined=True,
             random_seed=self.sampler_config["random_seed"],
             **kwargs,
         )
 
-        home_goals = pp["home_goals"].mean(dim=["chain"]).values.flatten()
-        away_goals = pp["away_goals"].mean(dim=["chain"]).values.flatten()
+        home_goals = pp.isel(y=0).values.flatten()
+        away_goals = pp.isel(y=1).values.flatten()
         # tie = home_goals == away_goals
         df = pd.DataFrame({"home_goals": home_goals, "away_goals": away_goals})
         return df
@@ -232,12 +217,6 @@ class pymc_FootballModel(ModelBuilder):
         predictions,
         **kwargs,
     ) -> pd.DataFrame:
-        # def posterior_predictive_checks(model, idata, x_data):
-        #     with model.model:
-        #         ppc = pm.sample_posterior_predictive(idata, random_seed=42)
-
-        #     return ppc
-
         team1_wins = predictions["home_goals"] > predictions["away_goals"]
         team2_wins = predictions["home_goals"] < predictions["away_goals"]
         tie = predictions["home_goals"] == predictions["away_goals"]
