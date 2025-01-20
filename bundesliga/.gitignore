@@ -8,12 +8,17 @@ conf/local/**
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
 
-# ignore everything in the following folders
+# ignore everything in the data folder
 data/**
 
 # except their sub-folders
-!data/**/
+!data/01_raw/
 
+
+# keep files in data/01_raw/football-datasets
+!data/01_raw/football-datasets/
+!data/01_raw/football-datasets/D1-24-25.csv
+!data/01_raw/football-datasets/D2-24-25.csv
 # also keep all .gitkeep files
 !.gitkeep
 
