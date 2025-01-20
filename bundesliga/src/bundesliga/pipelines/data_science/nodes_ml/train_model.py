@@ -78,9 +78,9 @@ def evaluate(model, day, test_data, predictions):
     rmse_home, mae_home, rmse_away, mae_away = rmse_mae(predictions, test_data)
 
     predictions["predicted_result"] = determine_winner(predictions)["winner"]
-
+    bools = test_goal["true_result"].values == predictions["predicted_result"].values
     winner_accuracy = (
-        test_goal["true_result"].values == predictions["predicted_result"].values
+        bools
     ).mean()
 
     results = {

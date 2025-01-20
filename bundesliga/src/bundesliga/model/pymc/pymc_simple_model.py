@@ -61,15 +61,11 @@ class SimpleModel(pymc_FootballModel):
                 self.X["away_id"].values,
                 dims="match",
             )
-            y_data_home = pm.Data(
-                "y_data_home",
-                list(map(lambda x: x[0], self.y)),
-                dims="match",
-            )
-            y_data_away = pm.Data(
-                "y_data_away",
-                list(map(lambda x: x[1], self.y)),
-                dims="match",
+
+            y_data = pm.Data(
+                "y_data",
+                self.y,
+                dims=["match", "y"],
             )
 
             # prior parameters
@@ -105,6 +101,9 @@ class SimpleModel(pymc_FootballModel):
             mu_home = pm.math.switch(mu_home > min_mu, mu_home, min_mu)
             mu_away = pm.math.switch(mu_away > min_mu, mu_away, min_mu)
 
+            mu = pm.math.stack([mu_home, mu_away], axis=-1)
+
             # observed
-            pm.Poisson("home_goals", observed=y_data_home, mu=mu_home, dims="match")
-            pm.Poisson("away_goals", observed=y_data_away, mu=mu_away, dims="match")
+            # pm.Poisson("home_goals", observed=y_data_home, mu=mu_home, dims="match")
+            # pm.Poisson("away_goals", observed=y_data_away, mu=mu_away, dims="match")
+            pm.Poisson("goals", observed=y_data, mu=mu, dims=["match", "y"])
