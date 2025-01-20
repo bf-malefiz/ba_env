@@ -44,20 +44,20 @@ def register_pipelines() -> Dict[str, Pipeline]:
                         namespace=f"{engine}",
                         tags=[engine],
                     )
+                    + eval_pipeline(
+                        startday=start_day,
+                        walks=walk_forward,
+                        setting=[
+                            (engine, [variant]),
+                        ],
+                        dataset_list=datasets_list,
+                    )
                 )
 
         pipeline_dict[engine] = pipeline(engine_pipeline_collection)
         default_pipeline.append(pipeline(engine_pipeline_collection))
 
-    eval_pipe = eval_pipeline(
-        startday=start_day,
-        walks=walk_forward,
-        setting=None,
-        dataset_list=datasets_list,
-    )
-
-    pipeline_dict["eval"] = eval_pipe
-    pipeline_dict["__default__"] = pipeline(default_pipeline) + eval_pipe
+    pipeline_dict["__default__"] = pipeline(default_pipeline)
     # reporting_pipeline = ml_pipeline.only_nodes_with_tags("reporting")
 
     return pipeline_dict
