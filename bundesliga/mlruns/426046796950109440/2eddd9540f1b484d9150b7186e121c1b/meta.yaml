@@ -1,0 +1,15 @@
+artifact_uri: file:///S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/mlruns/426046796950109440/2eddd9540f1b484d9150b7186e121c1b/artifacts
+end_time: 1737573182677
+entry_point_name: ''
+experiment_id: '426046796950109440'
+lifecycle_stage: active
+run_id: 2eddd9540f1b484d9150b7186e121c1b
+run_name: pymc
+run_uuid: 2eddd9540f1b484d9150b7186e121c1b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737568048553
+status: 3
+tags: []
+user_id: Phili

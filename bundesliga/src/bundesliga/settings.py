@@ -2,11 +2,10 @@
 from the Kedro defaults. For further information, including these default values, see
 https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
 
+from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
 from utils import merge_dicts
 
-from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
-
-SEED = 100
+SEED = 42
 # from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
 # from bundesliga.hooks.monitoring_hooks import PipelineMonitoringHooks
 
@@ -58,8 +57,6 @@ CONFIG_LOADER_ARGS = {
 }
 
 DYNAMIC_PIPELINES_MAPPING = {
-    # "etl": ["base"],
-    # "goal_predictor": ["base"],
     "pymc": ["simple"],
     "pyro": ["simple"],
 }

@@ -1,0 +1,15 @@
+artifact_uri: file:///S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/mlruns/713652734012086121/0c14488775164a3b95ead6240acf8d55/artifacts
+end_time: 1737390197558
+entry_point_name: ''
+experiment_id: '713652734012086121'
+lifecycle_stage: active
+run_id: 0c14488775164a3b95ead6240acf8d55
+run_name: Aggregated Accuracy | engine=pyro | model=simple | season=D2-24-25
+run_uuid: 0c14488775164a3b95ead6240acf8d55
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737390197511
+status: 3
+tags: []
+user_id: Phili

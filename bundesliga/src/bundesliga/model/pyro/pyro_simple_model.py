@@ -11,7 +11,7 @@ class SimplePyroModel(PyroModel):
         super().__init__(team_lexicon, parameters)
         self.prior_diff = prior_diff
 
-    def get_diffs(team_1, team_2, num_games=10000):
+    def get_diffs(team_1, team_2, num_games=50000):
         mu_offence_param = pyro.param("mu_offence").data
         mu_defence_param = pyro.param("mu_defence").data
         sigma_offence_param = pyro.param("sigma_offence").data

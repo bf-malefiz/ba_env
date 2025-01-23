@@ -190,6 +190,7 @@ class pymc_FootballModel(ModelBuilder):
             random_seed=self.sampler_config["random_seed"],
             nchains=self.sampler_config["chains"],
             draws=self.sampler_config["draws"],
+            cores=self.sampler_config["chains"],
         )
         return idata
 

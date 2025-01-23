@@ -13,6 +13,7 @@ def init_model(team_lexicon, parameters: t.Dict, **kwargs) -> xr.Dataset:
     model = parameters["model"]
     engine = parameters["engine"]
 
+    print("s")
     match engine:
         case "pymc":
             match model:
@@ -79,9 +80,7 @@ def evaluate(model, day, test_data, predictions):
 
     predictions["predicted_result"] = determine_winner(predictions)["winner"]
     bools = test_goal["true_result"].values == predictions["predicted_result"].values
-    winner_accuracy = (
-        bools
-    ).mean()
+    winner_accuracy = (bools).mean()
 
     results = {
         "winner_accuracy": winner_accuracy,
