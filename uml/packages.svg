@@ -1,0 +1,157 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="3090pt" height="188pt" viewBox="0.00 0.00 3089.97 188">
+<g id="graph0" class="graph" transform="translate(4,184) scale(1)" data-name="packages">
+
+<polygon fill="white" stroke="none" points="-4,4 -4,-184 3085.97,-184 3085.97,4 -4,4"/>
+<!-- bundesliga.model.pymc -->
+<g id="node1" class="node" pointer-events="visible" data-name="src" data-comment="bundesliga.model.pymc">
+
+<polygon fill="none" stroke="black" points="54,-36 0,-36 0,0 54,0 54,-36" style=""/>
+<text text-anchor="middle" x="27" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src</text>
+</g>
+<!-- bundesliga.model.pymc.pymc_model -->
+<g id="node2" class="node" pointer-events="visible" data-name="src.bundesliga" data-comment="bundesliga.model.pymc.pymc_model">
+
+<polygon fill="none" stroke="black" points="100.48,-108 3.52,-108 3.52,-72 100.48,-72 100.48,-108" style=""/>
+<text text-anchor="middle" x="52" y="-85.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga</text>
+</g>
+<!-- bundesliga.model.pymc.pymc_simple_model -->
+<g id="node3" class="node" pointer-events="visible" data-name="src.bundesliga.__main__" data-comment="bundesliga.model.pymc.pymc_simple_model">
+
+<polygon fill="none" stroke="black" points="343.97,-36 188.03,-36 188.03,0 343.97,0 343.97,-36" style=""/>
+<text text-anchor="middle" x="266" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.__main__</text>
+</g>
+<!-- bundesliga.model.pymc.pymc_simple_model&#45;&gt;bundesliga.model.pymc.pymc_model -->
+<g id="node4" class="node" pointer-events="visible" data-name="src.bundesliga.model" data-comment="bundesliga.model.pymc.pymc_simple_model-&gt;bundesliga.model.pymc.pymc_model">
+
+<polygon fill="none" stroke="black" points="496.47,-36 361.53,-36 361.53,0 496.47,0 496.47,-36" style=""/>
+<text text-anchor="middle" x="429" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.model</text>
+</g>
+<!-- bundesliga.model.pymc.pymc_toto_model -->
+<g id="node5" class="node" pointer-events="visible" data-name="src.bundesliga.model.model_interface" data-comment="bundesliga.model.pymc.pymc_toto_model">
+
+<polygon fill="none" stroke="black" points="743.93,-36 514.07,-36 514.07,0 743.93,0 743.93,-36" style=""/>
+<text text-anchor="middle" x="629" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.model.model_interface</text>
+</g>
+<!-- bundesliga.model.pymc.pymc_toto_model&#45;&gt;bundesliga.model.pymc.pymc_model -->
+<g id="node6" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc" data-comment="bundesliga.model.pymc.pymc_toto_model-&gt;bundesliga.model.pymc.pymc_model">
+
+<polygon fill="none" stroke="black" points="931.58,-36 762.42,-36 762.42,0 931.58,0 931.58,-36" style=""/>
+<text text-anchor="middle" x="847" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.model.pymc</text>
+</g>
+<!-- src.bundesliga.model.pymc.pymc_model -->
+<g id="node7" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc.pymc_model">
+
+<polygon fill="none" stroke="black" points="1196.17,-36 949.83,-36 949.83,0 1196.17,0 1196.17,-36" style=""/>
+<text text-anchor="middle" x="1073" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.model.pymc.pymc_model</text>
+</g>
+<!-- src.bundesliga.model.pymc.pymc_simple_model -->
+<g id="node8" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc.pymc_simple_model">
+
+<polygon fill="none" stroke="black" points="1504,-36 1214,-36 1214,0 1504,0 1504,-36" style=""/>
+<text text-anchor="middle" x="1359" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.model.pymc.pymc_simple_model</text>
+</g>
+<!-- src.bundesliga.model.pymc.pymc_toto_model -->
+<g id="node9" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc.pymc_toto_model">
+
+<polygon fill="none" stroke="black" points="1797.45,-36 1522.55,-36 1522.55,0 1797.45,0 1797.45,-36" style=""/>
+<text text-anchor="middle" x="1660" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.model.pymc.pymc_toto_model</text>
+</g>
+<!-- src.bundesliga.pipeline_registry -->
+<g id="node10" class="node" pointer-events="visible" data-name="src.bundesliga.pipeline_registry">
+
+<polygon fill="none" stroke="black" points="2010.34,-36 1815.66,-36 1815.66,0 2010.34,0 2010.34,-36" style=""/>
+<text text-anchor="middle" x="1913" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipeline_registry</text>
+</g>
+<!-- src.bundesliga.pipelines -->
+<g id="node11" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines">
+
+<polygon fill="none" stroke="black" points="2179.03,-36 2028.97,-36 2028.97,0 2179.03,0 2179.03,-36" style=""/>
+<text text-anchor="middle" x="2104" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines</text>
+</g>
+<!-- src.bundesliga.pipelines.data_processing -->
+<g id="node12" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines.data_processing">
+
+<polygon fill="none" stroke="black" points="2441.22,-36 2196.78,-36 2196.78,0 2441.22,0 2441.22,-36" style=""/>
+<text text-anchor="middle" x="2319" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines.data_processing</text>
+</g>
+<!-- src.bundesliga.pipelines.data_processing.pipeline -->
+<g id="node15" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines.data_processing.pipeline">
+
+<polygon fill="none" stroke="black" points="2465.31,-108 2172.69,-108 2172.69,-72 2465.31,-72 2465.31,-108" style=""/>
+<text text-anchor="middle" x="2319" y="-85.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines.data_processing.pipeline</text>
+</g>
+<!-- src.bundesliga.pipelines.data_processing&#45;&gt;src.bundesliga.pipelines.data_processing.pipeline -->
+<g id="edge1" class="edge" data-name="src.bundesliga.pipelines.data_processing-&gt;src.bundesliga.pipelines.data_processing.pipeline">
+
+<path fill="none" stroke="black" d="M2319,-36.3C2319,-44.1 2319,-53.49 2319,-62.17" style=""/>
+<polygon fill="black" stroke="black" points="2319,-71.9 2314.5,-61.9 2319,-66.9 2319,-61.9 2319,-61.9 2319,-61.9 2319,-66.9 2323.5,-61.9 2319,-71.9 2319,-71.9" style=""/>
+</g>
+<!-- src.bundesliga.pipelines.data_processing.nodes_etl -->
+<g id="node13" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines.data_processing.nodes_etl">
+
+<polygon fill="none" stroke="black" points="2760.87,-36 2459.13,-36 2459.13,0 2760.87,0 2760.87,-36" style=""/>
+<text text-anchor="middle" x="2610" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines.data_processing.nodes_etl</text>
+</g>
+<!-- src.bundesliga.pipelines.data_processing.nodes_etl.nodes -->
+<g id="node14" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines.data_processing.nodes_etl.nodes">
+
+<polygon fill="none" stroke="black" points="2487.54,-180 2150.46,-180 2150.46,-144 2487.54,-144 2487.54,-180" style=""/>
+<text text-anchor="middle" x="2319" y="-157.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines.data_processing.nodes_etl.nodes</text>
+</g>
+<!-- src.bundesliga.pipelines.data_processing.pipeline&#45;&gt;src.bundesliga.pipelines.data_processing.nodes_etl.nodes -->
+<g id="edge2" class="edge" data-name="src.bundesliga.pipelines.data_processing.pipeline-&gt;src.bundesliga.pipelines.data_processing.nodes_etl.nodes">
+
+<path fill="none" stroke="black" d="M2319,-108.3C2319,-116.1 2319,-125.49 2319,-134.17" style=""/>
+<polygon fill="black" stroke="black" points="2319,-143.9 2314.5,-133.9 2319,-138.9 2319,-133.9 2319,-133.9 2319,-133.9 2319,-138.9 2323.5,-133.9 2319,-143.9 2319,-143.9" style=""/>
+</g>
+<!-- src.bundesliga.pipelines.data_science -->
+<g id="node16" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines.data_science">
+
+<polygon fill="none" stroke="black" points="3003.54,-36 2778.46,-36 2778.46,0 3003.54,0 3003.54,-36" style=""/>
+<text text-anchor="middle" x="2891" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines.data_science</text>
+</g>
+<!-- src.bundesliga.pipelines.data_science.pipeline -->
+<g id="node17" class="node" pointer-events="visible" data-name="src.bundesliga.pipelines.data_science.pipeline">
+
+<polygon fill="none" stroke="black" points="3028.13,-108 2753.87,-108 2753.87,-72 3028.13,-72 3028.13,-108" style=""/>
+<text text-anchor="middle" x="2891" y="-85.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.pipelines.data_science.pipeline</text>
+</g>
+<!-- src.bundesliga.pipelines.data_science&#45;&gt;src.bundesliga.pipelines.data_science.pipeline -->
+<g id="edge3" class="edge" data-name="src.bundesliga.pipelines.data_science-&gt;src.bundesliga.pipelines.data_science.pipeline">
+
+<path fill="none" stroke="black" d="M2891,-36.3C2891,-44.1 2891,-53.49 2891,-62.17" style=""/>
+<polygon fill="black" stroke="black" points="2891,-71.9 2886.5,-61.9 2891,-66.9 2891,-61.9 2891,-61.9 2891,-61.9 2891,-66.9 2895.5,-61.9 2891,-71.9 2891,-71.9" style=""/>
+</g>
+<!-- src.bundesliga.settings -->
+<g id="node18" class="node" pointer-events="visible" data-name="src.bundesliga.settings">
+
+<polygon fill="none" stroke="black" points="261.26,-108 118.74,-108 118.74,-72 261.26,-72 261.26,-108" style=""/>
+<text text-anchor="middle" x="190" y="-85.8" font-family="Times,serif" font-size="14.00" style="">src.bundesliga.settings</text>
+</g>
+<!-- src.start_kedro -->
+<g id="node19" class="node" pointer-events="visible" data-name="src.start_kedro">
+
+<polygon fill="none" stroke="black" points="170.3,-36 71.7,-36 71.7,0 170.3,0 170.3,-36" style=""/>
+<text text-anchor="middle" x="121" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.start_kedro</text>
+</g>
+<!-- src.start_kedro&#45;&gt;src.bundesliga -->
+<g id="edge4" class="edge" data-name="src.start_kedro-&gt;src.bundesliga">
+
+<path fill="none" stroke="black" d="M103.94,-36.3C95.42,-44.95 84.97,-55.55 75.68,-64.97" style=""/>
+<polygon fill="black" stroke="black" points="68.86,-71.9 72.68,-61.61 72.37,-68.33 75.88,-64.77 75.88,-64.77 75.88,-64.77 72.37,-68.33 79.08,-67.93 68.86,-71.9 68.86,-71.9" style=""/>
+</g>
+<!-- src.start_kedro&#45;&gt;src.bundesliga.settings -->
+<g id="edge5" class="edge" data-name="src.start_kedro-&gt;src.bundesliga.settings">
+
+<path fill="none" stroke="black" d="M138.06,-36.3C146.58,-44.95 157.03,-55.55 166.32,-64.97" style=""/>
+<polygon fill="black" stroke="black" points="173.14,-71.9 162.92,-67.93 169.63,-68.33 166.12,-64.77 166.12,-64.77 166.12,-64.77 169.63,-68.33 169.32,-61.61 173.14,-71.9 173.14,-71.9" style=""/>
+</g>
+<!-- src.utils -->
+<g id="node20" class="node" pointer-events="visible" data-name="src.utils">
+
+<polygon fill="none" stroke="black" points="3081.94,-36 3022.06,-36 3022.06,0 3081.94,0 3081.94,-36" style=""/>
+<text text-anchor="middle" x="3052" y="-13.8" font-family="Times,serif" font-size="14.00" style="">src.utils</text>
+</g>
+</g>
+</svg>

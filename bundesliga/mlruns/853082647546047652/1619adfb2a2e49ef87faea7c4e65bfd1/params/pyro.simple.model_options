@@ -1,0 +1,1 @@
+{'model': 'simple', 'engine': 'pyro', 'start_day': 20, 'walk_forward': 20, 'test_size': 0.2, 'model_config': {'betas': [0.95, 0.999], 'learning_rate': 0.005, 'prior_diff': 1.5}, 'sampler_config': {'random_seed': 42}, 'plot_params': {'max_goals': 8, 'team_1': 'Augsburg', 'team_2': 'Bochum'}}

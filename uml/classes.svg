@@ -1,0 +1,94 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1848pt" height="273pt" viewBox="0.00 0.00 1848.26 273.00">
+<g id="graph0" class="graph" transform="translate(4,269) scale(1)" data-name="classes">
+
+<polygon fill="white" stroke="none" points="-4,4 -4,-269 1844.26,-269 1844.26,4 -4,4"/>
+<!-- src.bundesliga.model.model_interface.FootballModel -->
+<g id="node1" class="node" pointer-events="visible" data-name="src.bundesliga.model.model_interface.FootballModel">
+
+<polygon fill="none" stroke="black" points="0,-89.7 0,-175.3 319.27,-175.3 319.27,-89.7 0,-89.7"/>
+<text text-anchor="start" x="118.02" y="-158.7" font-family="Times,serif" font-size="14.00">FootballModel</text>
+<polyline fill="none" stroke="black" points="0,-150.5 319.27,-150.5"/>
+<polyline fill="none" stroke="black" points="0,-125.7 319.27,-125.7"/>
+<text text-anchor="start" x="8" y="-110.1" font-family="Times,serif" font-style="italic" font-size="14.00">predict_toto_probabilities</text>
+<text text-anchor="start" x="154.99" y="-110.1" font-family="Times,serif" font-size="14.00">(home_teams, away_teams)</text>
+<text text-anchor="start" x="8" y="-96.1" font-family="Times,serif" font-style="italic" font-size="14.00">train</text>
+<text text-anchor="start" x="35.23" y="-96.1" font-family="Times,serif" font-size="14.00">()</text>
+</g>
+<!-- src.bundesliga.model.pymc.pymc_simple_model.SimpleModel -->
+<g id="node3" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc.pymc_simple_model.SimpleModel">
+
+<polygon fill="none" stroke="black" points="498.44,-86.9 498.44,-178.1 764.83,-178.1 764.83,-86.9 498.44,-86.9"/>
+<text text-anchor="start" x="593.52" y="-161.5" font-family="Times,serif" font-size="14.00">SimpleModel</text>
+<polyline fill="none" stroke="black" points="498.44,-153.3 764.83,-153.3"/>
+<text text-anchor="start" x="598.58" y="-136.7" font-family="Times,serif" font-size="14.00">model</text>
+<text text-anchor="start" x="598.58" y="-119.9" font-family="Times,serif" font-size="14.00">version : str</text>
+<polyline fill="none" stroke="black" points="498.44,-111.7 764.83,-111.7"/>
+<text text-anchor="start" x="506.44" y="-95.1" font-family="Times,serif" font-size="14.00">build_model(X: pd.DataFrame, y: pd.Series)</text>
+</g><g id="node2" class="node" pointer-events="visible" data-name="src.bundesliga.model.pyro.pyro_model.PyroModel" data-comment="src.bundesliga.model.pymc.pymc_simple_model.SimpleModel">
+
+<polygon fill="none" stroke="black" points="336.89,-61.7 336.89,-203.3 480.38,-203.3 480.38,-61.7 336.89,-61.7" style=""/>
+<text text-anchor="start" x="377.13" y="-186.7" font-family="Times,serif" font-size="14.00" style="">PyroModel</text>
+<polyline fill="none" stroke="black" points="336.89,-178.5 480.38,-178.5" style=""/>
+<text text-anchor="start" x="365.09" y="-161.9" font-family="Times,serif" font-size="14.00" style="">guide</text>
+<text text-anchor="start" x="365.09" y="-145.1" font-family="Times,serif" font-size="14.00" style="">model</text>
+<text text-anchor="start" x="365.09" y="-128.3" font-family="Times,serif" font-size="14.00" style="">model_config</text>
+<text text-anchor="start" x="365.09" y="-111.5" font-family="Times,serif" font-size="14.00" style="">sampler_config</text>
+<text text-anchor="start" x="365.09" y="-94.7" font-family="Times,serif" font-size="14.00" style="">team_lexicon</text>
+<polyline fill="none" stroke="black" points="336.89,-86.5 480.38,-86.5" style=""/>
+<text text-anchor="start" x="344.89" y="-69.9" font-family="Times,serif" font-size="14.00" style="">train(X, y, parameters)</text>
+</g>
+<!-- src.bundesliga.model.pymc.pymc_toto_model.TotoModel -->
+<!-- src.bundesliga.model.pymc.pymc_toto_model.TotoModel -->
+<g id="node5" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc.pymc_toto_model.TotoModel">
+
+<polygon fill="none" stroke="black" points="1236.44,-86.9 1236.44,-178.1 1502.83,-178.1 1502.83,-86.9 1236.44,-86.9"/>
+<text text-anchor="start" x="1338.14" y="-161.5" font-family="Times,serif" font-size="14.00">TotoModel</text>
+<polyline fill="none" stroke="black" points="1236.44,-153.3 1502.83,-153.3"/>
+<text text-anchor="start" x="1336.58" y="-136.7" font-family="Times,serif" font-size="14.00">model</text>
+<text text-anchor="start" x="1336.58" y="-119.9" font-family="Times,serif" font-size="14.00">version : str</text>
+<polyline fill="none" stroke="black" points="1236.44,-111.7 1502.83,-111.7"/>
+<text text-anchor="start" x="1244.44" y="-95.1" font-family="Times,serif" font-size="14.00">build_model(X: pd.DataFrame, y: pd.Series)</text>
+</g>
+<!-- src.bundesliga.model.pymc.pymc_model.pymc_FootballModel -->
+
+<!-- src.bundesliga.model.pymc.pymc_model.pymc_FootballModel -->
+<g id="node6" class="node" pointer-events="visible" data-name="src.bundesliga.model.pymc.pymc_model.pymc_FootballModel">
+
+<polygon fill="none" stroke="black" points="1521.01,-0.5 1521.01,-264.5 1840.26,-264.5 1840.26,-0.5 1521.01,-0.5"/>
+<text text-anchor="start" x="1619.97" y="-247.9" font-family="Times,serif" font-size="14.00">pymc_FootballModel</text>
+<polyline fill="none" stroke="black" points="1521.01,-239.7 1840.26,-239.7"/>
+<text text-anchor="start" x="1578.77" y="-223.1" font-family="Times,serif" font-size="14.00">X : Union[pd.DataFrame, pd.Series]</text>
+<text text-anchor="start" x="1578.77" y="-206.3" font-family="Times,serif" font-size="14.00">model_coords : dict</text>
+<text text-anchor="start" x="1578.77" y="-189.5" font-family="Times,serif" font-size="14.00">output_var</text>
+<text text-anchor="start" x="1578.77" y="-172.7" font-family="Times,serif" font-size="14.00">version : str</text>
+<text text-anchor="start" x="1578.77" y="-155.9" font-family="Times,serif" font-size="14.00">y : Union[pd.Series, np.ndarray]</text>
+<polyline fill="none" stroke="black" points="1521.01,-147.7 1840.26,-147.7"/>
+<text text-anchor="start" x="1555.83" y="-132.1" font-family="Times,serif" font-style="italic" font-size="14.00">build_model</text>
+<text text-anchor="start" x="1625.82" y="-132.1" font-family="Times,serif" font-size="14.00">(X: pd.DataFrame, y: pd.Series)</text>
+<text text-anchor="start" x="1555.83" y="-118.1" font-family="Times,serif" font-size="14.00">get_default_model_config(): dict</text>
+<text text-anchor="start" x="1555.83" y="-104.1" font-family="Times,serif" font-size="14.00">get_default_sampler_config(): dict</text>
+<text text-anchor="start" x="1581.89" y="-90.1" font-family="Times,serif" font-size="14.00">predict_goals(test_data: np.ndarray</text>
+<polyline fill="none" stroke="black" points="1521.01,-83.7 1840.26,-83.7"/>
+<text text-anchor="start" x="1640.79" y="-67.1" font-family="Times,serif" font-size="14.00">pd.DataFrame</text>
+<polyline fill="none" stroke="black" points="1521.01,-58.9 1840.26,-58.9"/>
+<text text-anchor="start" x="1529.01" y="-42.3" font-family="Times,serif" font-size="14.00">pd.Series, extend_idata: bool): pd.DataFrame</text>
+<text text-anchor="start" x="1529.01" y="-25.5" font-family="Times,serif" font-size="14.00">predict_toto_probabilities(predictions): pd.DataFrame</text>
+<text text-anchor="start" x="1529.01" y="-8.7" font-family="Times,serif" font-size="14.00">train(X, y)</text>
+</g><g id="node4" class="node" pointer-events="visible" data-name="src.bundesliga.model.pyro.pyro_simple_model.SimplePyroModel" data-comment="src.bundesliga.model.pymc.pymc_model.pymc_FootballModel">
+
+<polygon fill="none" stroke="black" points="783.07,-53.3 783.07,-211.7 1218.2,-211.7 1218.2,-53.3 783.07,-53.3" style=""/>
+<text text-anchor="start" x="949.3" y="-195.1" font-family="Times,serif" font-size="14.00" style="">SimplePyroModel</text>
+<polyline fill="none" stroke="black" points="783.07,-186.9 1218.2,-186.9" style=""/>
+<text text-anchor="start" x="973.42" y="-170.3" font-family="Times,serif" font-size="14.00" style="">prior_diff</text>
+<polyline fill="none" stroke="black" points="783.07,-162.1 1218.2,-162.1" style=""/>
+<text text-anchor="start" x="791.07" y="-145.5" font-family="Times,serif" font-size="14.00" style="">get_diffs(team_2, num_games)</text>
+<text text-anchor="start" x="791.07" y="-128.7" font-family="Times,serif" font-size="14.00" style="">get_guide()</text>
+<text text-anchor="start" x="791.07" y="-111.9" font-family="Times,serif" font-size="14.00" style="">get_model()</text>
+<text text-anchor="start" x="791.07" y="-95.1" font-family="Times,serif" font-size="14.00" style="">get_probs_winner_from_goal_results(goals_of_team_1, goals_of_team_2)</text>
+<text text-anchor="start" x="791.07" y="-78.3" font-family="Times,serif" font-size="14.00" style="">predict_goals(test_data)</text>
+<text text-anchor="start" x="791.07" y="-61.5" font-family="Times,serif" font-size="14.00" style="">predict_toto_probabilities(predictions)</text>
+</g>
+
+</g>
+</svg>

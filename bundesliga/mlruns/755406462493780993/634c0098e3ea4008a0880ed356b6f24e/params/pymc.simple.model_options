@@ -1,0 +1,1 @@
+{'model': 'simple', 'engine': 'pymc', 'start_day': 20, 'walk_forward': 1, 'test_size': 0.2, 'model_config': {'prior_params': {'off_mu': 1.75, 'off_tau': 1.0, 'def_mu': 0.0, 'def_tau': 1.0}}, 'sampler_config': {'random_seed': 42, 'chains': 4, 'draws': 1000, 'tune': 100, 'target_accept': 0.85}, 'plot_params': {'max_goals': 8, 'team_1': 'Augsburg', 'team_2': 'Bochum'}}
