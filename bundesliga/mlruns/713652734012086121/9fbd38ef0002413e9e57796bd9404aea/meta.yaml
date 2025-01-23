@@ -1,0 +1,16 @@
+artifact_uri: file:///S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/mlruns/713652734012086121/9fbd38ef0002413e9e57796bd9404aea/artifacts
+end_time: 1737395955484
+entry_point_name: ''
+experiment_id: '713652734012086121'
+lifecycle_stage: active
+run_id: 9fbd38ef0002413e9e57796bd9404aea
+run_name: 'Solorun - engine: pymc | model: simple | season: D1-24-25 | day: 107 |
+  seed: 42'
+run_uuid: 9fbd38ef0002413e9e57796bd9404aea
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737395955395
+status: 3
+tags: []
+user_id: Phili
