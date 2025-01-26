@@ -2,13 +2,13 @@ import arviz as az
 import numpy as np
 import pandas as pd
 import pymc as pm
+from bundesliga import settings
 from bundesliga.model.pymc.pymc_model import pymc_FootballModel
 
-RANDOM_SEED = 8927
 min_mu = 0.0001
 average_goals = 3.0
 
-rng = np.random.default_rng(RANDOM_SEED)
+rng = np.random.default_rng(settings.SEED)
 az.style.use("arviz-darkgrid")
 
 

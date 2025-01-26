@@ -3,10 +3,8 @@ This is a boilerplate pipeline 'data_processing'
 generated using Kedro 0.19.10
 """
 
-from kedro.pipeline import Pipeline, node, pipeline
-from utils import load_config
-
 from bundesliga import settings
+from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes_etl.nodes import (
     build_team_lexicon,
@@ -39,12 +37,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
         ],
     )
-    datasets_list = load_config()["parameters"]["datasets"]
+    datasets_list = settings.DATASETS
     dataset_pipelines = []
 
     for dataset_name in datasets_list:
         dataset_pipelines.append(
             pipeline(data_processing, namespace=dataset_name, tags=dataset_name)
         )
-
     return sum(dataset_pipelines)

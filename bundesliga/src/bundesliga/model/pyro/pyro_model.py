@@ -3,6 +3,7 @@ import pyro
 import pyro.distributions as dist
 import pyro.infer
 import pyro.optim
+from bundesliga import settings
 from bundesliga.model.model_interface import FootballModel
 
 
@@ -14,8 +15,8 @@ class PyroModel(FootballModel):
 
     def train(self, X, y, parameters):
         pyro.clear_param_store()
-        pyro.set_rng_seed(self.sampler_config["random_seed"])
-        np.random.seed(self.sampler_config["random_seed"])
+        pyro.set_rng_seed(settings.SEED)
+        np.random.seed(settings.SEED)
 
         home_id, away_id, home_goals, away_goals, toto = (
             X["home_id"].values,

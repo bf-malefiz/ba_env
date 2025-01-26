@@ -2,20 +2,18 @@
 from the Kedro defaults. For further information, including these default values, see
 https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
 
+import yaml
 from utils import merge_dicts
 
 from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
 
-SEED = 100
-# from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
-# from bundesliga.hooks.monitoring_hooks import PipelineMonitoringHooks
+SEED = 42
 
 # Instantiated project hooks.
 # For example, after creating a hooks.py and defining a ProjectHooks class there, do
 # from pandas_viz.hooks import ProjectHooks
 
 # Hooks are executed in a Last-In-First-Out (LIFO) order.
-# HOOKS = ()
 HOOKS = (
     ModelTrackingHooks(),
     # PipelineMonitoringHooks(),
@@ -63,6 +61,17 @@ DYNAMIC_PIPELINES_MAPPING = {
     "pymc": ["simple"],
     "pyro": ["simple"],
 }
+
+
+# Datei einlesen
+with open(
+    "S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/conf/base/parameters_datasets_list.yml",
+    "r",
+) as file:
+    data = yaml.safe_load(file)  # Lädt die YAML-Daten sicher ein
+
+# Extrahiere die Liste der Datensätze
+DATASETS = data.get("datasets", [])
 
 # Class that manages Kedro's library components.
 # from kedro.framework.context import KedroContext

@@ -4,6 +4,7 @@ from typing import Union
 import numpy as np
 import pandas as pd
 import pymc as pm
+from bundesliga import settings
 from pymc_experimental.model_builder import ModelBuilder
 
 
@@ -187,7 +188,7 @@ class pymc_FootballModel(ModelBuilder):
         idata = self.fit(
             X=X,
             y=goals,
-            random_seed=self.sampler_config["random_seed"],
+            random_seed=settings.SEED,
             nchains=self.sampler_config["chains"],
             draws=self.sampler_config["draws"],
         )
@@ -202,7 +203,7 @@ class pymc_FootballModel(ModelBuilder):
         pp = self.predict_posterior(
             X_pred=test_data,
             combined=True,
-            random_seed=self.sampler_config["random_seed"],
+            random_seed=settings.SEED,
             **kwargs,
         )
 

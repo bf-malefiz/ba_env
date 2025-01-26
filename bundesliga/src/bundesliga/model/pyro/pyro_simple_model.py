@@ -3,6 +3,7 @@ import pandas as pd
 import pyro
 import pyro.distributions as dist
 import torch
+from bundesliga import settings
 from bundesliga.model.pyro.pyro_model import PyroModel
 
 
@@ -46,8 +47,8 @@ class SimplePyroModel(PyroModel):
         return np.array([p1, p2, tie])
 
     def predict_goals(self, test_data, **kwargs):
-        pyro.set_rng_seed(self.sampler_config["random_seed"])
-        np.random.seed(self.sampler_config["random_seed"])
+        pyro.set_rng_seed(settings.SEED)
+        np.random.seed(settings.SEED)
 
         team1 = test_data["home_id"].values
         team2 = test_data["away_id"].values
