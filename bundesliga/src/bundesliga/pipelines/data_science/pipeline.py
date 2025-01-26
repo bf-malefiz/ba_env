@@ -3,22 +3,17 @@ This is a boilerplate pipeline 'data_science'
 generated using Kedro 0.19.10
 """
 
+from bundesliga import settings
 from kedro.pipeline import Pipeline, node, pipeline
 from utils import split_time_data
 
-from bundesliga import settings
-
 from .nodes_ml.evaluate import aggregate_eval_metrics
-
-# from .nodes_ml.posteriors import posterior_f1, posterior_f2, team_means
 from .nodes_ml.train_model import (
     evaluate,
     init_model,
     predict_goals,
     train,
 )
-
-# from .nodes_monitoring.plots import plot_goal_diffs, plot_offence_defence
 
 
 def create_pipeline(**kwargs) -> Pipeline:

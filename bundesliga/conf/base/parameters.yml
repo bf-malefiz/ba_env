@@ -11,11 +11,11 @@ model_options:
   model: "" 
   engine: ""
   start_day: 20
-  walk_forward: 2
+  walk_forward: 1
   test_size: 0.2
   model_config: #define in model specific config
   sampler_config: #define in model specific config
-      random_seed: 100
+      random_seed: 42
 # -------------------------------
   plot_params:
     max_goals: 8
@@ -31,10 +31,10 @@ pymc:
     engine: "pymc"
     model_config:
     sampler_config:
-      chains: 1
+      chains: 2
       draws: 1000
       tune: 100 # toDo: 10% of draws
-      target_accept: 0.85
+      target_accept: 0.9
 
   
   simple:

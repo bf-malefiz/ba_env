@@ -1,22 +1,20 @@
 """Project pipelines."""
 from typing import Dict
 
-from kedro.pipeline import Pipeline, pipeline
-from utils import load_config
-
 from bundesliga import __version__ as PROJECT_VERSION
 from bundesliga import settings
 from bundesliga.pipelines.data_processing.pipeline import (
     create_pipeline as create_etl_pipeline,
 )
 from bundesliga.pipelines.data_science.pipeline import eval_pipeline, ml_pipeline
+from kedro.pipeline import Pipeline, pipeline
+from utils import load_config
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
     """Register the project's pipeline."""
 
     parameters = load_config()["parameters"]
-    datasets_list = parameters["datasets"]
     start_day = parameters["model_options"]["start_day"]
     walk_forward = parameters["model_options"]["walk_forward"]
 
@@ -27,7 +25,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     for engine, variants in settings.DYNAMIC_PIPELINES_MAPPING.items():
         engine_pipeline_collection = []
         for variant in variants:
-            for dataset_name in datasets_list:
+            for dataset_name in settings.DATASETS:
                 engine_pipeline_collection.append(
                     pipeline(
                         ml_pipeline(
