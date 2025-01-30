@@ -66,7 +66,6 @@ DYNAMIC_PIPELINES_MAPPING = {
 # Datei einlesen
 with open(
     "S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/conf/base/parameters_datasets_list.yml",
-    "r",
 ) as file:
     data = yaml.safe_load(file)  # Lädt die YAML-Daten sicher ein
 
