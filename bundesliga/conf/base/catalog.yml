@@ -5,34 +5,59 @@
     sep: ","
     index_col: 0
     encoding: "cp1252"
-
+  metadata:
+    kedro-viz:
+      layer: raw
+      preview_args:
+          nrows: 5
 "{dataset}.goals":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
     filepath: data/02_intermediate/{dataset}/goals.pq
+    metadata:
+      kedro-viz:
+        layer: intermediate
+        preview_args:
+            nrows: 5
 
 "{dataset}.team_lexicon":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
     filepath: data/03_primary/{dataset}/team_lexicon.pq
+    metadata:
+      kedro-viz:
+        layer: primary
+        preview_args:
+            nrows: 5
 
 "{dataset}.vectorized_data":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
     type: pandas.ParquetDataset
     filepath: data/03_primary/{dataset}/vectorized_data.pq
+    metadata:
+      kedro-viz:
+        layer: model_input
+        preview_args:
+            nrows: 5
 
 
 "{variant}.{dataset}.train_data_{day}":
   type: pandas.ParquetDataset
   filepath: data/04_feature/{dataset}/{variant}/train_data_{day}.pq
+  metadata:
+    kedro-viz:
+      layer: feature
 
 
 "{variant}.{dataset}.test_data_{day}":
   type: pandas.ParquetDataset
   filepath: data/04_feature/{dataset}/{variant}/test_data_{day}.pq
+  metadata:
+    kedro-viz:
+      layer: feature
 
 "{variant}.{dataset}.day_{day}":
   type: MemoryDataset
@@ -43,13 +68,20 @@
   dataset:
     type: pandas.ParquetDataset
     filepath: data/05_model_input/{dataset}/{variant}/toto.pq
+    metadata:
+      kedro-viz:
+        layer: model_input
 
 "{variant}.{dataset}.predictions_{day}":
   type: MemoryDataset
-
+  metadata:
+    kedro-viz:
+      layer: model_output
 "{variant}.{dataset}.metrics_{day}":
   type: MemoryDataset
-
+  metadata:
+    kedro-viz:
+      layer: reporting
 "{variant}.{dataset}.results":
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
   dataset:
@@ -57,8 +89,10 @@
     filepath: data/08_reporting/{dataset}/{variant}/results.csv
     save_args:
       mode: "a"
-      # header: False
-"{engine}.{dataset_name}.{variant}.modeldefinitions":
-    type: MemoryDataset
-"{engine}.{dataset_name}.{variant}.aggregated_metrics":
-    type: MemoryDataset
+    metadata:
+      kedro-viz:
+        layer: reporting
+# "{engine}.{dataset_name}.{variant}.modeldefinitions":
+#     type: MemoryDataset
+# "{engine}.{dataset_name}.{variant}.aggregated_metrics":
+#     type: MemoryDataset
