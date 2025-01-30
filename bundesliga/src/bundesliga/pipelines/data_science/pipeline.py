@@ -3,9 +3,10 @@ This is a boilerplate pipeline 'data_science'
 generated using Kedro 0.19.10
 """
 
-from bundesliga import settings
 from kedro.pipeline import Pipeline, node, pipeline
 from utils import split_time_data
+
+from bundesliga import settings
 
 from .nodes_ml.evaluate import aggregate_eval_metrics
 from .nodes_ml.train_model import (
@@ -137,7 +138,7 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
                     "parameters": "params:model_options",
                     # "toto": f"toto_{day}",
                 },
-                outputs=[f"model_{day}", f"idata_{day}"],
+                outputs=f"model_{day}",
                 name=f"fit_node_{day}",
             ),
             node(

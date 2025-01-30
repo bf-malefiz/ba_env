@@ -48,7 +48,7 @@ def train(model, train_data, parameters: t.Dict, **kwargs) -> xr.Dataset:
 
     idata = model.train(X=X, y=y, parameters=parameters)
 
-    return model, idata
+    return model
 
 
 def predict_goals(model, test_data, parameters, **kwargs):
@@ -79,9 +79,7 @@ def evaluate(model, day, test_data, predictions):
 
     predictions["predicted_result"] = determine_winner(predictions)["winner"]
     bools = test_goal["true_result"].values == predictions["predicted_result"].values
-    winner_accuracy = (
-        bools
-    ).mean()
+    winner_accuracy = (bools).mean()
 
     results = {
         "winner_accuracy": winner_accuracy,
