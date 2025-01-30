@@ -15,7 +15,13 @@ class ModelTrackingHooks:
 
     @hook_impl
     def after_dataset_loaded(self, dataset_name, data, node):
-        pass
+        if "vectorize" in dataset_name:
+            pd_dataset = mlflow.data.from_pandas(
+                data, name=dataset_name
+            )
+
+            mlflow.log_input(pd_dataset, context=dataset_name)
+
 
     @hook_impl
     def before_pipeline_run(
