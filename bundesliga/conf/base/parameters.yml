@@ -1,87 +1,108 @@
+# Configuration Documentation for Football Match Prediction Models
+
+# This YAML file defines the configuration options for different model variants and pipelines.
+# It uses a hierarchical structure to allow for overriding base configurations with specific
+# settings for each model or experiment.
+
 # <namespace>:
 #     <variant - e.g. model variant / experiment name>:
 #         _overrides: {} # what to override from root configuration 
 #       # any specific parameter, e.g. model_options, used in Kedro pipeline
 #         model_options: ${merge:${..model_options},${._overrides}}
 
+# -------------------------------
+# Base Configuration
+# -------------------------------
 
-# # The model_options below are "base" options for all pipelines
+# The `model_options` section defines the base configuration options that apply to all pipelines.
+# These options can be overridden by specific model variants or experiments.
 
 model_options:
-  model: "" 
-  engine: ""
-  start_day: 20
-  walk_forward: 1
-  test_size: 0.2
-  model_config: #define in model specific config
-  sampler_config: #define in model specific config
-      random_seed: 42
-# -------------------------------
-  plot_params:
-    max_goals: 8
-    team_1: 'Augsburg'
-    team_2: 'Bochum'
+  model: ""  # The type of model to use (e.g., "simple", "toto").
+  engine: ""  # The engine to use for the model (e.g., "pymc", "pyro").
+  start_day: 20  # The starting day for the data.
+  walk_forward: 0  # The number of days to walk forward in the data.
+  test_size: 0.2  # The proportion of data to use for testing.
+
+  # Model-specific configuration options.
+  model_config: # Define in model-specific config.
+  sampler_config: # Define in model-specific config.
+      random_seed: 42  # Random seed for reproducibility.
 
 # -------------------------------
-# Pipeline-specific configuration
+# Pipeline-Specific Configuration (PyMC)
+# -------------------------------
 
+# The `pymc` section defines configurations for models using the PyMC engine.
+# Each variant (e.g., "simple", "toto") can override the base configuration.
 
 pymc:
+  # Base overrides for all PyMC models.
   _overrides_base:
-    engine: "pymc"
-    model_config:
+    engine: "pymc"  # Use the PyMC engine.
+    model_config: {}  # Model-specific configuration.
     sampler_config:
-      chains: 2
-      draws: 1000
-      tune: 100 # toDo: 10% of draws
-      target_accept: 0.9
+      chains: 2  # Number of MCMC chains.
+      draws: 1000  # Number of draws per chain.
+      tune: 100  # Number of tuning steps (10% of draws).
+      target_accept: 0.9  # Target acceptance rate for MCMC.
 
-  
+  # Configuration for the "simple" PyMC model.
   simple:
     _overrides:
-      model: "simple"
+      model: "simple"  # Use the "simple" model variant.
       model_config:
         prior_params:
-          off_mu: 1.75
-          off_tau: 1.0
-          def_mu: 0.0
-          def_tau: 1.0
+          off_mu: 1.75  # Mean for the offensive strength prior.
+          off_tau: 1.0  # Precision for the offensive strength prior.
+          def_mu: 0.0  # Mean for the defensive strength prior.
+          def_tau: 1.0  # Precision for the defensive strength prior.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
 
+  # Configuration for the "toto" PyMC model.
   toto:
     _overrides:
-      model: "toto"
+      model: "toto"  # Use the "toto" model variant.
       model_config:
         prior_params:
           score:
-            tau: 1.0
-            mu: 0.0
+            tau: 1.0  # Precision for the score prior.
+            mu: 0.0  # Mean for the score prior.
           offence_defence_diff:
-            tau: 1.0
-            mu: 1.75 #avg/2
+            tau: 1.0  # Precision for the offensive-defensive difference prior.
+            mu: 1.75  # Mean for the offensive-defensive difference prior.
           home_advantage:
-            tau: 10.0
-            mu: 0.0
+            tau: 10.0  # Precision for the home advantage prior.
+            mu: 0.0  # Mean for the home advantage prior.
           weights:
-            tau: 100.0
-            mu: [0.0, 0.25, -0.25]
+            tau: 100.0  # Precision for the weights prior.
+            mu: [0.0, 0.25, -0.25]  # Mean for the weights prior.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
 
+# -------------------------------
+# Pipeline-Specific Configuration (Pyro)
+# -------------------------------
+
+# The `pyro` section defines configurations for models using the Pyro engine.
+# Each variant (e.g., "simple", "toto") can override the base configuration.
 
 pyro:
+  # Base overrides for all Pyro models.
   _overrides_base:
-    engine: "pyro"
+    engine: "pyro"  # Use the Pyro engine.
     model_config:
-      betas: [0.95, 0.999]
-      learning_rate: 0.005
-      prior_diff: 1.5
+      betas: [0.95, 0.999]  # Beta parameters for the optimizer.
+      learning_rate: 0.005  # Learning rate for the optimizer.
+      prior_diff: 1.5  # Prior difference for the model.
 
+  # Configuration for the "simple" Pyro model.
   simple:
     _overrides:
-      model: "simple"
+      model: "simple"  # Use the "simple" model variant.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
 
+  # Configuration for the "toto" Pyro model.
   toto:
     _overrides:
-      model: "toto"
+      model: "toto"  # Use the "toto" model variant.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
