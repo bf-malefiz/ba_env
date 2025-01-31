@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pymc as pm
 from bundesliga import settings
-from bundesliga.model.pymc.pymc_model import pymc_FootballModel
+from bundesliga.model.pymc.pymc_model import PymcModel
 
 min_mu = 0.0001
 average_goals = 3.0
@@ -12,10 +12,10 @@ rng = np.random.default_rng(settings.SEED)
 az.style.use("arviz-darkgrid")
 
 
-class SimpleModel(pymc_FootballModel):
-    # def __init__(self, model_config=None, sampler_config=None, team_lexicon=None):
-    #     self.team_lexicon = team_lexicon
-    #     super().__init__(model_config, sampler_config)
+class SimplePymcModel(PymcModel):
+    def __init__(self, model_options, team_lexicon=None):
+        self.team_lexicon = team_lexicon
+        super().__init__(model_options)
 
     # Give the model a name
     _model_type = "Simple_FootballModel"

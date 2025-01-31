@@ -7,34 +7,71 @@ from kedro.pipeline.node import Node
 
 
 class ModelTrackingHooks:
-    """Namespace for grouping all model-tracking hooks with MLflow together."""
+    """
+    A collection of Kedro hooks for tracking machine learning models using MLflow.
+
+    This class implements various Kedro hooks to integrate MLflow tracking into the Kedro pipeline.
+    It logs datasets, parameters, metrics, and tags at different stages of the pipeline execution.
+
+    Attributes:
+        None
+    """
 
     @hook_impl
     def after_context_created(self, context):
+        """
+        Hook implementation called after the Kedro context is created.
+
+        This hook can be used to perform setup tasks after the Kedro context is initialized.
+
+        Args:
+            context: The Kedro context object.
+        """
         pass
 
     @hook_impl
     def after_dataset_loaded(self, dataset_name, data, node):
+        """
+        Hook implementation called after a dataset is loaded.
+
+        This hook logs the dataset to MLflow if the dataset name contains "vectorize".
+
+        Args:
+            dataset_name (str): The name of the dataset that was loaded.
+            data (Any): The data that was loaded.
+            node (Node): The Kedro node that loaded the dataset.
+        """
         if "vectorize" in dataset_name:
-            pd_dataset = mlflow.data.from_pandas(
-                data, name=dataset_name
-            )
+            pd_dataset = mlflow.data.from_pandas(data, name=dataset_name)
 
             mlflow.log_input(pd_dataset, context=dataset_name)
-
 
     @hook_impl
     def before_pipeline_run(
         self, run_params: Dict[str, Any], pipeline, catalog
     ) -> None:
-        """Hook implementation to start an MLflow run
-        with the same run_id as the Kedro pipeline run.
         """
+        Hook implementation called before a pipeline run starts.
+
+        This hook can be used to start an MLflow run with the same run_id as the Kedro pipeline run.
+
+        Args:
+            run_params (Dict[str, Any]): Parameters for the pipeline run.
+            pipeline: The Kedro pipeline being executed.
+            catalog: The Kedro data catalog.
+        """
+        pass
 
     @hook_impl
     def before_node_run(self, node: Node, inputs: Dict[str, Any]) -> None:
-        """Hook implementation to log the parameters before some node runs.
-        In this example, we will log the parameters before the data splitting node runs.
+        """
+        Hook implementation called before a node runs.
+
+        This hook can be used to log parameters before a node runs. In this example, it is not implemented.
+
+        Args:
+            node (Node): The Kedro node about to be executed.
+            inputs (Dict[str, Any]): The inputs to the node.
         """
         pass
 
@@ -42,24 +79,29 @@ class ModelTrackingHooks:
     def after_node_run(
         self, node: Node, outputs: Dict[str, Any], inputs: Dict[str, Any]
     ) -> None:
+        """
+        Hook implementation called after a node runs.
+
+        This hook logs evaluation metrics to MLflow if the node's function name contains "evaluate".
+
+        Args:
+            node (Node): The Kedro node that was executed.
+            outputs (Dict[str, Any]): The outputs from the node.
+            inputs (Dict[str, Any]): The inputs to the node.
+        """
         if "evaluate" in node._func_name:
-            # Hol dir das (Dictionary) mit den Kennzahlen aus den Node-Outputs
+            # Get the evaluation results from the node outputs
             out_name = node._outputs
             eval_results = outputs[out_name]
 
-            # Sortierte Tags -> meist Tag-Reihenfolge wie [day, season, engine, model]
+            # Extract tags from the node (e.g., day, season, engine, model)
             tags = sorted(node.tags)
-
-            # Wenn du weißt, welche Indexe was bedeuten, kannst du es hier namentlich auseinandernehmen
             day = tags[0]
             season = tags[1]
             engine = tags[2]
             model = tags[3]
 
-            # Optional: Du kannst auch `.index()` auf die Tags machen,
-            # um die Position zu finden oder Tag-Strings direkt suchen.
-
-            # Bereite die Metriken auf
+            # Prepare the metrics for logging
             results = {
                 "winner_accuracy": eval_results["winner_accuracy"],
                 "rmse_home": eval_results["rmse_home"],
@@ -71,12 +113,15 @@ class ModelTrackingHooks:
                 "rps": eval_results["rps"],
             }
 
-            # Run-Name (z.B. "model: poisson Season: 2023 day: 2"):
-            run_name = f"Solorun - engine: {engine} | model: {model} | season: {season} | day: {day} | seed: {settings.SEED}"
+            # Create a run name for MLflow
+            run_name = (
+                f"Solorun - engine: {engine} | model: {model} | season: {season} | "
+                f"day: {day} | seed: {settings.SEED}"
+            )
 
+            # Log metrics and parameters to MLflow
             active_run = mlflow.active_run()
             if active_run is not None:
-                # Falls wir nested logging wollen
                 with mlflow.start_run(run_name=run_name, nested=True) as run:
                     mlflow.log_params(
                         {
@@ -105,4 +150,15 @@ class ModelTrackingHooks:
 
     @hook_impl
     def after_pipeline_run(self, run_params, run_result, pipeline, catalog) -> None:
+        """
+        Hook implementation called after a pipeline run completes.
+
+        This hook can be used to perform cleanup tasks or log final results after the pipeline run.
+
+        Args:
+            run_params: Parameters for the pipeline run.
+            run_result: The result of the pipeline run.
+            pipeline: The Kedro pipeline that was executed.
+            catalog: The Kedro data catalog.
+        """
         pass

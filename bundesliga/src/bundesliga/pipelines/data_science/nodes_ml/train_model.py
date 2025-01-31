@@ -9,15 +9,15 @@ import xarray as xr
 from utils import brier_score, log_likelihood, rmse_mae, rps
 
 
-def init_model(team_lexicon, parameters: t.Dict, **kwargs) -> xr.Dataset:
-    model = parameters["model"]
-    engine = parameters["engine"]
+def init_model(team_lexicon, model_options: t.Dict, **kwargs) -> xr.Dataset:
+    model = model_options["model"]
+    engine = model_options["engine"]
 
     match engine:
         case "pymc":
             match model:
                 case "simple":
-                    return pm_simple.SimpleModel(parameters)
+                    return pm_simple.SimplePymcModel(model_options)
                 case "toto":
                     try:
                         kwargs["toto"]
@@ -29,7 +29,7 @@ def init_model(team_lexicon, parameters: t.Dict, **kwargs) -> xr.Dataset:
         case "pyro":
             match model:
                 case "simple":
-                    return pyro_simple.SimplePyroModel(team_lexicon, parameters)
+                    return pyro_simple.SimplePyroModel(team_lexicon, model_options)
                 case "toto":
                     raise NotImplementedError("Pyro not implemented.")
         case "stan":

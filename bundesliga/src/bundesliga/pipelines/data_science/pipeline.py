@@ -23,38 +23,36 @@ def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(pipes)
 
 
-def eval_pipeline(
-    startday,
-    walks,
-    setting,
-    dataset_name,
-) -> Pipeline:
-    # 2) Erzeuge eine Node, die alle metrics_{day} einließt
+def create_model_definition_node(engine, variant, dataset_name):
+    """Erstellt eine Modelldefinitions-Node für eine Pipeline."""
+    return node(
+        func=lambda: {
+            "engine": engine,
+            "variant": variant,
+            "dataset_name": dataset_name,
+            "seed": settings.SEED,
+        },
+        inputs=None,
+        outputs=f"{engine}.{dataset_name}.{variant}.modeldefinitions",
+        name=f"{engine}.{dataset_name}.{variant}.modeldef_node",
+    )
 
+
+def eval_pipeline(startday, walks, setting, dataset_name) -> Pipeline:
+    """Erstellt eine Evaluationspipeline für verschiedene Engines und Varianten."""
     pipe_collection = []
 
     for engine, variants in setting:
         for variant in variants:
-            metrics_inputs = []
-            for day in range(startday, startday + walks):
-                metrics_inputs.append(
-                    f"{engine}.{dataset_name}.{variant}.metrics_{day}"
-                )
+            metrics_inputs = [
+                f"{engine}.{dataset_name}.{variant}.metrics_{day}"
+                for day in range(startday, startday + walks)
+            ]
 
             pipe_collection.append(
                 pipeline(
                     [
-                        node(
-                            func=lambda e=engine, v=variant, ds=dataset_name: {
-                                "engine": e,
-                                "variant": v,
-                                "dataset_name": ds,
-                                "seed": settings.SEED,
-                            },
-                            inputs=None,
-                            outputs=f"{engine}.{dataset_name}.{variant}.modeldefinitions",
-                            name=f"{engine}.{dataset_name}.{variant}.modeldef_node",
-                        ),
+                        create_model_definition_node(engine, variant, dataset_name),
                         node(
                             func=aggregate_eval_metrics,
                             inputs=[
@@ -85,16 +83,15 @@ def ml_pipeline(start_day, walk_forward, engine, variant, dataset_name):
 
 def create_walk_forward_pipeline(start_day: int, times_to_walk: int) -> Pipeline:
     """
-    Baut eine Pipeline, die für day=1..max_day Sub-Pipelines kaskadiert.
-    => Ein einziger Pipeline-Lauf deckt alle Tage ab.
+    Erstellt eine Pipeline, die für mehrere Tage durchlaufen wird.
     """
-    subpipelines = []
-    for day in range(start_day, start_day + times_to_walk + 1):
-        subpipelines.append(create_subpipeline_for_day(day))
-
-    # # Sub-Pipelines zu einer großen Pipeline zusammenfassen
-    # walk_forward_pipeline_collection = reduce(lambda p1, p2: p1 + p2, subpipelines)
-    return subpipelines
+    return sum(
+        (
+            create_subpipeline_for_day(day)
+            for day in range(start_day, start_day + times_to_walk + 1)
+        ),
+        start=Pipeline([]),
+    )
 
 
 def create_subpipeline_for_day(day: int) -> Pipeline:
@@ -125,7 +122,7 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
                 func=init_model,
                 inputs={
                     "team_lexicon": "team_lexicon",
-                    "parameters": "params:model_options",
+                    "model_options": "params:model_options",
                 },
                 outputs=f"init_model_{day}",
                 name=f"init_model_node_{day}",

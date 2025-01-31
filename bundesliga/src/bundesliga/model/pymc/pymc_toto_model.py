@@ -1,9 +1,9 @@
 import pandas as pd
 import pymc as pm
-from bundesliga.model.pymc.pymc_model import pymc_FootballModel
+from bundesliga.model.pymc.pymc_model import PymcModel
 
 
-class TotoModel(pymc_FootballModel):
+class TotoModel(PymcModel):
     # def __init__(
     #     self, model_config=None, sampler_config=None, team_lexicon=None, toto=None
     # ):

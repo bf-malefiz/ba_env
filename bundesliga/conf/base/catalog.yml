@@ -1,98 +1,155 @@
+# Kedro Data Catalog Configuration
+# This file defines the datasets used in the Kedro pipeline.
+# Each dataset is configured with a type, filepath, and optional metadata.
+
+# -------------------------------
+# Raw Data
+# -------------------------------
+
+# Raw datasets are stored in CSV format and represent the initial input data.
+# These datasets are typically loaded from external sources.
+
 "{dataset}.CSV":
-  type: pandas.CSVDataset
-  filepath: data/01_raw/football-datasets/{dataset}.csv
+  type: pandas.CSVDataset  # Dataset type for CSV files.
+  filepath: data/01_raw/football-datasets/{dataset}.csv  # Path to the CSV file.
   load_args:
-    sep: ","
-    index_col: 0
-    encoding: "cp1252"
+    sep: ","  # Delimiter used in the CSV file.
+    index_col: 0  # Column to use as the index.
+    encoding: "cp1252"  # Encoding of the CSV file.
   metadata:
     kedro-viz:
-      layer: raw
+      layer: raw  # Layer in the data pipeline (raw, intermediate, primary, etc.).
       preview_args:
-          nrows: 5
+          nrows: 5  # Number of rows to preview in Kedro-Viz.
+
+# -------------------------------
+# Intermediate Data
+# -------------------------------
+
+# Intermediate datasets are processed versions of raw data.
+# These datasets are typically stored in Parquet format for efficiency.
+
 "{dataset}.goals":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset  # Dataset type for MLflow artifacts.
   dataset:
-    type: pandas.ParquetDataset
-    filepath: data/02_intermediate/{dataset}/goals.pq
+    type: pandas.ParquetDataset  # Underlying dataset type (Parquet).
+    filepath: data/02_intermediate/{dataset}/goals.pq  # Path to the Parquet file.
     metadata:
       kedro-viz:
-        layer: intermediate
+        layer: intermediate  # Layer in the data pipeline.
         preview_args:
-            nrows: 5
+            nrows: 5  # Number of rows to preview in Kedro-Viz.
+
+# -------------------------------
+# Primary Data
+# -------------------------------
+
+# Primary datasets are cleaned and preprocessed data ready for modeling.
 
 "{dataset}.team_lexicon":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset  # Dataset type for MLflow artifacts.
   dataset:
-    type: pandas.ParquetDataset
-    filepath: data/03_primary/{dataset}/team_lexicon.pq
+    type: pandas.ParquetDataset  # Underlying dataset type (Parquet).
+    filepath: data/03_primary/{dataset}/team_lexicon.pq  # Path to the Parquet file.
     metadata:
       kedro-viz:
-        layer: primary
+        layer: primary  # Layer in the data pipeline.
         preview_args:
-            nrows: 5
+            nrows: 5  # Number of rows to preview in Kedro-Viz.
 
 "{dataset}.vectorized_data":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset  # Dataset type for MLflow artifacts.
   dataset:
-    type: pandas.ParquetDataset
-    filepath: data/03_primary/{dataset}/vectorized_data.pq
+    type: pandas.ParquetDataset  # Underlying dataset type (Parquet).
+    filepath: data/03_primary/{dataset}/vectorized_data.pq  # Path to the Parquet file.
     metadata:
       kedro-viz:
-        layer: model_input
+        layer: model_input  # Layer in the data pipeline.
         preview_args:
-            nrows: 5
+            nrows: 5  # Number of rows to preview in Kedro-Viz.
 
+# -------------------------------
+# Feature Data
+# -------------------------------
+
+# Feature datasets contain engineered features for machine learning models.
 
 "{variant}.{dataset}.train_data_{day}":
-  type: pandas.ParquetDataset
-  filepath: data/04_feature/{dataset}/{variant}/train_data_{day}.pq
+  type: pandas.ParquetDataset  # Dataset type for Parquet files.
+  filepath: data/04_feature/{dataset}/{variant}/train_data_{day}.pq  # Path to the Parquet file.
   metadata:
     kedro-viz:
-      layer: feature
-
+      layer: feature  # Layer in the data pipeline.
 
 "{variant}.{dataset}.test_data_{day}":
-  type: pandas.ParquetDataset
-  filepath: data/04_feature/{dataset}/{variant}/test_data_{day}.pq
+  type: pandas.ParquetDataset  # Dataset type for Parquet files.
+  filepath: data/04_feature/{dataset}/{variant}/test_data_{day}.pq  # Path to the Parquet file.
   metadata:
     kedro-viz:
-      layer: feature
+      layer: feature  # Layer in the data pipeline.
+
+# -------------------------------
+# Model Input Data
+# -------------------------------
+
+# Model input datasets are used as input to machine learning models.
 
 "{variant}.{dataset}.day_{day}":
-  type: MemoryDataset
+  type: MemoryDataset  # Dataset type for in-memory data.
 
 "{variant}.{dataset}.toto":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
-  artifact_path: toto
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset  # Dataset type for MLflow artifacts.
+  artifact_path: toto  # Path to the artifact in MLflow.
   dataset:
-    type: pandas.ParquetDataset
-    filepath: data/05_model_input/{dataset}/{variant}/toto.pq
+    type: pandas.ParquetDataset  # Underlying dataset type (Parquet).
+    filepath: data/05_model_input/{dataset}/{variant}/toto.pq  # Path to the Parquet file.
     metadata:
       kedro-viz:
-        layer: model_input
+        layer: model_input  # Layer in the data pipeline.
+
+# -------------------------------
+# Model Output Data
+# -------------------------------
+
+# Model output datasets contain predictions and metrics generated by the models.
 
 "{variant}.{dataset}.predictions_{day}":
-  type: MemoryDataset
+  type: MemoryDataset  # Dataset type for in-memory data.
   metadata:
     kedro-viz:
-      layer: model_output
+      layer: model_output  # Layer in the data pipeline.
+
 "{variant}.{dataset}.metrics_{day}":
-  type: MemoryDataset
+  type: MemoryDataset  # Dataset type for in-memory data.
   metadata:
     kedro-viz:
-      layer: reporting
+      layer: reporting  # Layer in the data pipeline.
+
+# -------------------------------
+# Reporting Data
+# -------------------------------
+
+# Reporting datasets contain final results and metrics for analysis.
+
 "{variant}.{dataset}.results":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset  # Dataset type for MLflow artifacts.
   dataset:
-    type: pandas.CSVDataset
-    filepath: data/08_reporting/{dataset}/{variant}/results.csv
+    type: pandas.CSVDataset  # Underlying dataset type (CSV).
+    filepath: data/08_reporting/{dataset}/{variant}/results.csv  # Path to the CSV file.
     save_args:
-      mode: "a"
+      mode: "a"  # Append mode for saving the CSV file.
     metadata:
       kedro-viz:
-        layer: reporting
+        layer: reporting  # Layer in the data pipeline.
+
+# -------------------------------
+# Additional Datasets (Commented Out)
+# -------------------------------
+
+# The following datasets are commented out and can be enabled if needed.
+
 # "{engine}.{dataset_name}.{variant}.modeldefinitions":
-#     type: MemoryDataset
+#     type: MemoryDataset  # Dataset type for in-memory data.
+
 # "{engine}.{dataset_name}.{variant}.aggregated_metrics":
-#     type: MemoryDataset
+#     type: MemoryDataset  # Dataset type for in-memory data.
