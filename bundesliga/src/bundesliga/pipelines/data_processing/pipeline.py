@@ -1,7 +1,4 @@
 """
-This is a boilerplate pipeline 'data_processing'
-generated using Kedro 0.19.10.
-
 This pipeline is responsible for processing raw football match data into a structured format
 suitable for machine learning. It performs the following steps:
 1. Builds a team lexicon (mapping of team names to unique indices).
@@ -28,9 +25,8 @@ Example:
     ```
 """
 
-from kedro.pipeline import Pipeline, node, pipeline
-
 from bundesliga import settings
+from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes_etl.nodes import (
     build_team_lexicon,
@@ -81,7 +77,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["CSV", "team_lexicon"],
                 outputs="goals",
                 name="get_goal_results_node",
-                namespace=None,
+                # namespace=None,
             ),
             node(
                 func=vectorize_data,

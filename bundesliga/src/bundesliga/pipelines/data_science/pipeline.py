@@ -1,12 +1,6 @@
-"""
-This is a boilerplate pipeline 'data_science'
-generated using Kedro 0.19.10
-"""
-
-from kedro.pipeline import Pipeline, node, pipeline
-from utils import split_time_data
-
 from bundesliga import settings
+from bundesliga.utils.utils import split_time_data
+from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes_ml.evaluate import aggregate_eval_metrics
 from .nodes_ml.train_model import (
@@ -96,7 +90,7 @@ def create_walk_forward_pipeline(start_day: int, times_to_walk: int) -> Pipeline
 
 def create_subpipeline_for_day(day: int) -> Pipeline:
     """
-    Erzeugt Knoten [split -> fit -> predict -> evaluate] für Tag = `day`.
+    Erzeugt Knoten [day -> split -> init -> train -> predict -> evaluate].
     """
     return Pipeline(
         [
@@ -132,7 +126,7 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
                 inputs={
                     "model": f"init_model_{day}",
                     "train_data": f"train_data_{day}",
-                    "parameters": "params:model_options",
+                    "model_options": "params:model_options",
                     # "toto": f"toto_{day}",
                 },
                 outputs=f"model_{day}",
@@ -143,7 +137,6 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
                 inputs={
                     "model": f"model_{day}",
                     "test_data": f"test_data_{day}",
-                    "parameters": "params:model_options",
                 },
                 outputs=f"predictions_{day}",
                 name=f"predict_node_{day}",

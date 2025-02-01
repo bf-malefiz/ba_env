@@ -2,7 +2,6 @@
 from typing import Dict, List
 
 from kedro.pipeline import Pipeline, pipeline
-from utils import load_config
 
 from bundesliga import __version__ as PROJECT_VERSION
 from bundesliga import settings
@@ -10,6 +9,7 @@ from bundesliga.pipelines.data_processing.pipeline import (
     create_pipeline as create_etl_pipeline,
 )
 from bundesliga.pipelines.data_science.pipeline import eval_pipeline, ml_pipeline
+from bundesliga.utils.utils import load_config
 
 
 def build_engine_pipelines(
