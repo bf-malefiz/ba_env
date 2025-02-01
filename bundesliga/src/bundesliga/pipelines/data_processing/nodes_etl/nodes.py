@@ -2,11 +2,15 @@ from collections import OrderedDict
 
 import numpy as np
 import pandas as pd
+from bundesliga.utils.validation import validate_dataframe
 
 GOALS_HOME = "FTHG"
 GOALS_AWAY = "FTAG"
 
 
+@validate_dataframe(
+    df_arg_name="df", required_columns=["HomeTeam", "AwayTeam"], allow_empty=False
+)
 def build_team_lexicon(df: pd.DataFrame) -> pd.DataFrame:
     """
     Builds a team lexicon (mapping of team names to unique indices) from the input DataFrame.
@@ -22,10 +26,6 @@ def build_team_lexicon(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: A DataFrame representing the team lexicon, with team names as the index
                       and their corresponding indices as values.
     """
-    if "HomeTeam" not in df.columns or "AwayTeam" not in df.columns:
-        raise ValueError(
-            "Input DataFrame must contain 'HomeTeam' and 'AwayTeam' columns."
-        )
 
     # Combine home and away teams and remove duplicates
     all_teams = (
@@ -38,6 +38,17 @@ def build_team_lexicon(df: pd.DataFrame) -> pd.DataFrame:
     return lex
 
 
+@validate_dataframe(
+    df_arg_name="df",
+    required_columns=["HomeTeam", "AwayTeam", GOALS_HOME, GOALS_AWAY],
+    allow_empty=False,
+)
+@validate_dataframe(
+    df_arg_name="lexicon",
+    required_columns=["index"],
+    required_index="team",
+    allow_empty=False,
+)
 def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame):
     """
     Extracts goal results from the input DataFrame and maps team names to their indices.
@@ -54,9 +65,22 @@ def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame):
         pd.DataFrame: A DataFrame containing goal results with columns "home_goals" and "away_goals".
                       Each entry is a tuple of (home_team_index, away_team_index, goals).
     """
-    required_columns = ["HomeTeam", "AwayTeam", GOALS_HOME, GOALS_AWAY]
-    if not all(col in df.columns for col in required_columns):
-        raise ValueError(f"Input DataFrame must contain columns: {required_columns}")
+
+    try:
+        df[GOALS_HOME] = pd.to_numeric(df[GOALS_HOME], errors="raise")
+        df[GOALS_AWAY] = pd.to_numeric(df[GOALS_AWAY], errors="raise")
+    except ValueError:
+        raise ValueError(
+            f"Non-numerical values detected in columns {GOALS_HOME} or {GOALS_AWAY}."
+        )
+
+    if (df["HomeTeam"] == df["AwayTeam"]).any():
+        raise ValueError("HomeTeam and AwayTeam must not be the same (invalid match).")
+
+    if (df[GOALS_HOME] < 0).any() or (df[GOALS_AWAY] < 0).any():
+        raise ValueError(
+            f"Negative goals detected in columns {GOALS_HOME}/{GOALS_AWAY}."
+        )
 
     # Map team names to indices using the lexicon
     df["home_id"] = df["HomeTeam"].apply(lambda x: lexicon.index.get_loc(x))
@@ -72,7 +96,12 @@ def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame):
     return goals
 
 
-def vectorize_data(goals) -> pd.DataFrame:
+@validate_dataframe(
+    df_arg_name="goals",
+    required_columns=["home_goals", "away_goals"],
+    allow_empty=False,
+)
+def vectorize_data(goals: pd.DataFrame) -> pd.DataFrame:
     """
     Vectorizes the goal results into a structured DataFrame.
 
@@ -91,10 +120,6 @@ def vectorize_data(goals) -> pd.DataFrame:
     Raises:
         ValueError: If the required columns ("home_goals", "away_goals") are missing.
     """
-    if "home_goals" not in goals.columns or "away_goals" not in goals.columns:
-        raise ValueError(
-            "Input DataFrame must contain 'home_goals' and 'away_goals' columns."
-        )
 
     # Extract data from tuples
     home_id = goals["home_goals"].apply(lambda x: x[0])

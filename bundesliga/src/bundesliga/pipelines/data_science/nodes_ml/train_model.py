@@ -1,14 +1,19 @@
 import typing as t
 
-import arviz as az
 import bundesliga.model.pymc.pymc_simple_model as pm_simple
-import bundesliga.model.pymc.pymc_toto_model as pm_toto
 import bundesliga.model.pyro.pyro_simple_model as pyro_simple
 import pandas as pd
 import xarray as xr
-from utils import brier_score, log_likelihood, rmse_mae, rps
+from bundesliga.utils.utils import brier_score, log_likelihood, rmse_mae, rps
+from bundesliga.utils.validation import validate_dataframe
 
 
+@validate_dataframe(
+    df_arg_name="team_lexicon",
+    required_columns=["index"],
+    required_index="team",
+    allow_empty=False,
+)
 def init_model(team_lexicon, model_options: t.Dict, **kwargs) -> xr.Dataset:
     model = model_options["model"]
     engine = model_options["engine"]
@@ -25,40 +30,56 @@ def init_model(team_lexicon, model_options: t.Dict, **kwargs) -> xr.Dataset:
                         raise ValueError(
                             "pm_toto.TotoModel requires 'toto' as keyword argument."
                         )
-                    return pm_toto.TotoModel(toto=kwargs["toto"])
+                    raise NotImplementedError("Pymc-toto not implemented.")
         case "pyro":
             match model:
                 case "simple":
                     return pyro_simple.SimplePyroModel(team_lexicon, model_options)
                 case "toto":
-                    raise NotImplementedError("Pyro not implemented.")
-        case "stan":
-            match model:
-                case "simple":
-                    raise NotImplementedError("Stan not implemented.")
-                case "toto":
-                    raise NotImplementedError("Stan not implemented.")
+                    raise NotImplementedError("Pyro-toto not implemented.")
+
         case _:
-            raise ValueError(f"Model {model} not supported.")
+            raise ValueError(f"Engine {engine} not supported.")
 
 
-def train(model, train_data, parameters: t.Dict, **kwargs) -> xr.Dataset:
+@validate_dataframe(
+    df_arg_name="train_data",
+    required_columns=["home_id", "away_id", "home_goals", "away_goals", "toto"],
+    allow_empty=False,
+)
+def train(model, train_data, model_options: t.Dict, **kwargs) -> xr.Dataset:
     X = train_data[["home_id", "away_id"]]
     y = train_data[["home_goals", "away_goals", "toto"]]
 
-    idata = model.train(X=X, y=y, parameters=parameters)
+    idata = model.train(X=X, y=y, parameters=model_options)
 
     return model
 
 
-def predict_goals(model, test_data, parameters, **kwargs):
+@validate_dataframe(
+    df_arg_name="test_data",
+    required_columns=["home_id", "away_id"],
+    allow_empty=False,
+)
+def predict_goals(model, test_data, **kwargs):
     pp = model.predict_goals(test_data)
 
     return pp
 
 
+@validate_dataframe(
+    df_arg_name="test_data",
+    required_columns=["home_goals", "away_goals"],
+    allow_empty=False,
+)
+@validate_dataframe(
+    df_arg_name="predictions",
+    required_columns=["home_goals", "away_goals"],
+    allow_empty=False,
+)
 def evaluate(model, day, test_data, predictions):
     test_goal = test_data[["home_goals", "away_goals"]]
+    test_goal = test_goal.copy()
     test_goal["true_result"] = test_goal.apply(true_result, axis=1)
 
     toto_probs = model.predict_toto_probabilities(predictions)
@@ -94,6 +115,11 @@ def evaluate(model, day, test_data, predictions):
     return results
 
 
+@validate_dataframe(
+    df_arg_name="predictions",
+    required_columns=["home_goals", "away_goals"],
+    allow_empty=False,
+)
 def determine_winner(predictions):
     # Funktion, um den Gewinner zu bestimmen
     def get_winner(row):
