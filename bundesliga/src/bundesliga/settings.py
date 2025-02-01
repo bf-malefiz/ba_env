@@ -3,9 +3,9 @@ from the Kedro defaults. For further information, including these default values
 https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
 
 import yaml
-from utils import merge_dicts
 
 from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
+from bundesliga.utils.utils import merge_dicts
 
 SEED = 42
 
@@ -56,20 +56,21 @@ CONFIG_LOADER_ARGS = {
 }
 
 DYNAMIC_PIPELINES_MAPPING = {
-    # "etl": ["base"],
-    # "goal_predictor": ["base"],
     "pymc": ["simple"],
     "pyro": ["simple"],
 }
 
 
-# Datei einlesen
-with open(
-    "S:/___Studium/Bachelor_Arbeit/ba_env/bundesliga/conf/base/parameters_datasets_list.yml",
-) as file:
-    data = yaml.safe_load(file)  # Lädt die YAML-Daten sicher ein
+base_path = Path(__file__).resolve().parent.parent.parent
 
-# Extrahiere die Liste der Datensätze
+# Define the relative path to the YAML file
+yaml_file = base_path / "conf" / "base" / "datasets_list.yml"
+
+# Open and load the YAML file
+with open(yaml_file, encoding="utf-8") as file:
+    data = yaml.safe_load(file)
+
+# Exctract the datasets from the YAML file
 DATASETS = data.get("datasets", [])
 
 # Class that manages Kedro's library components.
