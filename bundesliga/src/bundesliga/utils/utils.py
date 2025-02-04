@@ -1,5 +1,5 @@
 """
-This module provides utility functions for splitting data by time (match days),
+This module provides utility functions for splitting data by time (match matchs),
 handling configuration loading and dictionary merging for the custom resolver, extracting goal-related
 distributions, and computing various scoring metrics (Brier Score, RPS, log-
 likelihood, RMSE, MAE) for evaluating model predictions in a football analytics
@@ -34,35 +34,34 @@ min_mu = 0.0001
 low = 1e-8  # Adjusted from '10e-8' for clarity
 
 
-def split_time_data(vectorized_data: pd.DataFrame, current_day: int):
+def split_time_data(vectorized_data: pd.DataFrame, current_match: int):
     """
-    Splits a DataFrame into training and testing subsets based on a given matchday.
+    Splits a DataFrame into training and testing subsets based on a given matchmatch.
 
     Parameters
     ----------
     vectorized_data : pd.DataFrame
-        A DataFrame containing match data, typically indexed by day or matchday.
-    current_day : int or str
-        The current day index (converted to int if given as str). All rows
-        before `current_day` form the training set, and the row(s) at
-        `current_day` form the test set.
+        A DataFrame containing match data, typically indexed by match or matchmatch.
+    current_match : int or str
+        The current match index (converted to int if given as str). All rows
+        before `current_match` form the training set, and the row(s) at
+        `current_match` form the test set.
 
     Returns
     -------
     train_data : pd.DataFrame
-        Subset of `vectorized_data` up to (but not including) the current day.
+        Subset of `vectorized_data` up to (but not including) the current match.
     test_data : pd.DataFrame
-        The portion of `vectorized_data` corresponding exactly to `current_day`.
+        The portion of `vectorized_data` corresponding exactly to `current_match`.
 
     Notes
     -----
-    - This function assumes that `vectorized_data` is sorted by day (ascending)
-      or that rows prior to `current_day` logically represent the training window.
+    - This function assumes that `vectorized_data` is sorted by match (ascending)
+      or that rows prior to `current_match` logically represent the training window.
     """
-    current_day = int(current_day)
-    train_data = vectorized_data[:current_day]
-    test_data = vectorized_data[current_day : current_day + 1]
-
+    current_match = int(current_match) + 1
+    train_data = vectorized_data[:current_match]
+    test_data = vectorized_data[current_match : current_match + 1]
     return train_data, test_data
 
 

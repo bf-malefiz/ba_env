@@ -77,7 +77,7 @@ def predict_goals(model, test_data, **kwargs):
     required_columns=["home_goals", "away_goals"],
     allow_empty=False,
 )
-def evaluate(model, day, test_data, predictions):
+def evaluate(model, match, test_data, predictions):
     test_goal = test_data[["home_goals", "away_goals"]]
     test_goal = test_goal.copy()
     test_goal["true_result"] = test_goal.apply(true_result, axis=1)

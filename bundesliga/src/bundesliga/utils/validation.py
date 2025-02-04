@@ -51,7 +51,7 @@ def validate_dataframe(
                 raise TypeError(f"DataFrame '{df_arg_name}' is not a DataFrame.")
 
             if not allow_empty and df.empty:
-                raise ValueError(f"DataFrame '{df_arg_name}' is empty!")
+                raise ValueError(f"DataFrame '{df_arg_name}' is empty in {func.__name__}.")
 
             missing_cols = [col for col in required_columns if col not in df.columns]
             if missing_cols:

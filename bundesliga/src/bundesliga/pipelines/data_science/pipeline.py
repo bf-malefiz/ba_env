@@ -32,15 +32,15 @@ def create_model_definition_node(engine, variant, dataset_name):
     )
 
 
-def eval_pipeline(startday, walks, setting, dataset_name) -> Pipeline:
+def eval_pipeline(startmatch, last_match, setting, dataset_name) -> Pipeline:
     """Erstellt eine Evaluationspipeline für verschiedene Engines und Varianten."""
     pipe_collection = []
 
     for engine, variants in setting:
         for variant in variants:
             metrics_inputs = [
-                f"{engine}.{dataset_name}.{variant}.metrics_{day}"
-                for day in range(startday, startday + walks)
+                f"{engine}.{dataset_name}.{variant}.metrics_{match}"
+                for match in range(startmatch, startmatch + last_match)
             ]
 
             pipe_collection.append(
@@ -62,9 +62,9 @@ def eval_pipeline(startday, walks, setting, dataset_name) -> Pipeline:
     return pipeline(pipe_collection)
 
 
-def ml_pipeline(start_day, walk_forward, engine, variant, dataset_name):
+def ml_pipeline(start_match, last_match, engine, variant, dataset_name):
     return pipeline(
-        create_walk_forward_pipeline(start_day, walk_forward),
+        create_walk_forward_pipeline(start_match, last_match),
         inputs={
             "team_lexicon": "team_lexicon",
             "vectorized_data": "vectorized_data",
@@ -75,42 +75,42 @@ def ml_pipeline(start_day, walk_forward, engine, variant, dataset_name):
     )
 
 
-def create_walk_forward_pipeline(start_day: int, times_to_walk: int) -> Pipeline:
+def create_walk_forward_pipeline(start_match: int, last_match: int) -> Pipeline:
     """
     Erstellt eine Pipeline, die für mehrere Tage durchlaufen wird.
     """
     return sum(
         (
-            create_subpipeline_for_day(day)
-            for day in range(start_day, start_day + times_to_walk + 1)
+            create_subpipeline_for_match(match)
+            for match in range(start_match, last_match)
         ),
         start=Pipeline([]),
     )
 
 
-def create_subpipeline_for_day(day: int) -> Pipeline:
+def create_subpipeline_for_match(match: int) -> Pipeline:
     """
-    Erzeugt Knoten [day -> split -> init -> train -> predict -> evaluate].
+    Erzeugt Knoten [match -> split -> init -> train -> predict -> evaluate].
     """
     return Pipeline(
         [
             node(
-                func=lambda: str(day),
+                func=lambda: str(match),
                 inputs=None,
-                outputs=f"day_{day}",
-                name=f"day_node_{day}",
+                outputs=f"match_{match}",
+                name=f"match_node_{match}",
             ),
             node(
                 func=split_time_data,
                 inputs={
                     "vectorized_data": "vectorized_data",
-                    "current_day": f"day_{day}",
+                    "current_match": f"match_{match}",
                 },
                 outputs=[
-                    f"train_data_{day}",
-                    f"test_data_{day}",
+                    f"train_data_{match}",
+                    f"test_data_{match}",
                 ],
-                name=f"split_node_{day}",
+                name=f"split_node_{match}",
             ),
             node(
                 func=init_model,
@@ -118,40 +118,40 @@ def create_subpipeline_for_day(day: int) -> Pipeline:
                     "team_lexicon": "team_lexicon",
                     "model_options": "params:model_options",
                 },
-                outputs=f"init_model_{day}",
-                name=f"init_model_node_{day}",
+                outputs=f"init_model_{match}",
+                name=f"init_model_node_{match}",
             ),
             node(
                 func=train,
                 inputs={
-                    "model": f"init_model_{day}",
-                    "train_data": f"train_data_{day}",
+                    "model": f"init_model_{match}",
+                    "train_data": f"train_data_{match}",
                     "model_options": "params:model_options",
-                    # "toto": f"toto_{day}",
+                    # "toto": f"toto_{match}",
                 },
-                outputs=f"model_{day}",
-                name=f"fit_node_{day}",
+                outputs=f"model_{match}",
+                name=f"fit_node_{match}",
             ),
             node(
                 func=predict_goals,
                 inputs={
-                    "model": f"model_{day}",
-                    "test_data": f"test_data_{day}",
+                    "model": f"model_{match}",
+                    "test_data": f"test_data_{match}",
                 },
-                outputs=f"predictions_{day}",
-                name=f"predict_node_{day}",
+                outputs=f"predictions_{match}",
+                name=f"predict_node_{match}",
             ),
             node(
                 func=evaluate,
                 inputs={
-                    "model": f"model_{day}",
-                    "day": f"day_{day}",
-                    "test_data": f"test_data_{day}",
-                    "predictions": f"predictions_{day}",
+                    "model": f"model_{match}",
+                    "match": f"match_{match}",
+                    "test_data": f"test_data_{match}",
+                    "predictions": f"predictions_{match}",
                 },
-                outputs=f"metrics_{day}",
-                name=f"evaluate_node_{day}",
+                outputs=f"metrics_{match}",
+                name=f"evaluate_node_{match}",
             ),
         ],
-        tags=[f"{day}"],
+        tags=[f"{match}"],
     )
