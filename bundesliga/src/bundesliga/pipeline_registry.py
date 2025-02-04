@@ -2,6 +2,7 @@
 from typing import Dict, List
 
 from kedro.pipeline import Pipeline, pipeline
+from kedro_datasets.pandas import CSVDataset
 
 from bundesliga import __version__ as PROJECT_VERSION
 from bundesliga import settings
@@ -12,8 +13,22 @@ from bundesliga.pipelines.data_science.pipeline import eval_pipeline, ml_pipelin
 from bundesliga.utils.utils import load_config
 
 
+def read_matchlength_from_data(dataset_name: str, start_match: int) -> int:
+    """
+    Read the walk forward parameter from the data catalog.
+
+    Returns:
+        int: The walk forward parameter read from the data catalog.
+    """
+    data = CSVDataset(
+    filepath=f"./data/01_raw/football-datasets/{dataset_name}.csv",
+    load_args=dict(sep=",", encoding= "cp1252" ,index_col= 0)
+)
+    df = data.load()
+    return len(df) - start_match -2
+
 def build_engine_pipelines(
-    engine: str, variants: List[str], start_day: int, walk_forward: int
+    engine: str, variants: List[str], start_match: int, last_match: int
 ) -> Pipeline:
     """
     Builds a collection of machine learning pipelines for a specific engine and its variants.
@@ -25,8 +40,8 @@ def build_engine_pipelines(
     Args:
         engine (str): The engine type (e.g., "pymc", "pyro").
         variants (List[str]): A list of variants for the engine.
-        start_day (int): The starting day for the data.
-        walk_forward (int): The number of days to walk forward in the data.
+        start_match (int): The starting match for the data.
+        walk_forward (int): The number of matchs to walk forward in the data.
 
     Returns:
         Pipeline: A Kedro pipeline object representing the combined ML and evaluation pipelines
@@ -36,7 +51,7 @@ def build_engine_pipelines(
         To build pipelines for the "pymc" engine with variants ["simple", "toto"]:
         ```python
         engine_pipeline = build_engine_pipelines(
-            "pymc", ["simple", "toto"], start_day=20, walk_forward=5
+            "pymc", ["simple", "toto"], start_match=20, walk_forward=5
         )
         ```
     """
@@ -51,14 +66,19 @@ def build_engine_pipelines(
         raise ValueError("Missing or empty 'DATASETS' in settings.")
 
     engine_pipelines = []
-
+    is_last_match_set = last_match is not None
     for variant in variants:
         for dataset_name in settings.DATASETS:
+
+            if not is_last_match_set:
+                last_match = read_matchlength_from_data(dataset_name, start_match=start_match)
+            if start_match is None:
+                start_match = 0
             try:
                 pipeline_obj = pipeline(
                     ml_pipeline(
-                        start_day=start_day,
-                        walk_forward=walk_forward,
+                        start_match=start_match,
+                        last_match=last_match,
                         engine=engine,
                         variant=variant,
                         dataset_name=dataset_name,
@@ -70,8 +90,8 @@ def build_engine_pipelines(
                     namespace=f"{engine}",
                     tags=[engine],
                 ) + eval_pipeline(
-                    startday=start_day,
-                    walks=walk_forward,
+                    startmatch=start_match,
+                    last_match=last_match,
                     setting=[(engine, [variant])],
                     dataset_name=dataset_name,
                 )
@@ -82,7 +102,8 @@ def build_engine_pipelines(
                     f"Failed to build pipeline for engine '{engine}', variant '{variant}', "
                     f"and dataset '{dataset_name}': {str(e)}"
                 )
-
+            if not is_last_match_set:
+                last_match = None
     return pipeline(engine_pipelines)
 
 
@@ -116,16 +137,16 @@ def register_pipelines() -> Dict[str, Pipeline]:
     """
 
     parameters = load_config()["parameters"]
-    start_day = parameters["model_options"]["start_day"]
-    walk_forward = parameters["model_options"]["walk_forward"]
+    start_match = parameters["model_options"]["start_match"]
+    last_match = parameters["model_options"]["last_match"]
 
     etl_pipeline = create_etl_pipeline()
     pipeline_dict = {"etl": etl_pipeline}
 
     default_pipelines = []
 
-    if start_day is None or walk_forward is None:
-        raise ValueError("Missing required parameters: 'start_day' and 'walk_forward'.")
+    if start_match is None:
+        raise ValueError("Missing required parameters: 'start_match'.")
     if (
         not hasattr(settings, "DYNAMIC_PIPELINES_MAPPING")
         or not settings.DYNAMIC_PIPELINES_MAPPING
@@ -137,7 +158,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
 
     for engine, variants in settings.DYNAMIC_PIPELINES_MAPPING.items():
         engine_pipeline = build_engine_pipelines(
-            engine, variants, start_day, walk_forward
+            engine, variants, start_match, last_match
         )
         pipeline_dict[engine] = etl_pipeline + engine_pipeline
         default_pipelines.append(engine_pipeline)
