@@ -17,7 +17,6 @@ class ModelTrackingHooks:
         None
     """
 
-
     @hook_impl
     def after_dataset_loaded(self, dataset_name, data, node):
         """
@@ -30,11 +29,10 @@ class ModelTrackingHooks:
             data (Any): The data that was loaded.
             node (Node): The Kedro node that loaded the dataset.
         """
-        if "vectorize" in dataset_name:
-            pd_dataset = mlflow.data.from_pandas(data, name=dataset_name)
+        # if "vectorize" in dataset_name:
+        #     pd_dataset = mlflow.data.from_pandas(data, name=dataset_name)
 
-            mlflow.log_input(pd_dataset, context=dataset_name)
-
+        #     mlflow.log_input(pd_dataset, context=dataset_name)
 
     @hook_impl
     def before_node_run(self, node: Node, inputs: Dict[str, Any]) -> None:
@@ -63,21 +61,23 @@ class ModelTrackingHooks:
             outputs (Dict[str, Any]): The outputs from the node.
             inputs (Dict[str, Any]): The inputs to the node.
         """
-        if "evaluate" in node._func_name:
-            # Get the evaluation results from the node outputs
-            out_name = node._outputs
-            eval_results = outputs[out_name]
 
-            # Extract tags from the node (e.g., day, season, engine, model)
-            tags = sorted(node.tags)
+        tags = sorted(node.tags)
+
+        if "evaluate" in node._func_name:
             day = tags[0]
             season = tags[1]
             engine = tags[2]
             model = tags[3]
+            # Get the evaluation results from the node outputs
+            out_name = node._outputs
+            eval_results = outputs[out_name]
 
             # Prepare the metrics for logging
             results = {
-                "winner_accuracy": eval_results["winner_accuracy"],
+                "home_prob": eval_results["home_prob"],
+                "away_prob": eval_results["away_prob"],
+                "tie_prob": eval_results["tie_prob"],
                 "rmse_home": eval_results["rmse_home"],
                 "mae_home": eval_results["mae_home"],
                 "rmse_away": eval_results["rmse_away"],
@@ -106,6 +106,8 @@ class ModelTrackingHooks:
                             "run": "solo",
                             "seed": settings.SEED,
                             "run_id": run.info.run_id,
+                            "ground_truth": eval_results["ground_truth"],
+                            "predicted_result": eval_results["predicted_result"],
                         }
                     )
 
@@ -121,6 +123,17 @@ class ModelTrackingHooks:
                             "run_id": run.info.run_id,
                         }
                     )
+        if "aggregate" in node._func_name:
+            # Get the evaluation results from the node outputs
+            out_names = node._outputs
+            mean_metrics = outputs[out_names[0]]
+            nested_run_name = outputs[out_names[1]]
+
+            # Log metrics and parameters to MLflow
+            active_run = mlflow.active_run()
+            if active_run is not None:
+                with mlflow.start_run(run_name=nested_run_name, nested=True) as run:
+                    mlflow.log_metrics(mean_metrics)
 
     @hook_impl
     def after_pipeline_run(self, run_params, run_result, pipeline, catalog) -> None:

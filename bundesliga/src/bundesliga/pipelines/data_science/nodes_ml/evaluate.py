@@ -1,4 +1,3 @@
-import mlflow
 import pandas as pd
 from bundesliga.utils.utils import brier_score, log_likelihood, rmse_mae, rps
 from bundesliga.utils.validation import validate_dataframe
@@ -26,25 +25,18 @@ def evaluate_match(model, match, test_data, predictions):
     test_goal = test_goal.reset_index(drop=True)
     toto_probs = toto_probs.reset_index(drop=True)
 
-    # winner_accuracy = (
-    #     test_goal["true_result"] == toto_probs["predicted_result"]
-    # ).mean()
-
+    # Additional evaluation metric examples
     negative_log_likelihood = log_likelihood(toto_probs, test_goal)
     brier_score_ = brier_score(test_goal, toto_probs)
     rps_mean = rps(test_goal, toto_probs)
     rmse_home, mae_home, rmse_away, mae_away = rmse_mae(predictions, test_data)
 
-    predictions["predicted_result"] = determine_winner(predictions)["winner"]
-    toto_probs["ground_truth"] = test_goal["true_result"].values
-
-    ground_truth_met = (
-        test_goal["true_result"].values == predictions["predicted_result"].values
-    )
-    winner_accuracy = (ground_truth_met).mean()
-
     results = {
-        "winner_accuracy": winner_accuracy,
+        "ground_truth": test_goal["true_result"].values[0],
+        "predicted_result": toto_probs["predicted_result"].values[0],
+        "home_prob": toto_probs["home"].values[0],
+        "away_prob": toto_probs["away"].values[0],
+        "tie_prob": toto_probs["tie"].values[0],
         "toto_probs": toto_probs,
         "rmse_home": rmse_home,
         "mae_home": mae_home,
@@ -63,45 +55,42 @@ def aggregate_eval_metrics(
     """
     all_daily_metrics: z. B. [{'winner_accuracy': 1.0, 'rmse_home': 1.2, ...}, {...}, ...]
     """
+
     model_definitions = kwargs[0]
     engine = model_definitions["engine"]
     dataset_name = model_definitions["dataset_name"]
     variant = model_definitions["variant"]
     seed = model_definitions["seed"]
-    all_daily_metrics = kwargs[1:]
-
-    accuracies = [
-        m["winner_accuracy"] for m in all_daily_metrics if "winner_accuracy" in m
-    ]
-    if accuracies:
-        avg_acc = sum(accuracies) / len(accuracies)
-    else:
-        avg_acc = 0.0
+    all_daily_metrics = pd.DataFrame(kwargs[1:])
 
     nested_run_name = f"Aggregated Accuracy | engine={engine} | model={variant} | season={dataset_name}"
 
-    with mlflow.start_run(run_name=nested_run_name, nested=True) as run:
-        mlflow.log_metric("avg_winner_accuracy_over_all_days", avg_acc)
-        mlflow.log_params(
-            {
-                "season": dataset_name,
-                "model": variant,
-                "engine": engine,
-                "seed": seed,
-                "run_id": run.info.run_id,
-            }
-        )
-        mlflow.set_tags(
-            {
-                "model": variant,
-                "engine": engine,
-                "season": dataset_name,
-                "seed": seed,
-                "run_id": run.info.run_id,
-            }
-        )
+    all_daily_metrics["correct"] = all_daily_metrics.apply(
+        lambda row: row["predicted_result"] == row["ground_truth"], axis=1
+    )
 
-    return {"avg_winner_accuracy_over_all_days": avg_acc}
+    # Now compute the mean for each metric. You can either compute them individually:
+    mean_accuracy = all_daily_metrics["correct"].mean()
+    mean_rmse_home = all_daily_metrics["rmse_home"].mean()
+    mean_mae_home = all_daily_metrics["mae_home"].mean()
+    mean_rmse_away = all_daily_metrics["rmse_away"].mean()
+    mean_mae_away = all_daily_metrics["mae_away"].mean()
+    mean_neg_log_likelihood = all_daily_metrics["neg_log_likelihood"].mean()
+    mean_brier_score = all_daily_metrics["brier_score"].mean()
+    mean_rps = all_daily_metrics["rps"].mean()
+
+    mean_metrics = {
+        "accuracy": mean_accuracy,
+        "rmse_home": mean_rmse_home,
+        "mae_home": mean_mae_home,
+        "rmse_away": mean_rmse_away,
+        "mae_away": mean_mae_away,
+        "neg_log_likelihood": mean_neg_log_likelihood,
+        "brier_score": mean_brier_score,
+        "rps": mean_rps,
+    }
+
+    return mean_metrics, nested_run_name
 
 
 @validate_dataframe(
