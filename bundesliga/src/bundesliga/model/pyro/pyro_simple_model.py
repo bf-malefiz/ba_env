@@ -5,6 +5,7 @@ import pyro.distributions as dist
 import torch
 from bundesliga import settings
 from bundesliga.model.pyro.pyro_model import PyroModel
+from bundesliga.model.pyro.pyro_parameters import FootballParameters
 
 
 class SimplePyroModel(PyroModel):
@@ -30,8 +31,11 @@ class SimplePyroModel(PyroModel):
         """
         super().__init__(team_lexicon, parameters)
         self.prior_diff = prior_diff
+        self.parameter_module = FootballParameters(
+            nb_teams=len(self.team_lexicon), prior_diff=self.prior_diff
+        )
 
-    def get_diffs(team_1, team_2, num_games=10000):
+    def get_diffs(self, team_1, team_2, num_games=10000):
         """
         Calculates the differences in offensive and defensive strengths between two teams.
 
@@ -43,10 +47,10 @@ class SimplePyroModel(PyroModel):
         Returns:
             tuple: Two arrays containing the differences in offensive and defensive strengths.
         """
-        mu_offence_param = pyro.param("mu_offence").data
-        mu_defence_param = pyro.param("mu_defence").data
-        sigma_offence_param = pyro.param("sigma_offence").data
-        sigma_defence_param = pyro.param("sigma_defence").data
+        mu_offence_param = self.parameter_module.mu_offence.data
+        mu_defence_param = self.parameter_module.mu_defence.data
+        sigma_offence_param = self.parameter_module.sigma_offence.data
+        sigma_defence_param = self.parameter_module.sigma_defence.data
 
         team1_offence_samples = np.random.normal(
             mu_offence_param[team_1], sigma_offence_param[team_1], num_games
@@ -82,7 +86,7 @@ class SimplePyroModel(PyroModel):
         team1 = test_data["home_id"].values
         team2 = test_data["away_id"].values
 
-        diff_ij, diff_ji = SimplePyroModel.get_diffs(team1, team2)
+        diff_ij, diff_ji = self.get_diffs(team1, team2)
         goals_of_team_1 = []
         goals_of_team_2 = []
         for r in diff_ij:
@@ -111,17 +115,26 @@ class SimplePyroModel(PyroModel):
 
         def _model(home_id, away_id, home_goals, away_goals, toto):
             nb_games = len(home_id)
-            mu_offence_prior = torch.zeros(nb_teams) + self.prior_diff
-            mu_defence_prior = torch.zeros(nb_teams)
-            sigma_offence_prior = torch.ones(nb_teams)
-            sigma_defence_prior = torch.ones(nb_teams)
+            pyro.module("football_module", self.parameter_module)
+            # mu_offence_prior = torch.zeros(nb_teams) + self.prior_diff
+            # mu_defence_prior = torch.zeros(nb_teams)
+            # sigma_offence_prior = torch.ones(nb_teams)
+            # sigma_defence_prior = torch.ones(nb_teams)
 
             with pyro.plate("od_plate", size=nb_teams):
                 offence = pyro.sample(
-                    "offence", dist.Normal(mu_offence_prior, sigma_offence_prior)
+                    "offence",
+                    dist.Normal(
+                        self.parameter_module.mu_offence_prior,
+                        self.parameter_module.sigma_offence_prior.clamp(min=1e-5),
+                    ),
                 )
                 defence = pyro.sample(
-                    "defence", dist.Normal(mu_defence_prior, sigma_defence_prior)
+                    "defence",
+                    dist.Normal(
+                        self.parameter_module.mu_defence_prior,
+                        self.parameter_module.sigma_defence_prior.clamp(min=1e-5),
+                    ),
                 )
 
             home_values = torch.exp(offence[home_id] - defence[away_id])
@@ -153,17 +166,30 @@ class SimplePyroModel(PyroModel):
         nb_teams = len(self.team_lexicon)
 
         def _guide(home_id, away_id, home_goals_, away_goals_, toto):
+            pyro.module("football_module", self.parameter_module)
             # register the  variational parameters with Pyro.
-            mu_offence = pyro.param(
-                "mu_offence", torch.zeros(nb_teams) + self.prior_diff
-            )
-            mu_defence = pyro.param("mu_defence", torch.zeros(nb_teams))
-            sigma_offence = pyro.param("sigma_offence", torch.ones(nb_teams) * 2.0)
-            sigma_defence = pyro.param("sigma_defence", torch.ones(nb_teams) * 2.0)
+            # mu_offence = pyro.param(
+            #     "mu_offence", torch.zeros(nb_teams) + self.prior_diff
+            # )
+            # mu_defence = pyro.param("mu_defence", torch.zeros(nb_teams))
+            # sigma_offence = pyro.param("sigma_offence", torch.ones(nb_teams) * 2.0)
+            # sigma_defence = pyro.param("sigma_defence", torch.ones(nb_teams) * 2.0)
 
             with pyro.plate("od_plate", size=nb_teams):
-                offence = pyro.sample("offence", dist.Normal(mu_offence, sigma_offence))
-                defence = pyro.sample("defence", dist.Normal(mu_defence, sigma_defence))
+                offence = pyro.sample(
+                    "offence",
+                    dist.Normal(
+                        self.parameter_module.mu_offence,
+                        self.parameter_module.sigma_offence.clamp(min=1e-5),
+                    ),
+                )
+                defence = pyro.sample(
+                    "defence",
+                    dist.Normal(
+                        self.parameter_module.mu_defence,
+                        self.parameter_module.sigma_defence.clamp(min=1e-5),
+                    ),
+                )
 
             return offence, defence
 

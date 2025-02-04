@@ -1,6 +1,5 @@
 import numpy as np
 import pyro
-import pyro.distributions as dist
 import pyro.infer
 import pyro.optim
 from bundesliga import settings
@@ -45,7 +44,7 @@ class PyroModel(FootballModel):
         Returns:
             list: A list of losses during training.
         """
-        pyro.clear_param_store()
+        # pyro.clear_param_store()
         pyro.set_rng_seed(settings.SEED)
         np.random.seed(settings.SEED)
 
