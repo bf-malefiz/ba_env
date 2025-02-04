@@ -25,7 +25,12 @@ def read_matchlength_from_data(dataset_name: str, start_match: int) -> int:
     load_args=dict(sep=",", encoding= "cp1252" ,index_col= 0)
 )
     df = data.load()
-    return len(df) - start_match -2
+    total_matches = len(df)
+    if start_match >= total_matches:
+        raise ValueError(
+            f"Start match {start_match} is greater than or equal the number of matches in the dataset {len(df)}."
+        )
+    return total_matches - start_match -2
 
 def build_engine_pipelines(
     engine: str, variants: List[str], start_match: int, last_match: int
