@@ -20,8 +20,8 @@
 model_options:
   model: ""  # The type of model to use (e.g., "simple", "toto").
   engine: ""  # The engine to use for the model (e.g., "pymc", "pyro").
-  start_day: 20  # The starting day for the data.
-  walk_forward: 0  # The number of days to walk forward in the data.
+  start_match: 0  # The starting day for the data.
+  last_match: null  # The number of days to walk forward in the data.
   test_size: 0.2  # The proportion of data to use for testing.
 
   # Model-specific configuration options.
