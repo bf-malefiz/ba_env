@@ -2,19 +2,12 @@ from bundesliga import settings
 from bundesliga.utils.utils import split_time_data
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes_ml.evaluate import aggregate_eval_metrics
+from .nodes_ml.evaluate import aggregate_eval_metrics, evaluate_match
 from .nodes_ml.train_model import (
-    evaluate,
     init_model,
     predict_goals,
     train,
 )
-
-
-def create_pipeline(**kwargs) -> Pipeline:
-    pipes = []
-
-    return pipeline(pipes)
 
 
 def create_model_definition_node(engine, variant, dataset_name):
@@ -32,7 +25,7 @@ def create_model_definition_node(engine, variant, dataset_name):
     )
 
 
-def eval_pipeline(startmatch, last_match, setting, dataset_name) -> Pipeline:
+def eval_pipeline(start_match, last_match, setting, dataset_name) -> Pipeline:
     """Erstellt eine Evaluationspipeline für verschiedene Engines und Varianten."""
     pipe_collection = []
 
@@ -40,7 +33,7 @@ def eval_pipeline(startmatch, last_match, setting, dataset_name) -> Pipeline:
         for variant in variants:
             metrics_inputs = [
                 f"{engine}.{dataset_name}.{variant}.metrics_{match}"
-                for match in range(startmatch, startmatch + last_match)
+                for match in range(start_match, last_match)
             ]
 
             pipe_collection.append(
@@ -142,7 +135,7 @@ def create_subpipeline_for_match(match: int) -> Pipeline:
                 name=f"predict_node_{match}",
             ),
             node(
-                func=evaluate,
+                func=evaluate_match,
                 inputs={
                     "model": f"model_{match}",
                     "match": f"match_{match}",

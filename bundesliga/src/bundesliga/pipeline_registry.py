@@ -21,16 +21,17 @@ def read_matchlength_from_data(dataset_name: str, start_match: int) -> int:
         int: The walk forward parameter read from the data catalog.
     """
     data = CSVDataset(
-    filepath=f"./data/01_raw/football-datasets/{dataset_name}.csv",
-    load_args=dict(sep=",", encoding= "cp1252" ,index_col= 0)
-)
+        filepath=f"./data/01_raw/football-datasets/{dataset_name}.csv",
+        load_args=dict(sep=",", encoding="cp1252", index_col=0),
+    )
     df = data.load()
     total_matches = len(df)
     if start_match >= total_matches:
         raise ValueError(
             f"Start match {start_match} is greater than or equal the number of matches in the dataset {len(df)}."
         )
-    return total_matches - start_match -2
+    return total_matches - start_match - 2
+
 
 def build_engine_pipelines(
     engine: str, variants: List[str], start_match: int, last_match: int
@@ -74,9 +75,10 @@ def build_engine_pipelines(
     is_last_match_set = last_match is not None
     for variant in variants:
         for dataset_name in settings.DATASETS:
-
             if not is_last_match_set:
-                last_match = read_matchlength_from_data(dataset_name, start_match=start_match)
+                last_match = read_matchlength_from_data(
+                    dataset_name, start_match=start_match
+                )
             if start_match is None:
                 start_match = 0
             try:
@@ -95,7 +97,7 @@ def build_engine_pipelines(
                     namespace=f"{engine}",
                     tags=[engine],
                 ) + eval_pipeline(
-                    startmatch=start_match,
+                    start_match=start_match,
                     last_match=last_match,
                     setting=[(engine, [variant])],
                     dataset_name=dataset_name,
