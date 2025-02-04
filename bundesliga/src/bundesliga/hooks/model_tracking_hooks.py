@@ -17,17 +17,6 @@ class ModelTrackingHooks:
         None
     """
 
-    @hook_impl
-    def after_context_created(self, context):
-        """
-        Hook implementation called after the Kedro context is created.
-
-        This hook can be used to perform setup tasks after the Kedro context is initialized.
-
-        Args:
-            context: The Kedro context object.
-        """
-        pass
 
     @hook_impl
     def after_dataset_loaded(self, dataset_name, data, node):
@@ -46,21 +35,6 @@ class ModelTrackingHooks:
 
             mlflow.log_input(pd_dataset, context=dataset_name)
 
-    @hook_impl
-    def before_pipeline_run(
-        self, run_params: Dict[str, Any], pipeline, catalog
-    ) -> None:
-        """
-        Hook implementation called before a pipeline run starts.
-
-        This hook can be used to start an MLflow run with the same run_id as the Kedro pipeline run.
-
-        Args:
-            run_params (Dict[str, Any]): Parameters for the pipeline run.
-            pipeline: The Kedro pipeline being executed.
-            catalog: The Kedro data catalog.
-        """
-        pass
 
     @hook_impl
     def before_node_run(self, node: Node, inputs: Dict[str, Any]) -> None:
