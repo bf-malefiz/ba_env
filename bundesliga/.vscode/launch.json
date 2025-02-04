@@ -1,56 +1,86 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    
+    {
+      "name": "script",
+      "type": "debugpy",
+      "request": "launch",
+      "program": ".\\src\\start_kedro.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python Debugger: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "args": ["pytest"]
+    },
 
-
-        {
-            "name": "kedro run",
-            "type": "debugpy",
-            "request": "launch",
-            "console": "integratedTerminal",
-            "module": "kedro",
-            "args": ["run"],
-            "cwd": "${workspaceFolder}",
-            "justMyCode": false
-            // Any other arguments should be passed as a comma-seperated-list
-            // e.g "args": ["run", "--pipeline", "pipeline_name"]
-        },
-        {
-            "name": "-processing pipeline",
-            "type": "debugpy",
-            "request": "launch",
-            "console": "integratedTerminal",
-            "module": "kedro",
-            "args": ["run", "--pipeline", "data_processing"],
-            "cwd": "${workspaceFolder}",
-            "justMyCode": false
-            // Any other arguments should be passed as a comma-seperated-list
-            // e.g "args": ["run", "--pipeline", "pipeline_name"]
-        },{
-            "name": "-datascience pipeline",
-            "type": "debugpy",
-            "request": "launch",
-            "console": "integratedTerminal",
-            "module": "kedro",
-            "args": ["run", "--pipeline", "data_science"],
-            "cwd": "${workspaceFolder}/bundesliga",
-            "justMyCode": false
-            // Any other arguments should be passed as a comma-seperated-list
-            // e.g "args": ["run", "--pipeline", "pipeline_name"]
-        },{
-            "name": "-from node",
-            "type": "debugpy",
-            "request": "launch",
-            "console": "integratedTerminal",
-            "module": "kedro",
-            "args": ["run", "--pipeline", "data_science","--from-nodes", "active_modelling_pipeline.init_model_node"],
-            "cwd": "${workspaceFolder}/bundesliga",
-            "justMyCode": false
-            // Any other arguments should be passed as a comma-seperated-list
-            // e.g "args": ["run", "--pipeline", "pipeline_name"]
-        }
-    ]
+    {
+      "name": "kedro run",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "kedro",
+      "args": ["run"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+      // Any other arguments should be passed as a comma-seperated-list
+      // e.g "args": ["run", "--pipeline", "pipeline_name"]
+    },
+    {
+      "name": "-etl",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "kedro",
+      "args": ["run", "--pipeline", "etl"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+      // Any other arguments should be passed as a comma-seperated-list
+      // e.g "args": ["run", "--pipeline", "pipeline_name"]
+    },
+    {
+      "name": "training",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "kedro",
+      "args": ["run", "--pipeline", "training"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+      // Any other arguments should be passed as a comma-seperated-list
+      // e.g "args": ["run", "--pipeline", "pipeline_name"]
+    },
+    {
+      "name": "pyro CLI",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "kedro",
+      "args": ["run", "--pipeline", "pyro"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+      // Any other arguments should be passed as a comma-seperated-list
+      // e.g "args": ["run", "--pipeline", "pipeline_name"]
+    },
+    {
+      "name": "pymc CLI",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "kedro",
+      "args": ["run", "--namespace", "pymc"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+      // Any other arguments should be passed as a comma-seperated-list
+      // e.g "args": ["run", "--pipeline", "pipeline_name"]
+    }
+  ]
 }
