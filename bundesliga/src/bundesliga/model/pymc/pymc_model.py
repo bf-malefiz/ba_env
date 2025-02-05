@@ -5,9 +5,10 @@ from typing import Optional, Union
 import numpy as np
 import pandas as pd
 import pymc as pm
+from pymc_experimental.model_builder import ModelBuilder
+
 from bundesliga import settings
 from bundesliga.model.base_footballmodel import FootballModel
-from pymc_experimental.model_builder import ModelBuilder
 
 
 class PymcModel(ModelBuilder, FootballModel):
@@ -30,6 +31,7 @@ class PymcModel(ModelBuilder, FootballModel):
     def __init__(
         self,
         model_options: Optional[Dict] = None,
+        team_lexicon: Optional[Dict] = None,
     ):
         """
         Initializes the model with optional custom configurations.
@@ -40,7 +42,7 @@ class PymcModel(ModelBuilder, FootballModel):
         """
         self.model_config = self.get_default_model_config()
         self.sampler_config = self.get_default_sampler_config()
-
+        self.team_lexicon = team_lexicon
         if "model_config" in model_options:
             self.model_config.update(model_options["model_config"])
         if "sampler_config" in model_options:
@@ -225,7 +227,8 @@ class PymcModel(ModelBuilder, FootballModel):
             y = y.tolist()
 
         self.model_coords = {
-            "team": _get_teams(X)[1],
+            # "team": _get_teams(X)[1],
+            "team": self.team_lexicon.index,
             "match": np.arange(len(X)),
             "X": ["home_id", "away_id"],
             "y": ["home_goals", "away_goals"],

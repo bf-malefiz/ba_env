@@ -2,6 +2,7 @@ import arviz as az
 import numpy as np
 import pandas as pd
 import pymc as pm
+
 from bundesliga import settings
 from bundesliga.model.pymc.pymc_model import PymcModel
 
@@ -13,9 +14,9 @@ az.style.use("arviz-darkgrid")
 
 
 class SimplePymcModel(PymcModel):
-    def __init__(self, model_options, team_lexicon=None):
+    def __init__(self, model_options, team_lexicon):
         self.team_lexicon = team_lexicon
-        super().__init__(model_options)
+        super().__init__(model_options, team_lexicon)
 
     # Give the model a name
     _model_type = "Simple_FootballModel"
