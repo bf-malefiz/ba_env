@@ -150,6 +150,7 @@
 
 "{engine}.{dataset_name}.{variant}.modeldefinitions":
     type: MemoryDataset  # Dataset type for in-memory data.
-
+"{engine}.{variant}.model_eval_definitions":
+    type: MemoryDataset  # Dataset type for in-memory data.
 "{engine}.{dataset_name}.{variant}.aggregated_metrics":
     type: MemoryDataset  # Dataset type for in-memory data.

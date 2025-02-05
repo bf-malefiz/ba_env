@@ -20,13 +20,15 @@ Example:
     To create and run the pipeline:
     ```python
     from kedro.framework.project import pipelines
+
     pipeline = pipelines["__default__"]
     pipeline.run()
     ```
 """
 
-from bundesliga import settings
 from kedro.pipeline import Pipeline, node, pipeline
+
+from bundesliga import settings
 
 from .nodes_etl.nodes import (
     build_team_lexicon,
@@ -97,7 +99,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             pipeline(
                 data_processing,
                 namespace=dataset_name,  # Namespace for the dataset
-                tags=["ETL", dataset_name],  # Tags for the dataset
+                tags={
+                    "pipeline_name": "ETL",
+                    "dataset": dataset_name,
+                },  # Tags for the dataset
             )
         )
 
