@@ -56,7 +56,7 @@ CONFIG_LOADER_ARGS = {
 }
 
 DYNAMIC_PIPELINES_MAPPING = {
-    "pymc": ["simple"],
+    # "pymc": ["simple"],
     "pyro": ["simple"],
 }
 

@@ -1,6 +1,7 @@
+from kedro.pipeline import Pipeline, node, pipeline
+
 from bundesliga import settings
 from bundesliga.utils.utils import split_time_data
-from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes_ml.evaluate import aggregate_eval_metrics, evaluate_match
 from .nodes_ml.train_model import (
@@ -46,7 +47,10 @@ def eval_pipeline(start_match, last_match, setting, dataset_name) -> Pipeline:
                                 f"{engine}.{dataset_name}.{variant}.modeldefinitions"
                             ]
                             + metrics_inputs,
-                            outputs=f"{engine}.{dataset_name}.{variant}.all_daily_metrics",
+                            outputs=[
+                                f"{engine}.{dataset_name}.{variant}.all_match_metrics",
+                                f"{engine}.{dataset_name}.{variant}.nested_run_name",
+                            ],
                             name=f"{engine}.{dataset_name}.{variant}.aggregate_eval_metrics_node",
                         ),
                     ]

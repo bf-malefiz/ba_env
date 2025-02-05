@@ -14,3 +14,4 @@ numpy==1.26.4 # aesera needs vs <2.0
 hypothesis # unit test library ( check if needed / good lib? - used by numpy.test() )
 pyro-ppl
 statsd # for logging
+pymc-experimental
