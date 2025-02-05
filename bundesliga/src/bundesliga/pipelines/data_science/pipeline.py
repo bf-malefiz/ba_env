@@ -3,7 +3,11 @@ from kedro.pipeline import Pipeline, node, pipeline
 from bundesliga import settings
 from bundesliga.utils.utils import split_time_data
 
-from .nodes_ml.evaluate import aggregate_eval_metrics, evaluate_match
+from .nodes_ml.evaluate import (
+    aggregate_dataset_metrics,
+    aggregate_model_metrics,
+    evaluate_match,
+)
 from .nodes_ml.train_model import (
     init_model,
     predict_goals,
@@ -11,7 +15,7 @@ from .nodes_ml.train_model import (
 )
 
 
-def create_model_definition_node(engine, variant, dataset_name):
+def create_model_definition_node(engine, variant, dataset_name=None):
     """Erstellt eine Modelldefinitions-Node für eine Pipeline."""
     return node(
         func=lambda: {
@@ -26,13 +30,27 @@ def create_model_definition_node(engine, variant, dataset_name):
     )
 
 
-def eval_pipeline(start_match, last_match, setting, dataset_name) -> Pipeline:
+def create_model_eval_definition_node(engine, variant):
+    """Erstellt eine Modelldefinitions-Node für eine Pipeline."""
+    return node(
+        func=lambda: {
+            "engine": engine,
+            "variant": variant,
+            "seed": settings.SEED,
+        },
+        inputs=None,
+        outputs=f"{engine}.{variant}.model_eval_definitions",
+        name=f"{engine}.{variant}.model_eval_def_node",
+    )
+
+
+def eval_dataset_pipeline(start_match, last_match, setting, dataset_name) -> Pipeline:
     """Erstellt eine Evaluationspipeline für verschiedene Engines und Varianten."""
     pipe_collection = []
 
     for engine, variants in setting:
         for variant in variants:
-            metrics_inputs = [
+            match_metrics_inputs = [
                 f"{engine}.{dataset_name}.{variant}.metrics_{match}"
                 for match in range(start_match, last_match)
             ]
@@ -42,20 +60,51 @@ def eval_pipeline(start_match, last_match, setting, dataset_name) -> Pipeline:
                     [
                         create_model_definition_node(engine, variant, dataset_name),
                         node(
-                            func=aggregate_eval_metrics,
+                            func=aggregate_dataset_metrics,
                             inputs=[
                                 f"{engine}.{dataset_name}.{variant}.modeldefinitions"
                             ]
-                            + metrics_inputs,
+                            + match_metrics_inputs,
                             outputs=[
-                                f"{engine}.{dataset_name}.{variant}.all_match_metrics",
+                                f"{engine}.{dataset_name}.{variant}.dataset_metrics",
                                 f"{engine}.{dataset_name}.{variant}.nested_run_name",
                             ],
-                            name=f"{engine}.{dataset_name}.{variant}.aggregate_eval_metrics_node",
+                            name=f"{engine}.{dataset_name}.{variant}.aggregate_dataset_metrics_node",
+                            tags=[engine, variant, dataset_name],
                         ),
                     ]
                 )
             )
+
+    return pipeline(pipe_collection)
+
+
+def eval_model_pipeline(engine, variant):
+    match_metrics_inputs = [
+        f"{engine}.{dataset_name}.{variant}.dataset_metrics"
+        for dataset_name in settings.DATASETS
+    ]
+    pipe_collection = []
+    pipe_collection.append(
+        pipeline(
+            [
+                create_model_eval_definition_node(engine, variant),
+                node(
+                    func=aggregate_model_metrics,
+                    inputs=[
+                        f"{engine}.{variant}.model_eval_definitions",
+                    ]
+                    + match_metrics_inputs,
+                            outputs=[
+                                f"{engine}.{variant}.model_metrics",
+                                f"{engine}.{variant}.nested_run_name",
+                            ],
+                    name=f"{engine}.{variant}.model_metrics_node",
+                    tags=[engine, variant],
+                ),
+            ]
+        )
+    )
     return pipeline(pipe_collection)
 
 

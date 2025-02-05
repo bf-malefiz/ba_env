@@ -1,9 +1,10 @@
 from typing import Any, Dict
 
 import mlflow
-from bundesliga import settings
 from kedro.framework.hooks import hook_impl
 from kedro.pipeline.node import Node
+
+from bundesliga import settings
 
 
 class ModelTrackingHooks:
@@ -17,6 +18,15 @@ class ModelTrackingHooks:
         None
     """
 
+    def __init__(self):
+        self.parent_run = None
+
+    @hook_impl
+    def before_pipeline_run(self, run_params, pipeline, catalog):
+        run = mlflow.active_run()
+        mlflow.end_run()
+        mlflow.delete_run(run.info.run_id)
+
     @hook_impl
     def after_dataset_loaded(self, dataset_name, data, node):
         """
@@ -29,10 +39,32 @@ class ModelTrackingHooks:
             data (Any): The data that was loaded.
             node (Node): The Kedro node that loaded the dataset.
         """
-        # if "vectorize" in dataset_name:
-        #     pd_dataset = mlflow.data.from_pandas(data, name=dataset_name)
+        pipeline_tag = ""
 
-        #     mlflow.log_input(pd_dataset, context=dataset_name)
+        if "__default__" in node.tags:
+            pipeline_tag = "__default__"
+        else:
+            pipeline_tag = next(
+                (
+                    tag
+                    for tag in node.tags
+                    if tag in settings.DYNAMIC_PIPELINES_MAPPING.keys()
+                ),
+                None,
+            )
+        run = mlflow.active_run()
+        if run is not None and run.info.run_name != pipeline_tag:
+            mlflow.end_run()
+            mlflow.delete_run(run.info.run_id)
+            mlflow.start_run(
+                run_name=pipeline_tag,
+                description=f"Main Run for CLI instantiated pipeline: {pipeline_tag}",
+            )
+
+        if "vectorize" in dataset_name:
+            pd_dataset = mlflow.data.from_pandas(data, name=dataset_name)
+
+            mlflow.log_input(pd_dataset, context=dataset_name)
 
     @hook_impl
     def before_node_run(self, node: Node, inputs: Dict[str, Any]) -> None:
@@ -67,8 +99,9 @@ class ModelTrackingHooks:
         if "evaluate" in node._func_name:
             day = tags[0]
             season = tags[1]
-            engine = tags[2]
-            model = tags[3]
+            run_arg = tags[2]
+            engine = tags[3]
+            model = tags[4]
             # Get the evaluation results from the node outputs
             out_name = node._outputs
             eval_results = outputs[out_name]
@@ -96,7 +129,11 @@ class ModelTrackingHooks:
             # Log metrics and parameters to MLflow
             active_run = mlflow.active_run()
             if active_run is not None:
-                with mlflow.start_run(run_name=run_name, nested=True) as run:
+                with mlflow.start_run(
+                    # parent_run_id=self.parent_run.info.run_id,
+                    run_name=run_name,
+                    nested=True,
+                ) as run:
                     mlflow.log_params(
                         {
                             "day": day,
@@ -123,7 +160,7 @@ class ModelTrackingHooks:
                             "run_id": run.info.run_id,
                         }
                     )
-        if "aggregate" in node._func_name:
+        if "aggregate_dataset_metrics" in node._func_name:
             # Get the evaluation results from the node outputs
             out_names = node._outputs
             mean_metrics = outputs[out_names[0]]
@@ -132,8 +169,44 @@ class ModelTrackingHooks:
             # Log metrics and parameters to MLflow
             active_run = mlflow.active_run()
             if active_run is not None:
-                with mlflow.start_run(run_name=nested_run_name, nested=True) as run:
+                with mlflow.start_run(
+                    # parent_run_id=self.parent_run.info.run_id,
+                    run_name=nested_run_name,
+                    nested=True,
+                ) as run:
                     mlflow.log_metrics(mean_metrics)
+                    mlflow.log_params(
+                        {
+                            "season": tags[0],
+                            "pipeline": tags[1],
+                            "engine": tags[2],
+                            "model": tags[3],
+                            "seed": settings.SEED,
+                        }
+                    )
+        if "aggregate_model_metrics" in node._func_name:
+            # Get the evaluation results from the node outputs
+            out_names = node._outputs
+            mean_metrics = outputs[out_names[0]]
+            nested_run_name = outputs[out_names[1]]
+
+            # Log metrics and parameters to MLflow
+            active_run = mlflow.active_run()
+            if active_run is not None:
+                with mlflow.start_run(
+                    # parent_run_id=self.parent_run.info.run_id,
+                    run_name=nested_run_name,
+                    nested=True,
+                ) as run:
+                    mlflow.log_metrics(mean_metrics)
+                    mlflow.log_params(
+                        {
+                            "pipeline": tags[0],
+                            "engine": tags[1],
+                            "model": tags[2],
+                            "seed": settings.SEED,
+                        }
+                    )
 
     @hook_impl
     def after_pipeline_run(self, run_params, run_result, pipeline, catalog) -> None:
@@ -148,4 +221,3 @@ class ModelTrackingHooks:
             pipeline: The Kedro pipeline that was executed.
             catalog: The Kedro data catalog.
         """
-        pass

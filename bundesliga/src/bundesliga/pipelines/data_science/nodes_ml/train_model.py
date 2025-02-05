@@ -1,8 +1,9 @@
 import typing as t
 
+import xarray as xr
+
 import bundesliga.model.pymc.pymc_simple_model as pm_simple
 import bundesliga.model.pyro.pyro_simple_model as pyro_simple
-import xarray as xr
 from bundesliga.utils.validation import validate_dataframe
 
 
@@ -20,7 +21,7 @@ def init_model(team_lexicon, model_options: t.Dict, **kwargs) -> xr.Dataset:
         case "pymc":
             match model:
                 case "simple":
-                    return pm_simple.SimplePymcModel(model_options)
+                    return pm_simple.SimplePymcModel(model_options, team_lexicon)
                 case "toto":
                     try:
                         kwargs["toto"]

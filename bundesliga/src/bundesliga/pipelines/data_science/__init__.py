@@ -7,12 +7,15 @@ from .pipeline import (
     create_model_definition_node,
     create_subpipeline_for_match,
     create_walk_forward_pipeline,
-    eval_pipeline,
+    eval_dataset_pipeline,
+    eval_model_pipeline,
     ml_pipeline,
 )
 
 __all__ = [
     "ml_pipeline",
+    "eval_dataset_pipeline",
+    "eval_model_pipeline",
     "create_model_definition_node",
     "eval_pipeline",
     "create_walk_forward_pipeline",

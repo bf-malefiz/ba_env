@@ -1,4 +1,5 @@
 """Project pipelines."""
+
 from typing import Dict, List
 
 from kedro.pipeline import Pipeline, pipeline
@@ -9,7 +10,11 @@ from bundesliga import settings
 from bundesliga.pipelines.data_processing.pipeline import (
     create_pipeline as create_etl_pipeline,
 )
-from bundesliga.pipelines.data_science.pipeline import eval_pipeline, ml_pipeline
+from bundesliga.pipelines.data_science.pipeline import (
+    eval_dataset_pipeline,
+    eval_model_pipeline,
+    ml_pipeline,
+)
 from bundesliga.utils.utils import load_config
 
 
@@ -96,7 +101,7 @@ def build_engine_pipelines(
                     },
                     namespace=f"{engine}",
                     tags=[engine],
-                ) + eval_pipeline(
+                ) + eval_dataset_pipeline(
                     start_match=start_match,
                     last_match=last_match,
                     setting=[(engine, [variant])],
@@ -111,6 +116,7 @@ def build_engine_pipelines(
                 )
             if not is_last_match_set:
                 last_match = None
+        engine_pipelines.append(eval_model_pipeline(engine, variant))
     return pipeline(engine_pipelines)
 
 
@@ -150,7 +156,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     etl_pipeline = create_etl_pipeline()
     pipeline_dict = {"etl": etl_pipeline}
 
-    default_pipelines = []
+    default_pipelines = Pipeline([])
 
     if start_match is None:
         raise ValueError("Missing required parameters: 'start_match'.")
@@ -167,9 +173,12 @@ def register_pipelines() -> Dict[str, Pipeline]:
         engine_pipeline = build_engine_pipelines(
             engine, variants, start_match, last_match
         )
-        pipeline_dict[engine] = etl_pipeline + engine_pipeline
-        default_pipelines.append(engine_pipeline)
-
-    pipeline_dict["__default__"] = etl_pipeline + pipeline(default_pipelines)
+        p = etl_pipeline + pipeline(engine_pipeline)
+        pipeline_dict[engine] = pipeline(p, tags={"pipeline_name": "_" + engine})
+        default_pipelines += engine_pipeline
+    default_p = default_pipelines + etl_pipeline
+    pipeline_dict["__default__"] = pipeline(
+        default_p, tags={"pipeline_name": "__default__"}
+    )
 
     return pipeline_dict

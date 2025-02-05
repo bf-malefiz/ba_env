@@ -1,4 +1,5 @@
 import pandas as pd
+
 from bundesliga.utils.utils import brier_score, log_likelihood, rmse_mae, rps
 from bundesliga.utils.validation import validate_dataframe
 
@@ -49,7 +50,7 @@ def evaluate_match(model, match, test_data, predictions):
     return results
 
 
-def aggregate_eval_metrics(
+def aggregate_dataset_metrics(
     *kwargs,
 ):
     """
@@ -63,7 +64,7 @@ def aggregate_eval_metrics(
     seed = model_definitions["seed"]
     all_daily_metrics = pd.DataFrame(kwargs[1:])
 
-    nested_run_name = f"Aggregated Accuracy | engine={engine} | model={variant} | season={dataset_name}"
+    nested_run_name = f"Dataset Metrics | engine={engine} | model={variant} | season={dataset_name}"
 
     all_daily_metrics["correct"] = all_daily_metrics.apply(
         lambda row: row["predicted_result"] == row["ground_truth"], axis=1
@@ -91,6 +92,42 @@ def aggregate_eval_metrics(
     }
 
     return mean_metrics, nested_run_name
+
+
+def aggregate_model_metrics(
+    *kwargs,
+):
+    """
+    all_daily_metrics: z. B. [{'winner_accuracy': 1.0, 'rmse_home': 1.2, ...}, {...}, ...]
+    """
+
+    model_definitions = kwargs[0]
+    engine = model_definitions["engine"]
+    variant = model_definitions["variant"]
+    seed = model_definitions["seed"]
+    all_dataset_metrics = pd.DataFrame(kwargs[1:])
+
+    nested_run_name = f"Model Metrics | engine={engine} | model={variant} "
+    mean_accuracy = all_dataset_metrics["accuracy"].mean()
+    mean_rmse_home = all_dataset_metrics["rmse_home"].mean()
+    mean_mae_home = all_dataset_metrics["mae_home"].mean()
+    mean_rmse_away = all_dataset_metrics["rmse_away"].mean()
+    mean_mae_away = all_dataset_metrics["mae_away"].mean()
+    mean_neg_log_likelihood = all_dataset_metrics["neg_log_likelihood"].mean()
+    mean_brier_score = all_dataset_metrics["brier_score"].mean()
+    mean_rps = all_dataset_metrics["rps"].mean()
+
+    mean_model_metrics = {
+        "accuracy": mean_accuracy,
+        "rmse_home": mean_rmse_home,
+        "mae_home": mean_mae_home,
+        "rmse_away": mean_rmse_away,
+        "mae_away": mean_mae_away,
+        "neg_log_likelihood": mean_neg_log_likelihood,
+        "brier_score": mean_brier_score,
+        "rps": mean_rps,
+    }
+    return mean_model_metrics, nested_run_name
 
 
 @validate_dataframe(
