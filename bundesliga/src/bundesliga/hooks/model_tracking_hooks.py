@@ -97,7 +97,7 @@ class ModelTrackingHooks:
         tags = sorted(node.tags)
 
         if "evaluate" in node._func_name:
-            day = tags[0]
+            match = tags[0]
             season = tags[1]
             run_arg = tags[2]
             engine = tags[3]
@@ -123,20 +123,19 @@ class ModelTrackingHooks:
             # Create a run name for MLflow
             run_name = (
                 f"Solorun - engine: {engine} | model: {model} | season: {season} | "
-                f"day: {day} | seed: {settings.SEED}"
+                f"match: {match} | seed: {settings.SEED}"
             )
 
             # Log metrics and parameters to MLflow
             active_run = mlflow.active_run()
             if active_run is not None:
                 with mlflow.start_run(
-                    # parent_run_id=self.parent_run.info.run_id,
                     run_name=run_name,
                     nested=True,
                 ) as run:
                     mlflow.log_params(
                         {
-                            "day": day,
+                            "match": match,
                             "season": season,
                             "model": model,
                             "engine": engine,
@@ -151,7 +150,7 @@ class ModelTrackingHooks:
                     mlflow.log_metrics(results)
                     mlflow.set_tags(
                         {
-                            "day": day,
+                            "match": match,
                             "season": season,
                             "model": model,
                             "engine": engine,
