@@ -48,33 +48,30 @@ def eval_dataset_pipeline(start_match, last_match, setting, dataset_name) -> Pip
     """Erstellt eine Evaluationspipeline für verschiedene Engines und Varianten."""
     pipe_collection = []
 
-    for engine, variants in setting:
-        for variant in variants:
-            match_metrics_inputs = [
-                f"{engine}.{dataset_name}.{variant}.metrics_{match}"
-                for match in range(start_match, last_match)
-            ]
+    for engine, variant in setting:
+        match_metrics_inputs = [
+            f"{engine}.{dataset_name}.{variant}.metrics_{match}"
+            for match in range(start_match, last_match)
+        ]
 
-            pipe_collection.append(
-                pipeline(
-                    [
-                        create_model_definition_node(engine, variant, dataset_name),
-                        node(
-                            func=aggregate_dataset_metrics,
-                            inputs=[
-                                f"{engine}.{dataset_name}.{variant}.modeldefinitions"
-                            ]
-                            + match_metrics_inputs,
-                            outputs=[
-                                f"{engine}.{dataset_name}.{variant}.dataset_metrics",
-                                f"{engine}.{dataset_name}.{variant}.nested_run_name",
-                            ],
-                            name=f"{engine}.{dataset_name}.{variant}.aggregate_dataset_metrics_node",
-                            tags=[engine, variant, dataset_name],
-                        ),
-                    ]
-                )
+        pipe_collection.append(
+            pipeline(
+                [
+                    create_model_definition_node(engine, variant, dataset_name),
+                    node(
+                        func=aggregate_dataset_metrics,
+                        inputs=[f"{engine}.{dataset_name}.{variant}.modeldefinitions"]
+                        + match_metrics_inputs,
+                        outputs=[
+                            f"{engine}.{dataset_name}.{variant}.dataset_metrics",
+                            f"{engine}.{dataset_name}.{variant}.nested_run_name",
+                        ],
+                        name=f"{engine}.{dataset_name}.{variant}.aggregate_dataset_metrics_node",
+                        tags=[engine, variant, dataset_name],
+                    ),
+                ]
             )
+        )
 
     return pipeline(pipe_collection)
 
@@ -95,10 +92,10 @@ def eval_model_pipeline(engine, variant):
                         f"{engine}.{variant}.model_eval_definitions",
                     ]
                     + match_metrics_inputs,
-                            outputs=[
-                                f"{engine}.{variant}.model_metrics",
-                                f"{engine}.{variant}.nested_run_name",
-                            ],
+                    outputs=[
+                        f"{engine}.{variant}.model_metrics",
+                        f"{engine}.{variant}.nested_run_name",
+                    ],
                     name=f"{engine}.{variant}.model_metrics_node",
                     tags=[engine, variant],
                 ),
@@ -108,7 +105,7 @@ def eval_model_pipeline(engine, variant):
     return pipeline(pipe_collection)
 
 
-def ml_pipeline(start_match, last_match, engine, variant, dataset_name):
+def ml_pipeline(start_match, last_match, variant, dataset_name):
     return pipeline(
         create_walk_forward_pipeline(start_match, last_match),
         inputs={
