@@ -6,9 +6,9 @@ Title:
     Bundesliga Data Science Pipeline Unit Tests
 
 Purpose:
-    This test suite validates the functionality of key components in the 
-    Bundesliga machine learning pipeline. It includes tests for initializing 
-    various models (PyMC, Pyro), training them on sample data, generating 
+    This test suite validates the functionality of key components in the
+    Bundesliga machine learning pipeline. It includes tests for initializing
+    various models (PyMC, Pyro), training them on sample data, generating
     predictions, evaluating results, and determining match outcomes.
 
 Scope:
@@ -30,7 +30,7 @@ Referenced Components:
         Invokes the model's training routine.
     - **predict_goals**:
         Calls the model to generate goal predictions.
-    - **evaluate**:
+    - **evaluate_match**:
         Computes performance metrics such as accuracy.
     - **determine_winner**:
         Determines match outcomes ("home", "away", "tie") based on predicted goal tallies.
@@ -49,9 +49,9 @@ Testing Standards and Guidelines:
         - `sample_test_data()`: Minimal testing dataset.
         - `dummy_predictions()`: Synthetic predictions for evaluation.
         These fixtures keep the test setup organized and reusable.
-    3. **Error Handling**: 
+    3. **Error Handling**:
         Explicit checks for missing columns or invalid configurations that should raise specific exceptions (e.g., `ValueError`,`NotImplementedError`).
-    4. **Clarity and Maintainability**: 
+    4. **Clarity and Maintainability**:
         The test suite is divided into logical sections—initialization, training, prediction, evaluation, edge cases—promoting ease of future additions.
 
 Pre-requisites:
@@ -76,16 +76,19 @@ from unittest.mock import MagicMock
 import numpy as np
 import pandas as pd
 import pytest
+
 from bundesliga.model.pymc.pymc_simple_model import SimplePymcModel
 from bundesliga.model.pyro.pyro_simple_model import SimplePyroModel
-from bundesliga.pipelines.data_science.nodes_ml.train_model import (
+from bundesliga.pipelines.data_science.nodes_ml.evaluate import (
     determine_winner,
-    evaluate,
+    evaluate_match,
+    predicted_result,
+    true_result,
+)
+from bundesliga.pipelines.data_science.nodes_ml.train_model import (
     init_model,
     predict_goals,
-    predicted_result,
     train,
-    true_result,
 )
 
 
@@ -95,7 +98,7 @@ def model_options():
     return {
         "model": "",
         "engine": "",
-        "start_day": 20,
+        "start_match": 20,
         "walk_forward": 0,
         "test_size": 0.2,
         "model_config": {"prior_params": {}},
@@ -200,10 +203,10 @@ def test_evaluate_home_win(sample_test_data, dummy_predictions):
     """Tests if 'evaluate' correctly computes accuracy when home team wins."""
     mock_model = MagicMock()
     mock_model.predict_toto_probabilities.return_value = np.array([[0.6, 0.2, 0.2]])
-    results = evaluate(
-        mock_model, day=1, test_data=sample_test_data, predictions=dummy_predictions
+    results = evaluate_match(
+        mock_model, match=1, test_data=sample_test_data, predictions=dummy_predictions
     )
-    assert results["winner_accuracy"] == 1.0
+    assert results["predicted_result"] == "home"
 
 
 def test_determine_winner():

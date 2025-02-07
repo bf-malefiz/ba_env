@@ -57,14 +57,6 @@ def build_engine_pipelines(
     Returns:
         Pipeline: A Kedro pipeline object representing the combined ML and evaluation pipelines
                  for the given engine and variants.
-
-    Example:
-        To build pipelines for the "pymc" engine with variants ["simple", "toto"]:
-        ```python
-        engine_pipeline = build_engine_pipelines(
-            "pymc", ["simple", "toto"], start_match=20, walk_forward=5
-        )
-        ```
     """
 
     if not engine:
@@ -91,7 +83,6 @@ def build_engine_pipelines(
                     ml_pipeline(
                         start_match=start_match,
                         last_match=last_match,
-                        engine=engine,
                         variant=variant,
                         dataset_name=dataset_name,
                     ),
@@ -104,7 +95,7 @@ def build_engine_pipelines(
                 ) + eval_dataset_pipeline(
                     start_match=start_match,
                     last_match=last_match,
-                    setting=[(engine, [variant])],
+                    setting=[(engine, variant)],
                     dataset_name=dataset_name,
                 )
                 engine_pipelines.append(pipeline_obj)
@@ -180,5 +171,4 @@ def register_pipelines() -> Dict[str, Pipeline]:
     pipeline_dict["__default__"] = pipeline(
         default_p, tags={"pipeline_name": "__default__"}
     )
-
     return pipeline_dict
