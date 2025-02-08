@@ -1,6 +1,6 @@
 """
 ===============================================================================
-               UPDATED TEST DOCUMENTATION: Kedro Data Processing Pipeline
+               TEST DOCUMENTATION: Kedro Data Processing Pipeline
 ===============================================================================
 Title:
     Integration Tests for the Bundesliga Data Processing Pipeline
@@ -79,10 +79,11 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
-from bundesliga import settings
-from bundesliga.pipelines.data_processing.pipeline import create_pipeline
 from kedro.io import DataCatalog, MemoryDataset
 from kedro.runner import SequentialRunner
+
+from bundesliga import settings
+from bundesliga.pipelines.data_processing.pipeline import create_pipeline
 
 
 @pytest.fixture
@@ -144,8 +145,11 @@ class TestBuildTeamLexiconPipeline:
         test_catalog,
     ):
         """
-        Runs a pipeline with only the 'build_team_lexicon_node' in each dataset namespace.
-        Checks that each namespace produces a valid 'team_lexicon' output.
+        Verifies that the 'build_team_lexicon_node' executes correctly in each dataset namespace.
+
+        This test runs a pipeline containing only the 'build_team_lexicon_node' for each dataset defined in settings.
+        It checks that the output for each namespace (i.e., the 'team_lexicon' MemoryDataset) is produced, is not empty,
+        and includes the required 'index' column.
         """
         datasets = settings.DATASETS
         node_names = [f"{ds}.build_team_lexicon_node" for ds in datasets]
@@ -166,10 +170,11 @@ class TestGetGoalResultsPipeline:
         self, seq_runner, mock_settings_datasets, test_catalog
     ):
         """
-        Uses a partial pipeline with:
-          1) build_team_lexicon_node
-          2) get_goal_results_node
-        for each dataset, ensuring 'goals' is produced.
+        Ensures that the 'get_goal_results_node' executes correctly when chained with the build_team_lexicon_node.
+
+        This test runs a partial pipeline that includes both 'build_team_lexicon_node' and 'get_goal_results_node'
+        for each dataset. It verifies that the 'goals' output is produced, is not empty, and contains the expected
+        columns 'home_goals' and 'away_goals'.
         """
         datasets = settings.DATASETS
         build_nodes = [f"{ds}.build_team_lexicon_node" for ds in datasets]
@@ -192,12 +197,11 @@ class TestVectorizeDataPipeline:
         self, seq_runner, mock_settings_datasets, test_catalog
     ):
         """
-        Runs the entire sub-pipeline for each dataset:
-         1) build_team_lexicon_node (→ team_lexicon)
-         2) get_goal_results_node   (→ goals)
-         3) vectorize_data_node     (→ vectorized_data)
+        Validates that the complete data processing sub-pipeline (build_team_lexicon → get_goal_results → vectorize_data)
+        produces a non-empty 'vectorized_data' output with the expected columns.
 
-        Asserts 'vectorized_data' is non-empty and has expected columns.
+        This test runs the full sub-pipeline for each dataset namespace and checks that the 'vectorized_data' MemoryDataset
+        contains the columns 'home_id', 'away_id', 'home_goals', 'away_goals', and 'toto', ensuring proper data transformation.
         """
         datasets = settings.DATASETS
         build_nodes = [f"{ds}.build_team_lexicon_node" for ds in datasets]

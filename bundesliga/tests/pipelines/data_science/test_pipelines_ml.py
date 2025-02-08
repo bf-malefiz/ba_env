@@ -172,15 +172,16 @@ def catalog():
 class TestCreateSubpipelineForMatch:
     def test_subpipeline_nodes(self, match):
         """
-        Checks that create_subpipeline_for_match(match) returns a pipeline with nodes:
-          - match_node_{match}
-          - split_node_{match}
-          - init_model_node_{match}
-          - fit_node_{match}
-          - predict_node_{match}
-          - evaluate_node_{match}
+        Verifies that create_subpipeline_for_match(match) returns a Kedro Pipeline containing the expected nodes:
+        - match_node_{match}
+        - split_node_{match}
+        - init_model_node_{match}
+        - fit_node_{match}
+        - predict_node_{match}
+        - evaluate_node_{match}
 
-        and verifies key input/output references for match_node and evaluate_node.
+        Additionally, checks that the match_node produces the correct output (i.e., "match_{match}")
+        and that the evaluate_node includes all required inputs (model, match, test_data, predictions).
         """
         sub_pipe = create_subpipeline_for_match(match)
         assert isinstance(sub_pipe, Pipeline), (
@@ -221,20 +222,13 @@ class TestCreateSubpipelineForMatch:
                 f"{evaluate_node.name} missing input: '{inp}'"
             )
 
-        # (Optional) Check the private _inputs dict to confirm arg -> dataset
-        # for arg_name, dataset_name in {
-        #     "model": f"model_{match}",
-        #     "match": f"match_{match}",
-        # }.items():
-        #     assert evaluate_node._inputs[arg_name] == dataset_name
-
 
 class TestCreateWalkForwardPipeline:
     def test_last_match_pipeline_structure(self, start_match, last_match):
         """
-        Ensures create_walk_forward_pipeline(start_match, last_match) produces
-        sub-pipelines for each match in the range [start_match..start_match+last_match].
-        Each sub-pipeline has 6 nodes, so total: 6 * (last_match+1).
+        Ensures that create_walk_forward_pipeline(start_match, last_match) generates sub-pipelines for each match
+        in the range [start_match, last_match] and that each sub-pipeline contains exactly 6 nodes.
+        Verifies that the total number of nodes in the combined pipeline matches the expected count.
         """
         wf_pipe = create_walk_forward_pipeline(start_match, last_match)
         assert isinstance(wf_pipe, Pipeline)
@@ -252,9 +246,9 @@ class TestCreateWalkForwardPipeline:
 class TestMLPipeline:
     def test_ml_pipeline_namespaced_nodes(self):
         """
-        Checks that ml_pipeline(...) creates a pipeline with
-        6*(last_match+1) match-based nodes, each prefixed with
-        'my_dataset.simple.' or similar naming convention.
+        Checks that ml_pipeline(...) constructs a pipeline with all match-based nodes correctly namespaced
+        according to the specified dataset and model variant. Verifies that the total number of nodes equals
+        6 times the number of matches and that each node's name starts with the expected prefix.
         """
         start_match = 1
         last_match = 2
@@ -279,9 +273,9 @@ class TestMLPipeline:
 class TestEvalPipeline:
     def test_create_model_definition_node(self):
         """
-        Ensures create_model_definition_node(...) outputs a node that
-        returns a dictionary with engine, variant, dataset_name, and seed,
-        stored under the correct outputs key.
+        Validates that create_model_definition_node(engine, variant, dataset_name) returns a node with the correct
+        name and output key. Also verifies that executing the node's function produces a dictionary containing the
+        expected engine, variant, dataset_name, and seed.
         """
         engine = "pymc"
         variant = "simple"
@@ -304,8 +298,9 @@ class TestEvalPipeline:
 
     def test_eval_dataset_pipeline_structure(self):
         """
-        Checks that eval_dataset_pipeline(...) creates nodes for each
-        engine/variant pair plus aggregator nodes referencing the match-based metrics.
+        Checks that eval_dataset_pipeline(...) creates a pipeline that includes the necessary aggregator nodes.
+        Ensures that the aggregator nodes reference model definitions and match-based metrics for each match in the
+        specified range, confirming the proper structure for aggregating daily metrics.
         """
         startmatch = 10
         last_match = 15

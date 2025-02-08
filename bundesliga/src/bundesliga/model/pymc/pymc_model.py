@@ -1,3 +1,21 @@
+"""
+Module: pymc_model.py
+
+Summary:
+    Base class for PyMC-based football match prediction models.
+
+Dependencies:
+    - abc.abstractmethod
+    - ast.Dict
+    - typing.Optional, Union
+    - numpy as np
+    - pandas as pd
+    - pymc as pm
+    - pymc_experimental.model_builder.ModelBuilder
+    - bundesliga.settings
+    - bundesliga.model.base_footballmodel.FootballModel
+"""
+
 from abc import abstractmethod
 from ast import Dict
 from typing import Optional, Union
@@ -13,19 +31,11 @@ from bundesliga.model.base_footballmodel import FootballModel
 
 class PymcModel(ModelBuilder, FootballModel):
     """
-    A base class for PyMC-based football match prediction models.
+    Base class for PyMC-based football match prediction models.
 
-    This class provides the foundational structure for building, training, and predicting
-    using PyMC models. It integrates with the `ModelBuilder` class from `pymc_experimental`
-    and implements the `FootballModel` interface.
-
-    Attributes:
-        model_config (dict): Configuration parameters for the model, including priors.
-        sampler_config (dict): Configuration parameters for the sampler.
-        model_coords (dict): Coordinates for the PyMC model dimensions.
-        X (pd.DataFrame): Input features for the model.
-        y (pd.Series): Target data for the model.
-        logger (logging.Logger): Logger for tracking model events.
+    Provides a simple framework to build, train, and predict football match outcomes using PyMC.
+    Inherits from ModelBuilder and FootballModel, and includes methods for configuration, data handling,
+    and model evaluation.
     """
 
     def __init__(
@@ -34,41 +44,42 @@ class PymcModel(ModelBuilder, FootballModel):
         team_lexicon: Optional[Dict] = None,
     ):
         """
-        Initializes the model with optional custom configurations.
+        Initializes the PyMC model with default and custom configurations.
+
+        Sets up the model and sampler configurations and assigns the team lexicon used for mapping team identifiers.
+        Custom configurations provided in model_options update the defaults.
 
         Args:
-            model_config (Dict, optional): Custom model configuration. Defaults to None.
-            sampler_config (Dict, optional): Custom sampler configuration. Defaults to None.
+            model_options (Optional[Dict], optional): Custom configuration options for the model.
+            team_lexicon (Optional[Dict], optional): Mapping of team identifiers to their corresponding values.
         """
-        self.model_config = self.get_default_model_config()
-        self.sampler_config = self.get_default_sampler_config()
-        self.team_lexicon = team_lexicon
         if "model_config" in model_options:
             self.model_config.update(model_options["model_config"])
+        else:
+            self.model_config = self.get_default_model_config()
+
         if "sampler_config" in model_options:
             self.sampler_config.update(model_options["model_config"])
+        else:
+            self.sampler_config = self.get_default_sampler_config()
+
+        self.team_lexicon = team_lexicon
         super().__init__(self.model_config, self.sampler_config)
 
-    # Give the model a name
     _model_type = "FootballModel"
-
-    # And a version
     version = "0.1"
 
     @abstractmethod
     def build_model(self, X: pd.DataFrame, y: pd.Series, **kwargs):
         """
-        Builds the PyMC model using the provided data.
+        Constructs the PyMC model using the provided data.
 
-        This method must be implemented by subclasses to define the model structure.
+        Subclasses must implement this method to define the model's structure.
 
         Args:
-            X (pd.DataFrame): Input features for the model. Must contain columns "home_id" and "away_id".
-            y (pd.Series): Target data for the model. Represents the output variable (e.g., goals).
-            **kwargs: Additional keyword arguments for model configuration.
-
-        Raises:
-            NotImplementedError: If the method is not implemented by a subclass.
+            X (pd.DataFrame): Input features, expected to include 'home_id' and 'away_id' columns.
+            y (pd.Series): Target data representing outcomes (e.g., goals).
+            **kwargs: Additional configuration parameters.
         """
         raise NotImplementedError
 
@@ -134,6 +145,9 @@ class PymcModel(ModelBuilder, FootballModel):
         The model config dict is generally used to specify the prior values we want to build the model with.
         It supports more complex data structures like lists, dictionaries, etc.
         It will be passed to the class instance on initialization, in case the user doesn't provide any model_config of their own.
+
+        Returns:
+            dict: Default model configuration.
         """
         model_config = {
             "prior_params": {
@@ -154,6 +168,9 @@ class PymcModel(ModelBuilder, FootballModel):
         Returns a class default sampler dict for model builder if no sampler_config is provided on class initialization.
         The sampler config dict is used to send parameters to the sampler .
         It will be used during fitting in case the user doesn't provide any sampler_config of their own.
+
+        Returns:
+        dict: Default sampler configuration.
         """
         sampler_config = {
             "chains": 2,
@@ -199,17 +216,16 @@ class PymcModel(ModelBuilder, FootballModel):
         """
         pass
 
-        pass
-
     def _generate_and_preprocess_model_data(
         self,
         X: Union[pd.DataFrame, pd.Series],
         y: Union[pd.Series, np.ndarray],
     ) -> None:
         """
-        Preprocesses the input data before fitting the model.
+        Preprocesses the input data and sets up the model coordinates.
 
-        This method generates coordinates and preprocesses the data for the PyMC model.
+        Extracts team information, creates a range for matches, and stores the processed input features and targets
+        for use in the PyMC model.
 
         Args:
             X (Union[pd.DataFrame, pd.Series]): Input features for the model.
@@ -238,7 +254,9 @@ class PymcModel(ModelBuilder, FootballModel):
 
     def train(self, X, y, **kwargs):
         """
-        Trains the model using the provided data.
+        Trains the PymcModel using the provided data.
+
+        Prepares the target data and fits the model using the configured sampler settings.
 
         Args:
             X: Input features for training.

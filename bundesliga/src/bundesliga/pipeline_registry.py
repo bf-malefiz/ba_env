@@ -1,11 +1,8 @@
 """Project pipelines."""
 
-from typing import Dict, List
-
 from kedro.pipeline import Pipeline, pipeline
 from kedro_datasets.pandas import CSVDataset
 
-from bundesliga import __version__ as PROJECT_VERSION
 from bundesliga import settings
 from bundesliga.pipelines.data_processing.pipeline import (
     create_pipeline as create_etl_pipeline,
@@ -20,10 +17,21 @@ from bundesliga.utils.utils import load_config
 
 def read_matchlength_from_data(dataset_name: str, start_match: int) -> int:
     """
-    Read the walk forward parameter from the data catalog.
+    Reads the walk-forward parameter (match length) from the raw data catalog.
+
+    This function loads raw match data for the given dataset from a CSV file, determines the total number
+    of matches, and calculates the effective number of matches available for walk-forward evaluation.
+    It ensures that the provided start_match is within valid bounds.
+
+    Args:
+        dataset_name (str): The name of the dataset.
+        start_match (int): The starting match index for evaluation.
 
     Returns:
-        int: The walk forward parameter read from the data catalog.
+        int: The number of matches available for walk-forward evaluation, computed as total_matches - start_match - 1.
+
+    Raises:
+        ValueError: If the start_match is greater than or equal to the total number of matches in the dataset.
     """
     data = CSVDataset(
         filepath=f"./data/01_raw/football-datasets/{dataset_name}.csv",
@@ -35,28 +43,32 @@ def read_matchlength_from_data(dataset_name: str, start_match: int) -> int:
         raise ValueError(
             f"Start match {start_match} is greater than or equal the number of matches in the dataset {len(df)}."
         )
-    return total_matches - start_match - 2
+    return total_matches - start_match - 1
 
 
 def build_engine_pipelines(
-    engine: str, variants: List[str], start_match: int, last_match: int
+    engine: str, variants: list[str], start_match: int = 0, last_match: int = None
 ) -> Pipeline:
     """
     Builds a collection of machine learning pipelines for a specific engine and its variants.
 
-    This function creates a pipeline for each combination of engine, variant, and dataset.
-    It combines the machine learning pipeline (`ml_pipeline`) with the evaluation pipeline (`eval_pipeline`)
-    for each dataset specified in `settings.DATASETS`.
+    This function creates a pipeline for each combination of the specified engine, model variant, and dataset.
+    It combines the machine learning pipeline (ml_pipeline) with the evaluation pipeline (eval_dataset_pipeline)
+    for each dataset defined in the project settings, and then aggregates them with the model evaluation pipeline.
+    This allows for a complete workflow of model training, prediction, and evaluation for each engine and variant.
 
     Args:
         engine (str): The engine type (e.g., "pymc", "pyro").
-        variants (List[str]): A list of variants for the engine.
-        start_match (int): The starting match for the data.
-        walk_forward (int): The number of matchs to walk forward in the data.
+        variants (list[str]): A list of model variants for the engine.
+        start_match (int): The starting match index for processing.
+        last_match (int): The ending match index for processing.
 
     Returns:
-        Pipeline: A Kedro pipeline object representing the combined ML and evaluation pipelines
-                 for the given engine and variants.
+        Pipeline: A Kedro pipeline object representing the combined machine learning and evaluation workflows
+                  for the specified engine and variants.
+
+    Raises:
+        ValueError: If required parameters or settings (e.g., engine, variants, DATASETS) are missing or invalid.
     """
 
     if not engine:
@@ -69,15 +81,13 @@ def build_engine_pipelines(
         raise ValueError("Missing or empty 'DATASETS' in settings.")
 
     engine_pipelines = []
-    is_last_match_set = last_match is not None
+
     for variant in variants:
         for dataset_name in settings.DATASETS:
-            if not is_last_match_set:
+            if not last_match:
                 last_match = read_matchlength_from_data(
                     dataset_name, start_match=start_match
                 )
-            if start_match is None:
-                start_match = 0
             try:
                 pipeline_obj = pipeline(
                     ml_pipeline(
@@ -105,50 +115,40 @@ def build_engine_pipelines(
                     f"Failed to build pipeline for engine '{engine}', variant '{variant}', "
                     f"and dataset '{dataset_name}': {str(e)}"
                 )
-            if not is_last_match_set:
+            if not last_match:
                 last_match = None
         engine_pipelines.append(eval_model_pipeline(engine, variant))
     return pipeline(engine_pipelines)
 
 
-def register_pipelines() -> Dict[str, Pipeline]:
+def register_pipelines() -> dict[str, Pipeline]:
     """
-    Registers the project's pipelines.
+    Registers and constructs the project's pipelines for the Kedro process.
 
-    This function dynamically creates and registers pipelines based on the configuration
-    provided in `settings.DYNAMIC_PIPELINES_MAPPING`. It combines the ETL pipeline with
-    machine learning and evaluation pipelines for each engine and variant.
+    This function dynamically creates and registers multiple pipelines based on the project configuration.
+    It combines the ETL pipeline with machine learning and evaluation pipelines for each engine and model variant.
+    The resulting pipelines are organized into a dictionary with keys such as "etl", specific engine names,
+    and a default pipeline "__default__" that encompasses all workflows.
 
     Returns:
-        Dict[str, Pipeline]: A dictionary of pipeline names and their corresponding Pipeline objects.
-                             The keys include:
-                             - "etl": The ETL pipeline for data processing.
-                             - "<engine>": The combined pipeline for a specific engine (e.g., "pymc", "pyro").
-                             - "__default__": The default pipeline, which includes the ETL pipeline and all
-                               machine learning pipelines.
+        dict[str, Pipeline]: A dictionary mapping pipeline names to their corresponding Kedro Pipeline objects.
 
     Raises:
-        ValueError: If the required parameters or settings are missing or invalid.
-
-    Example:
-        To access the default pipeline:
-        ```python
-        from kedro.framework.project import pipelines
-
-        pipeline = pipelines["__default__"]
-        pipeline.run()
-        ```
+        ValueError: If required parameters (e.g., start_match) or settings (e.g., DYNAMIC_PIPELINES_MAPPING, DATASETS)
+                    are missing or invalid.
     """
 
+    # Load configuration parameters
     parameters = load_config()["parameters"]
     start_match = parameters["model_options"]["start_match"]
     last_match = parameters["model_options"]["last_match"]
 
+    # Create the ETL pipeline and initialize the pipeline dictionary
     etl_pipeline = create_etl_pipeline()
     pipeline_dict = {"etl": etl_pipeline}
-
     default_pipelines = Pipeline([])
 
+    # Validate required parameters and settings
     if start_match is None:
         raise ValueError("Missing required parameters: 'start_match'.")
     if (
@@ -160,15 +160,23 @@ def register_pipelines() -> Dict[str, Pipeline]:
     if not hasattr(settings, "DATASETS") or not settings.DATASETS:
         raise ValueError("Missing or empty 'DATASETS' in settings.")
 
+    # Build pipelines for each engine and its variants
     for engine, variants in settings.DYNAMIC_PIPELINES_MAPPING.items():
         engine_pipeline = build_engine_pipelines(
             engine, variants, start_match, last_match
         )
-        p = etl_pipeline + pipeline(engine_pipeline)
-        pipeline_dict[engine] = pipeline(p, tags={"pipeline_name": "_" + engine})
+
+        # Combine the ETL pipeline with the engine-specific pipelines
+        combined_pipeline = etl_pipeline + pipeline(engine_pipeline)
+        pipeline_dict[engine] = pipeline(
+            combined_pipeline, tags={"pipeline_name": "_" + engine}
+        )
+        # Aggregate all engine pipelines for the default pipeline
         default_pipelines += engine_pipeline
-    default_p = default_pipelines + etl_pipeline
+
+    # Combine default pipelines with the ETL pipeline and register as the default pipeline
+    default_pipeline = default_pipelines + etl_pipeline
     pipeline_dict["__default__"] = pipeline(
-        default_p, tags={"pipeline_name": "__default__"}
+        default_pipeline, tags={"pipeline_name": "__default__"}
     )
     return pipeline_dict

@@ -1,7 +1,25 @@
+"""
+Module: pyro_model.py
+
+Summary:
+    Base class for Pyro-based probabilistic models to predict football match outcomes.
+
+Dependencies:
+    - numpy as np
+    - pandas as pd
+    - pyro
+    - pyro.infer
+    - pyro.optim
+    - bundesliga.settings
+    - bundesliga.model.base_footballmodel.FootballModel
+"""
+
 import numpy as np
+import pandas as pd
 import pyro
 import pyro.infer
 import pyro.optim
+
 from bundesliga import settings
 from bundesliga.model.base_footballmodel import FootballModel
 
@@ -15,31 +33,31 @@ class PyroModel(FootballModel):
     the model, calculating win probabilities, and validating predictions.
 
     Attributes:
-        team_lexicon (dict): A dictionary mapping team names to unique IDs.
+        team_lexicon (dict): A mapping of team identifiers to team names or indices used within the model.
         model_config (dict): Configuration parameters for the model.
         sampler_config (dict): Configuration parameters for the sampler.
     """
 
-    def __init__(self, team_lexicon, model_options):
+    def __init__(self, team_lexicon: pd.DataFrame, model_options: dict) -> None:
         """
         Initializes the PyroModel with team lexicon and configuration parameters.
 
         Args:
             team_lexicon (dict): A dictionary mapping team names to unique IDs.
-            parameters (dict): A dictionary containing model and sampler configurations.
+            model_options (dict): A dictionary containing model and sampler configurations.
         """
         self.team_lexicon = team_lexicon
         self.model_config = model_options["model_config"]
         self.sampler_config = model_options["sampler_config"]
 
-    def train(self, X, y, parameters):
+    def train(self, X: pd.DataFrame, y: pd.DataFrame, **kwargs) -> list:
         """
-        Trains the model using the provided data.
+        Trains the PyroModel using the provided data.
 
         Args:
             X (pd.DataFrame): Input data containing home and away team IDs.
             y (pd.DataFrame): Target data containing home goals, away goals, and match results (toto).
-            parameters (dict): Additional parameters for training.
+            kwargs: Additional keyword arguments for training.
 
         Returns:
             list: A list of losses during training.
@@ -79,7 +97,9 @@ class PyroModel(FootballModel):
 
         return losses
 
-    def get_probs_winner_from_goal_results(self, goals_of_team_1, goals_of_team_2):
+    def get_probs_winner_from_goal_results(
+        self, goals_of_team_1: np.array, goals_of_team_2: np.array
+    ) -> np.array:
         """
         Calculates the probabilities of team 1 winning, team 2 winning, or a draw based on goal results.
 
@@ -88,7 +108,7 @@ class PyroModel(FootballModel):
             goals_of_team_2 (np.array): Goals scored by team 2.
 
         Returns:
-            np.array: An array containing probabilities for team 1 win, team 2 win, and draw.
+            np.array: An array containing probabilities for home-team win, away-team win, and draw.
         """
         team1_wins = goals_of_team_1 > goals_of_team_2
         team2_wins = goals_of_team_1 < goals_of_team_2
@@ -100,12 +120,14 @@ class PyroModel(FootballModel):
         np.testing.assert_almost_equal(1.0, p1 + tie + p2)
         return np.array([p1, p2, tie])
 
-    def predict_toto_probabilities(self, predictions, **kwargs):
+    def predict_toto_probabilities(
+        self, predictions: pd.DataFrame, **kwargs
+    ) -> np.array:
         """
         Predicts the probabilities for match outcomes (toto) based on predicted goals.
 
         Args:
-            predictions (dict): A dictionary containing predicted home and away goals.
+            predictions (pd.DataFrame): A dictionary containing predicted home and away goals.
             **kwargs: Additional keyword arguments.
 
         Returns:

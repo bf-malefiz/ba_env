@@ -3,6 +3,7 @@ from the Kedro defaults. For further information, including these default values
 https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
 
 import yaml
+from kedro_mlflow.framework.hooks import MlflowHook
 
 from bundesliga.hooks.model_tracking_hooks import ModelTrackingHooks
 from bundesliga.utils.utils import merge_dicts
@@ -14,10 +15,7 @@ SEED = 42
 # from pandas_viz.hooks import ProjectHooks
 
 # Hooks are executed in a Last-In-First-Out (LIFO) order.
-HOOKS = (
-    ModelTrackingHooks(),
-    # PipelineMonitoringHooks(),
-)
+HOOKS = (ModelTrackingHooks(),)
 
 
 # Installed plugins for which to disable hook auto-registration.
@@ -56,21 +54,14 @@ CONFIG_LOADER_ARGS = {
 }
 
 DYNAMIC_PIPELINES_MAPPING = {
-    # "pymc": ["simple"],
+    "pymc": ["simple"],
     "pyro": ["simple"],
 }
-
-
+# Exctract the datasets from the YAML file
 base_path = Path(__file__).resolve().parent.parent.parent
-
-# Define the relative path to the YAML file
 yaml_file = base_path / "conf" / "base" / "datasets_list.yml"
-
-# Open and load the YAML file
 with open(yaml_file, encoding="utf-8") as file:
     data = yaml.safe_load(file)
-
-# Exctract the datasets from the YAML file
 DATASETS = data.get("datasets", [])
 
 # Class that manages Kedro's library components.

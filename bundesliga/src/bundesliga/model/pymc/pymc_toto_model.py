@@ -1,9 +1,36 @@
+"""
+Summary:
+    Implementation class for PyMC-based football match prediction models.
+
+Dependencies:
+    - numpy: For numerical computations and random number generation.
+    - pandas: For data manipulation and handling of input datasets.
+    - pymc: For probabilistic programming and Bayesian model specification.
+    - bundesliga.settings: For configuration parameters, including the random seed.
+    - bundesliga.model.pymc.pymc_model: The base class (PymcModel) that this model extends.
+"""
+
 import pandas as pd
 import pymc as pm
+
 from bundesliga.model.pymc.pymc_model import PymcModel
 
 
 class TotoModel(PymcModel):
+    """
+    A simple Bayesian model for forecasting football match outcomes using PyMC.
+
+    This class builds a probabilistic model that estimates team-specific offensive and defensive strengths based on
+    match data. By leveraging Poisson likelihoods, it models the number of goals scored in a match, ensuring that
+    the computed mean values remain above a minimal threshold. The model is configurable through external model options,
+    and it utilizes a team lexicon to map team identifiers to their respective attributes.
+
+    Attributes:
+        team_lexicon: A mapping of team identifiers to team names or indices used within the model.
+        _model_type (str): A string identifier for the type of model implemented ("Simple_FootballModel").
+        version (str): The version identifier of the Totomodel implementation.
+    """
+
     # def __init__(
     #     self, model_config=None, sampler_config=None, team_lexicon=None, toto=None
     # ):
@@ -19,23 +46,22 @@ class TotoModel(PymcModel):
 
     def build_model(self, X: pd.DataFrame, y: pd.Series, *args):
         """
-        build_model creates the PyMC model
+        Build and configure the PyMC probabilistic model for predicting football match outcomes.
 
-        Parameters:
-        model_config: dictionary
-            it is a dictionary with all the parameters that we need in our model example:  a_loc, a_scale, b_loc
-        X : pd.DataFrame
-            The input data that is going to be used in the model. This should be a DataFrame
-            containing the features (predictors) for the model. For efficiency reasons, it should
-            only contain the necessary data columns, not the entire available dataset, as this
-            will be encoded into the data used to recreate the model.
+        This method prepares and constructs the Bayesian model by first preprocessing the input data. It extracts the
+        necessary features (specifically, the home and away team identifiers) from the provided DataFrame, and converts
+        the target data into an appropriate format. The method then sets up mutable data containers within a PyMC model
+        context to hold these inputs. Using prior parameters from the model configuration (such as offensive and defensive
+        means and variances), it defines normal priors for team strengths. The model calculates expected goal rates for both
+        home and away teams, ensuring that these rates do not fall below a minimum threshold by using a conditional switch.
+        Finally, the observed match outcomes (goals) are modeled using a Poisson likelihood, thereby completing the model
+        specification.
 
-        y : pd.Series
-            The target data for the model. This should be a Series representing the output
-            or dependent variable for the model.
-
-        kwargs : dict
-            Additional keyword arguments that may be used for model configuration.
+        Args:
+            X (pd.DataFrame): The input DataFrame containing match features. It must include 'home_id' and 'away_id' columns
+                              that denote the identifiers for the home and away teams, respectively.
+            y (pd.Series): The target data representing observed goal counts, provided as a pandas Series.
+            **kwargs: Additional keyword arguments for customizing the model configuration, if necessary.
         """
 
         # self._generate_and_preprocess_model_data(X, goals)
