@@ -15,3 +15,5 @@ hypothesis # unit test library ( check if needed / good lib? - used by numpy.tes
 pyro-ppl
 statsd # for logging
 pymc-experimental
+pytest
+pytest-cov

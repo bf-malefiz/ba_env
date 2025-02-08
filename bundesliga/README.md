@@ -40,9 +40,9 @@ kedro run | kedro run --pipeline "pymc"
 To define how many models and samples you want to draw go into parameters.py.
 
 Options:
--   start_day = startingpoint for the model in the season to learn
--   walk_forward = how many models the pipeline should initiate and train
-i.e start_day = 30 and walk_forward=2 will train and predict on match 30,31,32
+-   start_match = startingpoint for the model in the season to learn
+-   last_match = last match the pipeline should initiate and train
+i.e start_match = 30 and walk_forward=32 will train and predict on match 30,31,32
 
 ## Visualize kedro pipeline and evaluations
 
