@@ -1,23 +1,21 @@
 """
-This module provides utility functions for splitting data by time (match matchs),
-handling configuration loading and dictionary merging for the custom resolver, extracting goal-related
-distributions, and computing various scoring metrics (Brier Score, RPS, log-
-likelihood, RMSE, MAE) for evaluating model predictions in a football analytics
-context.
+Module: utils.py
 
-Notes:
-------
-- Many of these functions rely on well-formed Pandas DataFrames with specific column
-  names (e.g., 'true_result' for the actual match outcome, or 'home_goals'/'away_goals'
-  for predicted vs. actual goal counts).
-- The Poisson-based distribution functions assume strictly positive lambda values
-  (`diff`), adjusting by a small constant if lambda is extremely small.
+Summary:
+    This module provides utility functions for splitting data by time (match matches),
+    handling configuration loading and dictionary merging for the custom resolver, extracting goal-related
+    distributions, and computing various scoring metrics (Brier Score, RPS, log-likelihood, RMSE, MAE)
+    for evaluating model predictions in a football analytics context.
 
-Author:
-    Philipp Dahlke
-
-License:
-    Specify your project license here.
+Dependencies:
+    - copy.deepcopy
+    - pathlib.Path
+    - numpy as np
+    - omegaconf
+    - pandas as pd
+    - scipy.stats
+    - kedro.config.OmegaConfigLoader
+    - kedro.framework.project.settings
 """
 
 from copy import deepcopy
@@ -30,34 +28,28 @@ import scipy.stats
 from kedro.config import OmegaConfigLoader
 from kedro.framework.project import settings
 
+from bundesliga.model.base_footballmodel import FootballModel
+
 min_mu = 0.0001
-low = 1e-8  # Adjusted from '10e-8' for clarity
+low = 1e-8
 
 
-def split_time_data(vectorized_data: pd.DataFrame, current_match: int):
+def split_time_data(vectorized_data: pd.DataFrame, current_match: str | int) -> tuple:
     """
-    Splits a DataFrame into training and testing subsets based on a given matchmatch.
+    Splits a DataFrame into training and testing subsets based on a given match index.
 
-    Parameters
-    ----------
-    vectorized_data : pd.DataFrame
-        A DataFrame containing match data, typically indexed by match or matchmatch.
-    current_match : int or str
-        The current match index (converted to int if given as str). All rows
-        before `current_match` form the training set, and the row(s) at
-        `current_match` form the test set.
+    This function separates the input DataFrame into a training set consisting of all rows
+    before the current match and a test set consisting of the row corresponding to the current match.
+    It assumes that the DataFrame is sorted in ascending order by match.
 
-    Returns
-    -------
-    train_data : pd.DataFrame
-        Subset of `vectorized_data` up to (but not including) the current match.
-    test_data : pd.DataFrame
-        The portion of `vectorized_data` corresponding exactly to `current_match`.
+    Parameters:
+        vectorized_data (pd.DataFrame): DataFrame containing match data.
+        current_match (int): The index of the current match (if provided as a str, it will be converted to int).
 
-    Notes
-    -----
-    - This function assumes that `vectorized_data` is sorted by match (ascending)
-      or that rows prior to `current_match` logically represent the training window.
+    Returns:
+        tuple: A tuple containing:
+            - train_data (pd.DataFrame): Rows before the current match.
+            - test_data (pd.DataFrame): The row(s) corresponding exactly to the current match.
     """
     current_match = int(current_match) + 1
     train_data = vectorized_data[:current_match]
@@ -65,20 +57,16 @@ def split_time_data(vectorized_data: pd.DataFrame, current_match: int):
     return train_data, test_data
 
 
-def load_config():
+def load_config() -> OmegaConfigLoader:
     """
     Loads a Kedro-style configuration using OmegaConf.
 
-    Returns
-    -------
-    conf_loader : OmegaConfigLoader
-        An object capable of loading and merging configuration files
-        from the project's conf directory.
+    This function constructs the configuration loader by determining the project's configuration
+    directory based on the Kedro settings and returns an OmegaConfigLoader instance that can load
+    and merge configuration files from that directory.
 
-    Notes
-    -----
-    - Relies on `settings.CONF_SOURCE` for the conf path inside the Kedro project.
-    - Adjusts `proj_path` to be the parent of the current file, then appends `CONF_SOURCE`.
+    Returns:
+        OmegaConfigLoader: An object capable of loading and merging configuration files from the project's conf directory.
     """
     proj_path = Path(__file__).parent.parent.parent.parent
     conf_path = str(proj_path / settings.CONF_SOURCE)
@@ -89,27 +77,18 @@ def load_config():
 
 def merge_dicts(dict1, dict2):
     """
-    Recursively merge two dictionaries or OmegaConf DictConfigs.
+    Recursively merges two dictionaries or OmegaConf DictConfigs.
 
-    If a key exists in both `dict1` and `dict2`, and both values are
-    `omegaconf.DictConfig`, this function merges them recursively.
-    Otherwise, the value in `dict2` overwrites the value in `dict1`.
+    If a key exists in both dictionaries and both corresponding values are DictConfigs,
+    they are merged recursively. Otherwise, the value from the second dictionary overwrites
+    the value from the first. A deep copy is used to avoid modifying the original dictionaries.
 
-    Parameters
-    ----------
-    dict1 : dict or omegaconf.DictConfig
-        The first dictionary / config to merge.
-    dict2 : dict or omegaconf.DictConfig
-        The second dictionary / config, whose values take precedence.
+    Parameters:
+        dict1 (dict or omegaconf.DictConfig): The first dictionary or configuration.
+        dict2 (dict or omegaconf.DictConfig): The second dictionary or configuration, whose values take precedence.
 
-    Returns
-    -------
-    dict
-        A new dictionary-like object containing the merged keys/values.
-
-    Notes
-    -----
-    - Uses `deepcopy` to avoid modifying the input dictionaries in-place.
+    Returns:
+        dict: A new dictionary containing the merged keys and values.
     """
     result = deepcopy(dict1)
     for key, value in dict2.items():
@@ -124,50 +103,35 @@ def merge_dicts(dict1, dict2):
     return result
 
 
-def get_teams(model):
+def get_teams(model: FootballModel) -> pd.DataFrame:
     """
-    Retrieves the `team_lexicon` attribute from a model object.
+    Retrieves the team lexicon from a model object.
 
-    Parameters
-    ----------
-    model : Any
-        An object (usually a trained model) that holds a `team_lexicon`
-        attribute.
+    This function extracts and returns the 'team_lexicon' attribute from the given model,
+    which contains a mapping of team names to unique indices.
 
-    Returns
-    -------
-    team_lexicon : Any
-        Whatever is stored in `model.team_lexicon` (often a DataFrame or dict).
+    Parameters:
+        model (FootballModel): A model object that holds a 'team_lexicon' attribute.
+
+    Returns:
+        pd.DataFrame: The team lexicon, as a DataFrame.
     """
     return model.team_lexicon
 
 
-def get_goal_distribution(diff, max_goals=20):
+def get_goal_distribution(diff, max_goals: int = 20):
     """
-    Computes a Poisson-based probability distribution over 0..max_goals-1 goals,
-    given a set of Poisson rate parameters (lambdas) in `diff`.
+    Computes a Poisson-based probability distribution over 0 to max_goals-1 goals.
 
-    The function first calculates a Poisson PMF for each lambda and sums them,
-    then normalizes the resulting distribution.
+    For each lambda value in 'diff', the function calculates the Poisson probability mass function (PMF),
+    sums these probabilities element-wise, and then normalizes the result to form a valid probability distribution. (unused)
 
-    Parameters
-    ----------
-    diff : iterable of float
-        A collection of lambda values for Poisson distributions. Each value
-        is clamped to a minimum of `low` to avoid zero or negative rates.
-    max_goals : int, optional
-        The maximum number of goals to consider (default is 20).
+    Parameters:
+        diff (iterable of float): Lambda values for Poisson distributions, each clamped to a minimum threshold.
+        max_goals (int, optional): The maximum number of goals to consider (default is 20).
 
-    Returns
-    -------
-    poisson_goals : np.ndarray
-        A normalized array of length `max_goals` representing the combined
-        Poisson probabilities across all lambdas.
-
-    Notes
-    -----
-    - If multiple lambdas are provided, their PMFs are summed element-wise
-      and then re-normalized to sum to 1.
+    Returns:
+        np.ndarray: A normalized array of length 'max_goals' representing the combined Poisson probabilities.
     """
     poisson_goals = np.zeros(max_goals)
     k = np.arange(0, max_goals)
@@ -181,28 +145,18 @@ def get_goal_distribution(diff, max_goals=20):
 
 def brier_score(test_goal: pd.DataFrame, toto_probs: pd.DataFrame) -> float:
     """
-    Computes the Brier Score (multi-class version) for match outcomes: home, away, tie.
+    Computes the mean Brier Score for multi-class match outcomes.
 
-    Parameters
-    ----------
-    test_goal : pd.DataFrame
-        Must contain a column 'true_result' indicating the actual match outcome
-        ('home', 'away', or 'tie').
-    toto_probs : pd.DataFrame
-        Predicted probabilities with columns ['home', 'away', 'tie'].
+    The Brier Score is calculated as the mean squared error between the one-hot encoded true outcomes
+    and the predicted probability distributions for outcomes ('home', 'away', 'tie'). If certain categories
+    are missing in the true outcomes, they are filled with zeros.
 
-    Returns
-    -------
-    float
-        The mean Brier Score over the rows of data.
+    Parameters:
+        test_goal (pd.DataFrame): DataFrame containing the true match outcomes in a column 'true_result'.
+        toto_probs (pd.DataFrame): DataFrame with predicted probabilities for outcomes in columns ['home', 'away', 'tie'].
 
-    Notes
-    -----
-    - The Brier Score is the mean squared error between the one-hot encoded
-      true outcome and the predicted probability distribution.
-    - If test_goal has fewer than 3 categories, reindexing ensures
-      columns 'home', 'away', and 'tie' exist, filling missing categories
-      with 0. This might happen if all matches in `test_goal` had the same result.
+    Returns:
+        float: The average Brier Score computed over all matches.
     """
     # Convert true_result to one-hot
     one_hot = pd.get_dummies(test_goal["true_result"])
@@ -214,27 +168,18 @@ def brier_score(test_goal: pd.DataFrame, toto_probs: pd.DataFrame) -> float:
 
 def rps(test_goals: pd.DataFrame, toto_probs: pd.DataFrame) -> float:
     """
-    Calculates the mean Ranked Probability Score (RPS) for a set of matches
-    with possible outcomes 'home', 'away', or 'tie'.
+    Calculates the average Ranked Probability Score (RPS) for a set of matches.
 
-    Parameters
-    ----------
-    test_goals : pd.DataFrame
-        Contains a column 'true_result' with the actual outcome per match.
-    toto_probs : pd.DataFrame
-        Contains columns ['home', 'away', 'tie'] with predicted probabilities.
+    The RPS measures the quality of probabilistic predictions by comparing the cumulative predicted probabilities
+    against the cumulative true outcomes for each match. The function applies the single-match RPS calculation
+    (using rps_3) across all matches and returns the mean score.
 
-    Returns
-    -------
-    float
-        The average RPS across all matches.
+    Parameters:
+        test_goals (pd.DataFrame): DataFrame containing the actual outcomes in a column 'true_result'.
+        toto_probs (pd.DataFrame): DataFrame with predicted probabilities in columns ['home', 'away', 'tie'].
 
-    Notes
-    -----
-    - The function applies `rps_3` row by row, passing the predicted
-      probabilities for 'away', 'tie', 'home', and the actual result.
-    - RPS is a measure of how well-structured the probability distribution
-      is, taking into account the ordinal nature of outcomes if applicable.
+    Returns:
+        float: The mean RPS across all matches.
     """
     rps_values = []
     for i in range(len(test_goals)):
@@ -249,32 +194,20 @@ def rps(test_goals: pd.DataFrame, toto_probs: pd.DataFrame) -> float:
 
 def rps_3(prob_away: float, prob_tie: float, prob_home: float, actual: str) -> float:
     """
-    Computes the Ranked Probability Score (RPS) for a single match with three
-    possible outcomes (away, tie, home).
+    Computes the Ranked Probability Score (RPS) for a single match with three outcomes.
 
-    Parameters
-    ----------
-    prob_away : float
-        Predicted probability for 'away' outcome.
-    prob_tie : float
-        Predicted probability for 'tie' outcome.
-    prob_home : float
-        Predicted probability for 'home' outcome.
-    actual : {'away', 'tie', 'home'}
-        The actual observed outcome of the match.
+    The RPS is calculated by comparing the cumulative predicted probabilities with the cumulative true outcomes.
+    The function assumes an ordinal order of outcomes (away < tie < home) and sums the squared differences
+    of the cumulative distributions.
 
-    Returns
-    -------
-    float
-        The RPS value for this single match.
+    Parameters:
+        prob_away (float): Predicted probability for an away win.
+        prob_tie (float): Predicted probability for a tie.
+        prob_home (float): Predicted probability for a home win.
+        actual (str): The actual outcome ('away', 'tie', or 'home').
 
-    Notes
-    -----
-    - RPS is computed by first forming cumulative probabilities in the
-      order (away, tie, home). Then, each partial sum is compared to
-      the true outcome's partial sum. The squared differences are summed.
-    - The order assumed here is away < tie < home. If `actual == 'away'`,
-      that implies O0=1, O1=1, else if `actual == 'tie'`, then O0=0, O1=1, etc.
+    Returns:
+        float: The RPS value for the single match.
     """
     # Cumulative predicted distribution
     F0 = prob_away
@@ -293,26 +226,17 @@ def rps_3(prob_away: float, prob_tie: float, prob_home: float, actual: str) -> f
 
 def log_likelihood(toto_probs: pd.DataFrame, test_goals: pd.DataFrame) -> float:
     """
-    Calculates the negative log-likelihood (NLL) for predicted match outcome
-    probabilities vs. the true results.
+    Calculates the negative log-likelihood for predicted match outcome probabilities.
 
-    Parameters
-    ----------
-    toto_probs : pd.DataFrame
-        Contains columns ['home', 'away', 'tie'] representing the predicted
-        probabilities for each match.
-    test_goals : pd.DataFrame
-        Must have a column 'true_result' with values in {'home','away','tie'}.
+    This function computes the negative log-likelihood by extracting the probability assigned to the true outcome
+    for each match, applying a small epsilon to prevent log(0), and returning the negative mean of the log probabilities.
 
-    Returns
-    -------
-    float
-        The average negative log-likelihood across all matches.
+    Parameters:
+        toto_probs (pd.DataFrame): DataFrame with predicted probabilities in columns ['home', 'away', 'tie'].
+        test_goals (pd.DataFrame): DataFrame containing the true match outcomes in a column 'true_result'.
 
-    Notes
-    -----
-    - A small epsilon (1e-12) is added to avoid log(0) issues.
-    - The final result is -mean(log(prob_of_true_outcome)).
+    Returns:
+        float: The average negative log-likelihood across all matches.
     """
     merged = pd.concat([toto_probs, test_goals["true_result"]], axis=1)
     EPS = 1e-12
@@ -324,60 +248,40 @@ def log_likelihood(toto_probs: pd.DataFrame, test_goals: pd.DataFrame) -> float:
 
 def get_probability(row: pd.Series) -> float:
     """
-    Extracts the probability of the true outcome from a row containing
-    'home', 'away', 'tie', and 'true_result' columns.
+    Extracts the probability of the true outcome from a DataFrame row.
 
-    Parameters
-    ----------
-    row : pd.Series
-        Must include:
-          - 'home': float
-          - 'away': float
-          - 'tie':  float
-          - 'true_result': str in {'home','away','tie'}
+    Given a row that includes predicted probabilities for 'home', 'away', and 'tie', along with the actual outcome
+    specified in 'true_result', this function returns the probability corresponding to the actual outcome.
 
-    Returns
-    -------
-    float
-        Probability of the actual outcome (row['true_result']).
+    Parameters:
+        row (pd.Series): A row containing keys 'home', 'away', 'tie', and 'true_result'.
+
+    Returns:
+        float: The predicted probability for the true outcome.
     """
     return row[row["true_result"]]
 
 
-def rmse_mae(predictions: pd.DataFrame, test_data: pd.DataFrame):
+def rmse_mae(
+    predictions: pd.DataFrame, test_data: pd.DataFrame
+) -> tuple[float, float, float, float]:
     """
-    Calculates RMSE and MAE for predicted vs. actual goals in home and away scenarios.
+    Calculates RMSE and MAE for predicted versus actual goals in home and away scenarios.
 
-    Parameters
-    ----------
-    predictions : pd.DataFrame
-        A DataFrame with columns ['home_goals', 'away_goals'] representing
-        predicted goals.
-    test_data : pd.DataFrame
-        A DataFrame with columns ['home_goals', 'away_goals'] representing
-        actual goals. Typically contains a single row or consistent values
-        for the test match(es).
+    The function computes the root mean squared error (RMSE) and mean absolute error (MAE) separately for home
+    and away goals by comparing the predictions against the actual values provided in test_data. Both inputs are
+    reindexed to ensure proper alignment.
 
-    Returns
-    -------
-    (float, float, float, float)
-        (rmse_home, mae_home, rmse_away, mae_away), where:
-          - rmse_home : float
-              RMSE for home goals
-          - mae_home : float
-              MAE for home goals
-          - rmse_away : float
-              RMSE for away goals
-          - mae_away : float
-              MAE for away goals
+    Parameters:
+        predictions (pd.DataFrame): DataFrame with predicted goals in columns ['home_goals', 'away_goals'].
+        test_data (pd.DataFrame): DataFrame with actual goals in columns ['home_goals', 'away_goals'].
 
-    Notes
-    -----
-    - Both `predictions` and `test_data` are reset_index to avoid alignment
-      issues when subtracting Series.
-    - This function assumes that for each index i in `predictions`, the
-      corresponding row in `test_data` has the relevant actual goals.
-      If `test_data` has only one row, it is reused.
+    Returns:
+        tuple[float, float, float, float]: A tuple containing four floats:
+            - rmse_home: RMSE for home goals.
+            - mae_home: MAE for home goals.
+            - rmse_away: RMSE for away goals.
+            - mae_away: MAE for away goals.
     """
     predictions = predictions.reset_index(drop=True)
     test_data = test_data.reset_index(drop=True)

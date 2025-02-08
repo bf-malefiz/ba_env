@@ -3,6 +3,7 @@ import pandas as pd
 import pyro
 import pyro.distributions as dist
 import torch
+
 from bundesliga import settings
 from bundesliga.model.pyro.pyro_model import PyroModel
 from bundesliga.model.pyro.pyro_parameters import FootballParameters
@@ -20,7 +21,7 @@ class SimplePyroModel(PyroModel):
         prior_diff (float): A prior value for the difference in team offensive strengths.
     """
 
-    def __init__(self, team_lexicon, parameters, prior_diff=np.log(1.5)):
+    def __init__(self, team_lexicon, parameters, prior_diff=np.log(1.5)) -> None:
         """
         Initializes the SimplePyroModel with team lexicon, parameters, and a prior difference.
 
@@ -69,7 +70,7 @@ class SimplePyroModel(PyroModel):
         diff_ji = np.exp(team2_offence_samples - team1_defence_samples)
         return diff_ij, diff_ji
 
-    def predict_goals(self, test_data, **kwargs):
+    def predict_goals(self, test_data, **kwargs) -> pd.DataFrame:
         """
         Predicts the goals scored by home and away teams based on test data.
 
@@ -104,7 +105,7 @@ class SimplePyroModel(PyroModel):
 
         return df
 
-    def get_model(self):
+    def get_model(self) -> callable:
         """
         Defines the probabilistic model for team offensive and defensive strengths.
 
@@ -156,7 +157,7 @@ class SimplePyroModel(PyroModel):
 
         return _model
 
-    def get_guide(self):
+    def get_guide(self) -> callable:
         """
         Defines the guide (variational distribution) for variational inference.
 

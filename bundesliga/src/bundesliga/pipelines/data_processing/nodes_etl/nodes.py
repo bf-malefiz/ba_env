@@ -1,7 +1,19 @@
-from collections import OrderedDict
+"""
+Module: data_processing
+
+Summary:
+    Functions for processing football match data to build a team lexicon, extract goal results,
+    and vectorize the data for modeling.
+
+Dependencies:
+    - numpy as np
+    - pandas as pd
+    - bundesliga.utils.validation.validate_dataframe
+"""
 
 import numpy as np
 import pandas as pd
+
 from bundesliga.utils.validation import validate_dataframe
 
 GOALS_HOME = "FTHG"
@@ -49,21 +61,27 @@ def build_team_lexicon(df: pd.DataFrame) -> pd.DataFrame:
     required_index="team",
     allow_empty=False,
 )
-def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame):
+def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame) -> pd.DataFrame:
     """
     Extracts goal results from the input DataFrame and maps team names to their indices.
 
-    This function iterates over the input DataFrame and maps the home and away team names
-    to their corresponding indices using the provided team lexicon. It returns a DataFrame
-    containing tuples of (home_team_index, away_team_index, goals) for each match.
+    This function validates that the goal columns contain numerical values, checks for valid match entries
+    (e.g., ensuring that a team does not play against itself and that goal values are non-negative), and then
+    maps team names to their unique indices using the provided team lexicon. It returns a DataFrame containing
+    goal results as tuples for home and away teams.
 
     Args:
-        df (pd.DataFrame): The input DataFrame containing match data with "HomeTeam" and "AwayTeam" columns.
-        lexicon (pd.DataFrame): The team lexicon mapping team names to indices.
+        df (pd.DataFrame): The input DataFrame containing match data with "HomeTeam", "AwayTeam", and goal columns.
+        lexicon (pd.DataFrame): The team lexicon mapping team names to unique indices.
 
     Returns:
-        pd.DataFrame: A DataFrame containing goal results with columns "home_goals" and "away_goals".
-                      Each entry is a tuple of (home_team_index, away_team_index, goals).
+        pd.DataFrame: A DataFrame with two columns:
+                      - "home_goals": Tuples of (home_team_index, away_team_index, home goals).
+                      - "away_goals": Tuples of (home_team_index, away_team_index, away goals).
+
+    Raises:
+        ValueError: If non-numerical values are detected in the goal columns, if a match has the same team
+                    for both home and away, or if negative goal values are present.
     """
 
     try:
@@ -104,6 +122,11 @@ def get_goal_results(df: pd.DataFrame, lexicon: pd.DataFrame):
 def vectorize_data(goals: pd.DataFrame) -> pd.DataFrame:
     """
     Vectorizes the goal results into a structured DataFrame.
+
+    This function processes the tuples in the "home_goals" and "away_goals" columns to extract individual
+    components (team indices and goals scored), calculates the match outcome (toto) based on the goals, and
+    constructs a new DataFrame with separate columns for home team index, away team index, home goals, away goals,
+    and the match result.
 
     Args:
         goals (pd.DataFrame): A DataFrame containing goal results with columns "home_goals" and "away_goals".

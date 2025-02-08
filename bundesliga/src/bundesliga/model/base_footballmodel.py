@@ -1,5 +1,18 @@
+"""
+Module: football_model.py
+
+Summary:
+    An abstract base class for football match prediction models.
+
+Dependencies:
+    - abc (ABC, abstractmethod)
+    - typing (Annotated, Any, Dict, Union)
+    - numpy as np
+    - pandas as pd
+"""
+
 from abc import ABC, abstractmethod
-from typing import Annotated, Any, Dict, Union
+from typing import Annotated, Any, Union
 
 import numpy as np
 import pandas as pd
@@ -13,7 +26,7 @@ class FootballModel(ABC):
     Subclasses must implement the `train` and `predict_toto_probabilities` methods.
 
     Methods:
-        train(X, y, **kwargs): Trains the model using the provided data.
+        train(X, y, **kwargs): Abstract train method using the provided data.
         predict_toto_probabilities(predictions, **kwargs): Predicts match outcome probabilities.
         _validate_output(output): Validates the output of predictions.
     """
@@ -26,12 +39,12 @@ class FootballModel(ABC):
         **kwargs,
     ) -> None:
         """
-        Trains the model using the provided data.
+        Ensures the implementation of a training method for the model.
 
         Args:
-            X: Input features for training. The exact format depends on the implementation.
-            y: Target labels for training. The exact format depends on the implementation.
-            **kwargs: Additional keyword arguments for training.
+            X: Needed input features for training. The exact format depends on the implementation.
+            y: Needed target labels for training. The exact format depends on the implementation.
+            **kwargs: Additional keyword arguments.
 
         Raises:
             NotImplementedError: If the method is not implemented by a subclass.
@@ -40,13 +53,13 @@ class FootballModel(ABC):
 
     @abstractmethod
     def predict_toto_probabilities(
-        self, predictions: Union[pd.DataFrame, np.ndarray, Dict[str, Any]], **kwargs
+        self, predictions: Union[pd.DataFrame, np.ndarray, dict[str, Any]], **kwargs
     ) -> Annotated[np.ndarray, "shape=(3,)", "dtype=float"]:
         """
-        Predicts the probabilities of match outcomes (toto).
+        Ensures the implementation to predict the probabilities of match outcomes (toto).
 
         Args:
-            predictions: Input data for making predictions. The exact format depends on the implementation.
+            predictions: Needed input data for making predictions. The exact format depends on the implementation.
             **kwargs: Additional keyword arguments for prediction.
 
         Returns:
@@ -58,7 +71,7 @@ class FootballModel(ABC):
         Raises:
             NotImplementedError: If the method is not implemented by a subclass.
         """
-        pass
+        raise NotImplementedError
 
     def _validate_output(
         self, output: np.ndarray, expected_shape: tuple = (1, 3)

@@ -63,6 +63,7 @@ Expected Outcome:
 # =============================================================================
 import pandas as pd
 import pytest
+
 from bundesliga.pipelines.data_processing.nodes_etl.nodes import (
     build_team_lexicon,
     get_goal_results,
@@ -114,7 +115,10 @@ def goals_df_expected():
 # =============================================================================
 def test_build_team_lexicon_empty_df():
     """
-    Ensures `build_team_lexicon` raises an error for an empty DataFrame.
+    Ensures that build_team_lexicon raises an error for an empty DataFrame.
+
+    This test verifies that when an empty DataFrame (with the required columns) is passed to
+    build_team_lexicon, the function correctly raises a ValueError indicating that the DataFrame is empty.
     """
     empty_df = pd.DataFrame(columns=["HomeTeam", "AwayTeam"])
 
@@ -126,8 +130,10 @@ def test_build_team_lexicon_empty_df():
 
 def test_build_team_lexicon(sample_data):
     """
-    Tests whether `build_team_lexicon` correctly creates a DataFrame
-    with teams as the index and their assigned numerical IDs.
+    Tests that build_team_lexicon correctly creates a lexicon mapping team names to numeric indices.
+
+    The test checks that the output DataFrame has teams as its index, includes the 'index' column,
+    and contains the expected number of teams.
     """
     lex = build_team_lexicon(sample_data)
 
@@ -141,7 +147,10 @@ def test_build_team_lexicon(sample_data):
 
 def test_build_team_lexicon_missing_columns():
     """
-    Ensures `build_team_lexicon` raises an error if required columns are missing.
+    Ensures that build_team_lexicon raises an error when required columns are missing.
+
+    This test provides a DataFrame that lacks the necessary 'HomeTeam' and 'AwayTeam' columns and
+    asserts that a ValueError is raised with an appropriate error message.
     """
     incomplete_df = pd.DataFrame(
         {"FTHG": [1], "FTAG": [2]}
@@ -160,8 +169,11 @@ def test_build_team_lexicon_missing_columns():
 
 def test_get_goal_results(sample_data, lexicon_expected):
     """
-    Tests whether `get_goal_results` correctly extracts goal results
-    and assigns team indices.
+    Tests that get_goal_results correctly extracts goal results and assigns team indices.
+
+    This test verifies that the function produces an output DataFrame containing the columns 'home_goals'
+    and 'away_goals', where each entry is a tuple of (home_id, away_id, goals). It confirms that the structure
+    of the output matches expectations.
     """
     goals = get_goal_results(sample_data, lexicon_expected)
 
@@ -174,7 +186,10 @@ def test_get_goal_results(sample_data, lexicon_expected):
 
 def test_get_goal_results_missing_columns(lexicon_expected):
     """
-    Ensures `get_goal_results` raises an error when required columns are missing.
+    Ensures that get_goal_results raises an error when required columns are missing.
+
+    The test uses a DataFrame missing the 'AwayTeam' and 'FTAG' columns and asserts that the function
+    raises a ValueError indicating the missing required columns.
     """
     bad_df = pd.DataFrame(
         {"HomeTeam": ["TeamX"], "FTHG": [1]}
@@ -188,8 +203,10 @@ def test_get_goal_results_missing_columns(lexicon_expected):
 
 def test_get_goal_results_id_alignment(sample_data, lexicon_expected):
     """
-    Verifies that team indices in `goals_df` match their corresponding
-    indices in the lexicon.
+    Verifies that the team indices in the goal results match those in the lexicon.
+
+    For each match in the sample data, the test checks that the home and away team indices in the tuples
+    produced by get_goal_results align with the corresponding indices in the expected lexicon.
     """
     goals = get_goal_results(sample_data, lexicon_expected)
 
@@ -217,7 +234,11 @@ def test_get_goal_results_id_alignment(sample_data, lexicon_expected):
 
 def test_vectorize_data(goals_df_expected):
     """
-    Tests whether `vectorize_data` correctly generates the expected columns.
+    Tests that vectorize_data produces the expected output DataFrame.
+
+    This test confirms that the output from vectorize_data includes the required columns
+    ('home_id', 'away_id', 'home_goals', 'away_goals', 'toto') and that the number of rows matches
+    the input goal DataFrame.
     """
     result = vectorize_data(goals_df_expected)
 
@@ -229,7 +250,10 @@ def test_vectorize_data(goals_df_expected):
 
 def test_vectorize_data_missing_columns():
     """
-    Ensures `vectorize_data` raises an error when required columns are missing.
+    Ensures that vectorize_data raises an error when required columns are missing.
+
+    The test passes a DataFrame missing the expected goal columns to vectorize_data and asserts that
+    a ValueError is raised with an appropriate error message.
     """
     bad_goals = pd.DataFrame({"some_column": [1]})
 
@@ -246,7 +270,10 @@ def test_vectorize_data_missing_columns():
 
 def test_same_home_away_team():
     """
-    Ensures that `get_goal_results` raises an error when HomeTeam == AwayTeam.
+    Ensures that get_goal_results raises an error when the HomeTeam is the same as the AwayTeam.
+
+    This test provides a DataFrame where at least one match has identical values for HomeTeam and AwayTeam,
+    and verifies that get_goal_results raises a ValueError indicating an invalid match.
     """
     df = pd.DataFrame(
         {
@@ -267,7 +294,10 @@ def test_same_home_away_team():
 
 def test_negative_goals():
     """
-    Ensures that `get_goal_results` raises an error for negative goal values.
+    Ensures that get_goal_results raises an error when negative goal values are encountered.
+
+    The test supplies a DataFrame with negative values in the goal columns and asserts that a ValueError
+    is raised due to the invalid negative goal values.
     """
     df = pd.DataFrame(
         {
@@ -286,7 +316,10 @@ def test_negative_goals():
 
 def test_non_numeric_goals():
     """
-    Ensures that `get_goal_results` raises an error for non-numeric goal values.
+    Ensures that get_goal_results raises an error when non-numeric goal values are provided.
+
+    This test passes a DataFrame with non-numeric data in the goal column (e.g., a string) and checks that
+    a ValueError is raised, indicating that non-numeric values are not acceptable.
     """
     df = pd.DataFrame(
         {

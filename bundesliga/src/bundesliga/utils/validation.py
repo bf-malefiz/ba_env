@@ -1,9 +1,6 @@
 import functools
-import logging
 
 import pandas as pd
-
-logging.basicConfig(level=logging.INFO)
 
 
 def validate_dataframe(
@@ -13,27 +10,31 @@ def validate_dataframe(
     allow_empty=False,
 ):
     """
-    Decorator für Nodes, die mit Pandas DataFrames arbeiten.
+    Decorator for nodes that work with Pandas DataFrames.
 
-    - Prüft, ob der erste Funktionsparameter ein DataFrame ist.
-    - Falls required_columns angegeben sind, wird geprüft, ob diese Spalten existieren.
-    - Falls allow_empty=False, wird geprüft, ob der DataFrame leer ist.
-    - Misst die Laufzeit der Funktion (Performance-Tracking).
+    This decorator validates that the argument specified by `df_arg_name` is a Pandas DataFrame.
+    It checks that the DataFrame is non-empty (if allow_empty is False), contains the required columns,
+    and has the expected index name (if required_index is provided).
 
     Args:
-        required_columns (list, optional): Liste von Spaltennamen, die existieren müssen.
-        allow_empty (bool): Falls False, wird ein leerer DataFrame als Fehler behandelt.
+        df_arg_name (str, optional): The name of the DataFrame argument to validate. Defaults to "df_name".
+        required_columns (list, optional): A list of column names that must be present in the DataFrame.
+        required_index (str, optional): The expected name of the DataFrame's index.
+        allow_empty (bool, optional): If False, the DataFrame must not be empty. Defaults to False.
+
+    Returns:
+        function: The decorated function with added DataFrame validation.
     """
     required_columns = required_columns or []
 
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # Wir versuchen zuerst, `df_arg_name` in kwargs zu finden
+            # Check if `df_arg_name` in kwargs
             if df_arg_name in kwargs:
                 df = kwargs[df_arg_name]
             else:
-                # Falls kein Keyword-Argument, schauen wir positional nach
+                # else check positional arguments
                 import inspect
 
                 sig = inspect.signature(func)
@@ -51,7 +52,9 @@ def validate_dataframe(
                 raise TypeError(f"DataFrame '{df_arg_name}' is not a DataFrame.")
 
             if not allow_empty and df.empty:
-                raise ValueError(f"DataFrame '{df_arg_name}' is empty in {func.__name__}.")
+                raise ValueError(
+                    f"DataFrame '{df_arg_name}' is empty in {func.__name__}."
+                )
 
             missing_cols = [col for col in required_columns if col not in df.columns]
             if missing_cols:

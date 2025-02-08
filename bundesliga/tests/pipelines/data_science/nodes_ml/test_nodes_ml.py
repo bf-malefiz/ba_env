@@ -147,7 +147,12 @@ def dummy_predictions():
 
 
 def test_init_model_pymc_simple(lexicon_expected, model_options):
-    """Tests if the PyMC simple model initializes correctly."""
+    """
+    Tests if the PyMC simple model initializes correctly.
+
+    Verifies that when model_options specify "simple" for the model and "pymc" for the engine,
+    init_model returns an instance of SimplePymcModel.
+    """
     model_options["model"] = "simple"
     model_options["engine"] = "pymc"
     model = init_model(lexicon_expected, model_options)
@@ -155,7 +160,12 @@ def test_init_model_pymc_simple(lexicon_expected, model_options):
 
 
 def test_init_model_pyro_simple(lexicon_expected, model_options):
-    """Tests if the Pyro simple model initializes correctly."""
+    """
+    Tests if the Pyro simple model initializes correctly.
+
+    Verifies that when model_options specify "simple" for the model and "pyro" for the engine,
+    init_model returns an instance of SimplePyroModel.
+    """
     model_options["model"] = "simple"
     model_options["engine"] = "pyro"
     model = init_model(lexicon_expected, model_options)
@@ -163,7 +173,12 @@ def test_init_model_pyro_simple(lexicon_expected, model_options):
 
 
 def test_init_model_pyro_toto_not_implemented(lexicon_expected, model_options):
-    """Tests if initializing a Pyro 'toto' model raises NotImplementedError."""
+    """
+    Tests that initializing a Pyro 'toto' model raises NotImplementedError.
+
+    When model_options specify "toto" for the model and "pyro" for the engine,
+    verifies that init_model raises a NotImplementedError with an appropriate message.
+    """
     model_options["model"] = "toto"
     model_options["engine"] = "pyro"
     with pytest.raises(NotImplementedError, match="Pyro-toto not implemented."):
@@ -171,7 +186,12 @@ def test_init_model_pyro_toto_not_implemented(lexicon_expected, model_options):
 
 
 def test_train_happy_path(sample_train_data):
-    """Ensures that 'train' runs successfully with valid input data."""
+    """
+    Ensures that the train function executes successfully with valid input data.
+
+    Mocks a model's train method and confirms that train is called correctly,
+    returning the model instance without errors.
+    """
     mock_model = MagicMock()
     mock_model.train.return_value = "some_inference_data"
     parameters = {"lr": 0.01}
@@ -181,7 +201,12 @@ def test_train_happy_path(sample_train_data):
 
 
 def test_train_missing_columns():
-    """Ensures 'train' raises ValueError when required columns are missing."""
+    """
+    Ensures that the train function raises a ValueError when required columns are missing.
+
+    Provides a DataFrame missing necessary columns and verifies that a ValueError
+    is raised with an appropriate error message.
+    """
     df_missing = pd.DataFrame({"home_id": [0]})
     mock_model = MagicMock()
     with pytest.raises(ValueError, match="Missing required columns"):
@@ -189,7 +214,12 @@ def test_train_missing_columns():
 
 
 def test_predict_goals(sample_test_data):
-    """Ensures 'predict_goals' correctly invokes the model's predict method."""
+    """
+    Tests that the predict_goals function correctly invokes the model's prediction method.
+
+    Mocks a model's predict_goals method, checks that it is called with the provided test data,
+    and verifies that the output is a DataFrame.
+    """
     mock_model = MagicMock()
     mock_model.predict_goals.return_value = pd.DataFrame(
         {"home_goals": [2], "away_goals": [1]}
@@ -200,7 +230,12 @@ def test_predict_goals(sample_test_data):
 
 
 def test_evaluate_home_win(sample_test_data, dummy_predictions):
-    """Tests if 'evaluate' correctly computes accuracy when home team wins."""
+    """
+    Tests the evaluate_match function for a scenario where the home team wins.
+
+    Mocks the model's predict_toto_probabilities method to return probabilities favoring a home win,
+    and verifies that evaluate_match interprets the prediction correctly as "home".
+    """
     mock_model = MagicMock()
     mock_model.predict_toto_probabilities.return_value = np.array([[0.6, 0.2, 0.2]])
     results = evaluate_match(
@@ -210,7 +245,12 @@ def test_evaluate_home_win(sample_test_data, dummy_predictions):
 
 
 def test_determine_winner():
-    """Tests the 'determine_winner' function for different match outcomes."""
+    """
+    Tests the determine_winner function for correctly assigning match outcomes.
+
+    Provides a DataFrame with varying home and away goal counts and verifies that the resulting
+    'winner' column correctly indicates "home", "away", or "tie" for each row.
+    """
     preds = pd.DataFrame({"home_goals": [2, 1, 3], "away_goals": [1, 2, 3]})
     result = determine_winner(preds)
     assert "winner" in result.columns
@@ -220,7 +260,12 @@ def test_determine_winner():
 
 
 def test_true_result():
-    """Ensures 'true_result' correctly determines match outcomes."""
+    """
+    Verifies that the true_result function correctly determines the actual match outcome.
+
+    Checks that given sample goal data for home win, away win, and tie scenarios,
+    true_result returns "home", "away", and "tie" respectively.
+    """
     row_home_win = pd.Series({"home_goals": 3, "away_goals": 1})
     row_away_win = pd.Series({"home_goals": 1, "away_goals": 4})
     row_tie = pd.Series({"home_goals": 2, "away_goals": 2})
@@ -230,7 +275,12 @@ def test_true_result():
 
 
 def test_predicted_result():
-    """Ensures 'predicted_result' returns the highest probability outcome."""
+    """
+    Verifies that the predicted_result function returns the outcome with the highest probability.
+
+    Given sample probability distributions for different scenarios,
+    confirms that predicted_result identifies "home", "away", or "tie" appropriately.
+    """
     probs_home = pd.Series({"home": 0.5, "away": 0.3, "tie": 0.2})
     probs_away = pd.Series({"home": 0.3, "away": 0.6, "tie": 0.1})
     probs_tie = pd.Series({"home": 0.2, "away": 0.2, "tie": 0.6})
