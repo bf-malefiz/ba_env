@@ -1,4 +1,4 @@
-bundesliga.model.pymc package
+PyMC
 =============================
 
 .. automodule:: bundesliga.model.pymc

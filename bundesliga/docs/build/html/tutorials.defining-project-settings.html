@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bundesliga package &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
+  <title>Defining Project Settings &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=345afb5f" />
@@ -20,8 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="hooks package" href="bundesliga.hooks.html" />
-    <link rel="prev" title="BA - Bayesian Model Evaluation Documentation" href="index.html" /> 
+    <link rel="next" title="Running a Kedro Pipeline" href="tutorials.run.html" />
+    <link rel="prev" title="Setting up the Environment" href="tutorials.environment.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,8 +45,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">bundesliga package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#src-module">Src module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#src-module">Src module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="bundesliga.hooks.html">hooks package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html#module-bundesliga.hooks.model_tracking_hooks">model_tracking_hooks</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks</span></code></a><ul>
@@ -178,18 +178,18 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-bundesliga.pipeline_registry">pipeline_registry module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#bundesliga.pipeline_registry.build_engine_pipelines"><code class="docutils literal notranslate"><span class="pre">build_engine_pipelines()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bundesliga.pipeline_registry.read_matchlength_from_data"><code class="docutils literal notranslate"><span class="pre">read_matchlength_from_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bundesliga.pipeline_registry.register_pipelines"><code class="docutils literal notranslate"><span class="pre">register_pipelines()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#module-bundesliga.pipeline_registry">pipeline_registry module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.build_engine_pipelines"><code class="docutils literal notranslate"><span class="pre">build_engine_pipelines()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.read_matchlength_from_data"><code class="docutils literal notranslate"><span class="pre">read_matchlength_from_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.register_pipelines"><code class="docutils literal notranslate"><span class="pre">register_pipelines()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-bundesliga.settings">settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#module-bundesliga.settings">settings module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="tutorials.environment.html">Setting up the Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.defining-project-settings.html">Defining Project Settings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Defining Project Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.run.html">Running a Kedro Pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.visualizing-results.html">Visualizing results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.adding-model.html">Adding Models to the Pipeline</a></li>
@@ -211,9 +211,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">bundesliga package</li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Defining Project Settings</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/bundesliga.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/tutorials.defining-project-settings.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -221,192 +222,96 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="bundesliga-package">
-<h1>bundesliga package<a class="headerlink" href="#bundesliga-package" title="Link to this heading"></a></h1>
-<section id="src-module">
-<h2>Src module<a class="headerlink" href="#src-module" title="Link to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bundesliga.hooks.html">hooks package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.hooks.html#module-bundesliga.hooks.model_tracking_hooks">model_tracking_hooks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="bundesliga.model.html">model package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.model.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.model.pymc.html">PyMC</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.pymc.html#pymc-model">pymc_model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.pymc.html#pymc-simple-model">pymc_simple_model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.pymc.html#pymc-toto-model">pymc_toto_model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.model.pyro.html">Pyro</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_model">pyro_model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_parameters">pyro_parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_simple_model">pyro_simple_model</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.model.html#abstract-footballmodel">Abstract FootballModel</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="bundesliga.pipelines.html">pipelines package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.pipelines.html#pipelines">pipelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_processing.html">data_processing</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#subpackages">Subpackages</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.html">data_science</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_model_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_definition_node()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_subpipeline_for_match"><code class="docutils literal notranslate"><span class="pre">create_subpipeline_for_match()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_walk_forward_pipeline"><code class="docutils literal notranslate"><span class="pre">create_walk_forward_pipeline()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.eval_dataset_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_dataset_pipeline()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.eval_model_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_model_pipeline()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.ml_pipeline"><code class="docutils literal notranslate"><span class="pre">ml_pipeline()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="bundesliga.pipelines.data_science.html#submodules">Submodules</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="bundesliga.utils.html">utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.utils">Utils module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_goal_distribution"><code class="docutils literal notranslate"><span class="pre">get_goal_distribution()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_probability"><code class="docutils literal notranslate"><span class="pre">get_probability()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_teams"><code class="docutils literal notranslate"><span class="pre">get_teams()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.merge_dicts"><code class="docutils literal notranslate"><span class="pre">merge_dicts()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.split_time_data"><code class="docutils literal notranslate"><span class="pre">split_time_data()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.validation">Validation module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.validation.validate_dataframe"><code class="docutils literal notranslate"><span class="pre">validate_dataframe()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+  <section id="defining-project-settings">
+<span id="tutorials-defining-project-settings"></span><h1>Defining Project Settings<a class="headerlink" href="#defining-project-settings" title="Link to this heading"></a></h1>
+<p>This tutorial guides you through setting up the project-related configurations before running the pipeline.</p>
+<ol class="arabic simple">
+<li><p><strong>Include Datasets</strong>: Place your raw football datasets (CSV files) in the follwowing directory.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">01_raw/football-datasets</span></code></p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Specify Datasets</strong>: List the datasets you want to process in the <cite>data_sets_list.yml</cite> file.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">D1-24-25</span>
+<span class="w">  </span><span class="c1"># - D2-24-25</span>
+<span class="w">  </span><span class="c1"># - D1-23-24</span>
+<span class="w">  </span><span class="c1"># - D2-23-24</span>
+<span class="w">  </span><span class="c1"># - D1-19-20</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">D1-24-25-test</span>
+<span class="w">  </span><span class="c1"># - D1-93-94-test</span>
+</pre></div>
 </div>
-</section>
-<section id="module-bundesliga.pipeline_registry">
-<span id="pipeline-registry-module"></span><h2>pipeline_registry module<a class="headerlink" href="#module-bundesliga.pipeline_registry" title="Link to this heading"></a></h2>
-<p>Project pipelines.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="bundesliga.pipeline_registry.build_engine_pipelines">
-<span class="sig-prename descclassname"><span class="pre">bundesliga.pipeline_registry.</span></span><span class="sig-name descname"><span class="pre">build_engine_pipelines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipeline_registry.build_engine_pipelines" title="Link to this definition"></a></dt>
-<dd><p>Builds a collection of machine learning pipelines for a specific engine and its variants.</p>
-<p>This function creates a pipeline for each combination of the specified engine, model variant, and dataset.
-It combines the machine learning pipeline (ml_pipeline) with the evaluation pipeline (eval_dataset_pipeline)
-for each dataset defined in the project settings, and then aggregates them with the model evaluation pipeline.
-This allows for a complete workflow of model training, prediction, and evaluation for each engine and variant.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>engine</strong> (<em>str</em>) – The engine type (e.g., “pymc”, “pyro”).</p></li>
-<li><p><strong>variants</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A list of model variants for the engine.</p></li>
-<li><p><strong>start_match</strong> (<em>int</em>) – The starting match index for processing.</p></li>
-<li><p><strong>last_match</strong> (<em>int</em>) – The ending match index for processing.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>A Kedro pipeline object representing the combined machine learning and evaluation workflows</dt><dd><p>for the specified engine and variants.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Pipeline</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If required parameters or settings (e.g., engine, variants, DATASETS) are missing or invalid.</p>
-</dd>
-</dl>
-</dd></dl>
+<ol class="arabic simple" start="3">
+<li><p><strong>Choose Engine and Model</strong>: In <cite>settings.py</cite>, modify the <cite>DYNAMIC_PIPELINES_MAPPING</cite> dictionary to include or exclude desired engines and models.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the mapping for dynamic pipelines</span>
+<span class="n">DYNAMIC_PIPELINES_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;pymc&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;simple&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;pyro&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="s2">&quot;simple2&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>Adjust global Parameters</strong>: Fine-tune global parameters in the <cite>parameters.yml</cite> file as needed.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># -------------------------------</span>
+<span class="c1"># Base Configuration</span>
+<span class="c1"># -------------------------------</span>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="bundesliga.pipeline_registry.read_matchlength_from_data">
-<span class="sig-prename descclassname"><span class="pre">bundesliga.pipeline_registry.</span></span><span class="sig-name descname"><span class="pre">read_matchlength_from_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#bundesliga.pipeline_registry.read_matchlength_from_data" title="Link to this definition"></a></dt>
-<dd><p>Reads the walk-forward parameter (match length) from the raw data catalog.</p>
-<p>This function loads raw match data for the given dataset from a CSV file, determines the total number
-of matches, and calculates the effective number of matches available for walk-forward evaluation.
-It ensures that the provided start_match is within valid bounds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset.</p></li>
-<li><p><strong>start_match</strong> (<em>int</em>) – The starting match index for evaluation.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of matches available for walk-forward evaluation, computed as total_matches - start_match - 1.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the start_match is greater than or equal to the total number of matches in the dataset.</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="c1"># The `model_options` section defines the base configuration options that apply to all pipelines.</span>
+<span class="c1"># These options can be overridden by specific model variants or experiments.</span>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="bundesliga.pipeline_registry.register_pipelines">
-<span class="sig-prename descclassname"><span class="pre">bundesliga.pipeline_registry.</span></span><span class="sig-name descname"><span class="pre">register_pipelines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Pipeline</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bundesliga.pipeline_registry.register_pipelines" title="Link to this definition"></a></dt>
-<dd><p>Registers and constructs the project’s pipelines for the Kedro process.</p>
-<p>This function dynamically creates and registers multiple pipelines based on the project configuration.
-It combines the ETL pipeline with machine learning and evaluation pipelines for each engine and model variant.
-The resulting pipelines are organized into a dictionary with keys such as “etl”, specific engine names,
-and a default pipeline “__default__” that encompasses all workflows.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary mapping pipeline names to their corresponding Kedro Pipeline objects.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict[str, Pipeline]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If required parameters (e.g., start_match) or settings (e.g., DYNAMIC_PIPELINES_MAPPING, DATASETS)
-    are missing or invalid.</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="nt">model_options</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">  </span><span class="c1"># The type of model to use (e.g., &quot;simple&quot;, &quot;toto&quot;).</span>
+<span class="w">  </span><span class="nt">engine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">  </span><span class="c1"># The engine to use for the model (e.g., &quot;pymc&quot;, &quot;pyro&quot;).</span>
+<span class="w">  </span><span class="nt">start_match</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">  </span><span class="c1"># The starting day for the data.</span>
+<span class="w">  </span><span class="nt">last_match</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">  </span><span class="c1"># Last match to consider for predicting. Choose null for predicting on the whole dataset.</span>
 
-</section>
-<section id="module-bundesliga.settings">
-<span id="settings-module"></span><h2>settings module<a class="headerlink" href="#module-bundesliga.settings" title="Link to this heading"></a></h2>
-<p>Project settings.</p>
-<p>There is no need to edit this file unless you want to change values
-from the Kedro defaults or add new Models. For further information, including these default values, see
-<a class="reference external" href="https://docs.kedro.org/en/stable/kedro_project_setup/settings.html">https://docs.kedro.org/en/stable/kedro_project_setup/settings.html</a>.</p>
-<p><strong>SEED</strong>: Set the random seed for reproducibility.</p>
-<p><strong>DYNAMIC_PIPELINES_MAPPING</strong>: Specifies the type of engine and model used.</p>
-<p>i.e.: {“pyro”: [“simple”, “toto”]}</p>
-</section>
+<span class="w">  </span><span class="c1"># Model-specific configuration options.</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span><span class="w"> </span><span class="c1"># Define in model-specific config.</span>
+<span class="w">  </span><span class="nt">sampler_config</span><span class="p">:</span><span class="w"> </span><span class="c1"># Define in model-specific config.</span>
+
+<span class="c1"># -------------------------------</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p><strong>Adjust Engine-specific Parameters</strong>: Fine-tune engine parameters in the <cite>parameters.yml</cite> file as needed.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">_overrides_base</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">engine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pymc&quot;</span><span class="w">  </span><span class="c1"># Use the PyMC engine.</span>
+<span class="w">    </span><span class="nt">model_config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w">  </span><span class="c1"># Model-specific configuration.</span>
+<span class="w">    </span><span class="nt">sampler_config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">chains</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">  </span><span class="c1"># Number of MCMC chains.</span>
+<span class="w">      </span><span class="nt">draws</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w">  </span><span class="c1"># Number of draws per chain.</span>
+<span class="w">      </span><span class="nt">tune</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">  </span><span class="c1"># Number of tuning steps (10% of draws).</span>
+<span class="w">      </span><span class="nt">target_accept</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span><span class="w">  </span><span class="c1"># Target acceptance rate for MCMC.</span>
+
+<span class="w">  </span><span class="c1"># Configuration for the &quot;simple&quot; PyMC model.</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p><strong>Adjust Model-specific Parameters</strong>: Fine-tune model parameters in the <cite>parameters.yml</cite> file as needed.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">_overrides</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;simple&quot;</span><span class="w">  </span><span class="c1"># Use the &quot;simple&quot; model variant.</span>
+<span class="w">      </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">prior_params</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">off_mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.75</span><span class="w">  </span><span class="c1"># Mean for the offensive strength prior.</span>
+<span class="w">          </span><span class="nt">off_tau</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">  </span><span class="c1"># Precision for the offensive strength prior.</span>
+<span class="w">          </span><span class="nt">def_mu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w">  </span><span class="c1"># Mean for the defensive strength prior.</span>
+<span class="w">          </span><span class="nt">def_tau</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">  </span><span class="c1"># Precision for the defensive strength prior.</span>
+<span class="w">    </span><span class="nt">model_options</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}</span>
+</pre></div>
+</div>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="BA - Bayesian Model Evaluation Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="bundesliga.hooks.html" class="btn btn-neutral float-right" title="hooks package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tutorials.environment.html" class="btn btn-neutral float-left" title="Setting up the Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials.run.html" class="btn btn-neutral float-right" title="Running a Kedro Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

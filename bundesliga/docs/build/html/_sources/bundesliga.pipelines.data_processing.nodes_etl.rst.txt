@@ -1,4 +1,4 @@
-bundesliga.pipelines.data\_processing.nodes\_etl package
+nodes\_etl
 ========================================================
 
 .. automodule:: bundesliga.pipelines.data_processing.nodes_etl
@@ -6,10 +6,10 @@ bundesliga.pipelines.data\_processing.nodes\_etl package
    :undoc-members:
    :show-inheritance:
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-bundesliga.pipelines.data\_processing.nodes\_etl.nodes module
+nodes
 -------------------------------------------------------------
 
 .. automodule:: bundesliga.pipelines.data_processing.nodes_etl.nodes

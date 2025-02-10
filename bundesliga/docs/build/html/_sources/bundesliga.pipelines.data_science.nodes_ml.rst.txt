@@ -1,4 +1,4 @@
-bundesliga.pipelines.data\_science.nodes\_ml package
+nodes\_ml
 ====================================================
 
 .. automodule:: bundesliga.pipelines.data_science.nodes_ml
@@ -6,10 +6,10 @@ bundesliga.pipelines.data\_science.nodes\_ml package
    :undoc-members:
    :show-inheritance:
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-bundesliga.pipelines.data\_science.nodes\_ml.evaluate module
+evaluate
 ------------------------------------------------------------
 
 .. automodule:: bundesliga.pipelines.data_science.nodes_ml.evaluate
@@ -17,7 +17,7 @@ bundesliga.pipelines.data\_science.nodes\_ml.evaluate module
    :undoc-members:
    :show-inheritance:
 
-bundesliga.pipelines.data\_science.nodes\_ml.train\_model module
+train\_model
 ----------------------------------------------------------------
 
 .. automodule:: bundesliga.pipelines.data_science.nodes_ml.train_model
