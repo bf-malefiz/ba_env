@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BA - Bayesian Model Evaluation Documentation &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
+  <title>Visualizing results &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=345afb5f" />
@@ -20,7 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="bundesliga package" href="bundesliga.html" /> 
+    <link rel="next" title="Adding Models to the Pipeline" href="tutorials.adding-model.html" />
+    <link rel="prev" title="Running a Kedro Pipeline" href="tutorials.run.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,7 +32,7 @@
 
           
           
-          <a href="#" class="icon icon-home">
+          <a href="index.html" class="icon icon-home">
             BA - Bayesian Model Evaluation
           </a>
 <div role="search">
@@ -43,7 +44,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="bundesliga.html#src-module">Src module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="bundesliga.hooks.html">hooks package</a><ul>
@@ -68,33 +69,12 @@
 </ul>
 </li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.model.pyro.html">Pyro</a><ul>
-<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_model">pyro_model</a><ul>
-<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel"><code class="docutils literal notranslate"><span class="pre">PyroModel</span></code></a><ul>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel.team_lexicon"><code class="docutils literal notranslate"><span class="pre">PyroModel.team_lexicon</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel.model_config"><code class="docutils literal notranslate"><span class="pre">PyroModel.model_config</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel.sampler_config"><code class="docutils literal notranslate"><span class="pre">PyroModel.sampler_config</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel.get_probs_winner_from_goal_results"><code class="docutils literal notranslate"><span class="pre">PyroModel.get_probs_winner_from_goal_results()</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel.predict_toto_probabilities"><code class="docutils literal notranslate"><span class="pre">PyroModel.predict_toto_probabilities()</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_model.PyroModel.train"><code class="docutils literal notranslate"><span class="pre">PyroModel.train()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html#pyro-model">pyro_model</a></li>
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_parameters">pyro_parameters</a><ul>
 <li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_parameters.FootballParameters"><code class="docutils literal notranslate"><span class="pre">FootballParameters</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_simple_model">pyro_simple_model</a><ul>
-<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_simple_model.SimplePyroModel"><code class="docutils literal notranslate"><span class="pre">SimplePyroModel</span></code></a><ul>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_simple_model.SimplePyroModel.prior_diff"><code class="docutils literal notranslate"><span class="pre">SimplePyroModel.prior_diff</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_simple_model.SimplePyroModel.get_diffs"><code class="docutils literal notranslate"><span class="pre">SimplePyroModel.get_diffs()</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_simple_model.SimplePyroModel.get_guide"><code class="docutils literal notranslate"><span class="pre">SimplePyroModel.get_guide()</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_simple_model.SimplePyroModel.get_model"><code class="docutils literal notranslate"><span class="pre">SimplePyroModel.get_model()</span></code></a></li>
-<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_simple_model.SimplePyroModel.predict_goals"><code class="docutils literal notranslate"><span class="pre">SimplePyroModel.predict_goals()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html#pyro-simple-model">pyro_simple_model</a></li>
 </ul>
 </li>
 </ul>
@@ -186,11 +166,11 @@
 <li class="toctree-l2"><a class="reference internal" href="bundesliga.html#module-bundesliga.settings">settings module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="tutorials.environment.html">Setting up the Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.defining-project-settings.html">Defining Project Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.run.html">Running a Kedro Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.visualizing-results.html">Visualizing results</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Visualizing results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.adding-model.html">Adding Models to the Pipeline</a></li>
 </ul>
 </li>
@@ -202,17 +182,18 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">BA - Bayesian Model Evaluation</a>
+          <a href="index.html">BA - Bayesian Model Evaluation</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">BA - Bayesian Model Evaluation Documentation</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Visualizing results</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/tutorials.visualizing-results.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -220,82 +201,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="ba-bayesian-model-evaluation-documentation">
-<h1>BA - Bayesian Model Evaluation Documentation<a class="headerlink" href="#ba-bayesian-model-evaluation-documentation" title="Link to this heading"></a></h1>
-<p>Welcome to the documentation for the Bayesian model evaluation framework, built using Kedro and MLflow. This framework provides tools and pipelines for evaluating Bayesian models in a robust and reproducible way.</p>
-<section id="key-features">
-<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><strong>Kedro Integration</strong>: Leverages Kedro’s pipeline structure for organizing and managing model training and evaluation workflows.</p></li>
-<li><p><strong>MLflow Tracking</strong>: Integrates with MLflow to track experiments, log parameters, metrics, and artifacts, facilitating model comparison and reproducibility.</p></li>
-<li><p><strong>Modular Design</strong>: Provides a flexible and extensible framework for incorporating various Bayesian models and evaluation metrics.</p></li>
-<li><p><strong>Data Validation</strong>: Includes data validation checks to ensure data integrity and consistency throughout the pipeline.</p></li>
-<li><p><strong>Comprehensive Metrics</strong>: Offers a wide range of evaluation metrics, including but not limited to, negative log-likelihood, Brier score, ranked probability score (RPS), root mean squared error (RMSE), and mean absolute error (MAE).</p></li>
-</ul>
-</section>
-<section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
-<p>This documentation provides detailed information on how to use the framework, including:</p>
-<ul class="simple">
-<li><p>Setting up the project environment and installing dependencies.</p></li>
-<li><p>Defining and running Kedro pipelines for model training and evaluation.</p></li>
-<li><p>Logging and visualizing results with MLflow.</p></li>
-<li><p>Extending the framework with custom models and metrics.</p></li>
-</ul>
-</section>
-<section id="documentation-structure">
-<h2>Documentation Structure<a class="headerlink" href="#documentation-structure" title="Link to this heading"></a></h2>
-<p>The documentation is organized as follows:</p>
-<ul class="simple">
-<li><p><strong>Modules</strong>: Contains detailed API documentation for all modules and classes in the framework.</p></li>
-<li><p><strong>Tutorials</strong>: Provides step-by-step guides on how to use the framework for specific use cases.</p></li>
-<li><p><strong>Examples</strong>: Includes example projects demonstrating the framework’s capabilities.</p></li>
-</ul>
-</section>
-<section id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
-<p>Contributions to the framework and documentation are welcome! Please see the contribution guidelines for more information.</p>
-</section>
-<section id="license">
-<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#src-module">Src module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.hooks.html">hooks package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.model.html">model package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.html">pipelines package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html">utils package</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#module-bundesliga.pipeline_registry">pipeline_registry module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.build_engine_pipelines"><code class="docutils literal notranslate"><span class="pre">build_engine_pipelines()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.read_matchlength_from_data"><code class="docutils literal notranslate"><span class="pre">read_matchlength_from_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.register_pipelines"><code class="docutils literal notranslate"><span class="pre">register_pipelines()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#module-bundesliga.settings">settings module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.environment.html">Setting up the Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.defining-project-settings.html">Defining Project Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.run.html">Running a Kedro Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.visualizing-results.html">Visualizing results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.adding-model.html">Adding Models to the Pipeline</a></li>
-</ul>
-</li>
-</ul>
+  <section id="visualizing-results">
+<h1>Visualizing results<a class="headerlink" href="#visualizing-results" title="Link to this heading"></a></h1>
+<p><strong>Pipeline Graph with Kedro-Viz</strong></p>
+<p>This Framework uses Kedro-Viz to visualize the pipeline graph. You can generate the graph by running the following command after you ran your pipeline:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>kedro<span class="w"> </span>viz
+</pre></div>
 </div>
-</section>
+<p>This will generate a visualization of your pipeline in the browser at <a class="reference external" href="http://localhost:4141">http://localhost:4141</a>. For more information on Kedro-Viz, see the <a class="reference external" href="https://docs.kedro.org/projects/kedro-viz/en/v6.6.1.post1/kedro-viz_visualisation.html">Visualise the spaceflights project</a> or the <a class="reference external" href="https://demo.kedro.org/">Kedro-Viz Demo</a> for a quick overview of its functionalities.</p>
+<p><strong>Experiment Tracking with MLflow</strong></p>
+<p>The framework automatically logs parameters, metrics, and artifacts to MLflow during pipeline execution. You can use the MLflow UI to visualize and compare results from different runs.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>mlflow<span class="w"> </span>ui
+</pre></div>
+</div>
+<p>This will start the MLflow UI server, which you can access in your browser at <a class="reference external" href="http://localhost:5000">http://localhost:5000</a>. Each run initialized by the CLI will create a new run with the pipeline name as the run name. This run encapsulates all child runs, which are individual pipelines in the main pipeline. All matchpredictions are named as Soloruns, where aggregated modelresults are named as Aggregatedruns. For reference see <a class="reference internal" href="bundesliga.hooks.html#module-bundesliga.hooks.model_tracking_hooks" title="bundesliga.hooks.model_tracking_hooks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bundesliga.hooks.model_tracking_hooks</span></code></a>.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="bundesliga.html" class="btn btn-neutral float-right" title="bundesliga package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tutorials.run.html" class="btn btn-neutral float-left" title="Running a Kedro Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials.adding-model.html" class="btn btn-neutral float-right" title="Adding Models to the Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

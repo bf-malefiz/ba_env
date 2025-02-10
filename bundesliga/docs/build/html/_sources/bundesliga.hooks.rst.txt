@@ -1,4 +1,4 @@
-bundesliga.hooks package
+hooks package
 ========================
 
 .. automodule:: bundesliga.hooks

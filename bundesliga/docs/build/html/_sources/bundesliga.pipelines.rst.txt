@@ -1,4 +1,4 @@
-bundesliga.pipelines package
+pipelines package
 ============================
 
 .. automodule:: bundesliga.pipelines
@@ -6,7 +6,7 @@ bundesliga.pipelines package
    :undoc-members:
    :show-inheritance:
 
-Subpackages
+pipelines
 -----------
 
 .. toctree::

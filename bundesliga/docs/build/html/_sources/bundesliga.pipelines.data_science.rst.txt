@@ -1,4 +1,4 @@
-bundesliga.pipelines.data\_science package
+data\_science
 ==========================================
 
 .. automodule:: bundesliga.pipelines.data_science
@@ -6,7 +6,7 @@ bundesliga.pipelines.data\_science package
    :undoc-members:
    :show-inheritance:
 
-Subpackages
+Submodules
 -----------
 
 .. toctree::
@@ -14,13 +14,13 @@ Subpackages
 
    bundesliga.pipelines.data_science.nodes_ml
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-bundesliga.pipelines.data\_science.pipeline module
---------------------------------------------------
+.. data\_science pipeline
+.. --------------------------------------------------
 
-.. automodule:: bundesliga.pipelines.data_science.pipeline
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. .. automodule:: bundesliga.pipelines.data_science.pipeline
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:

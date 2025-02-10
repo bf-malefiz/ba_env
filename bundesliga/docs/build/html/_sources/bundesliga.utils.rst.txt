@@ -1,4 +1,4 @@
-bundesliga.utils package
+utils package
 ========================
 
 .. automodule:: bundesliga.utils
@@ -6,10 +6,10 @@ bundesliga.utils package
    :undoc-members:
    :show-inheritance:
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-bundesliga.utils.utils module
+Utils module
 -----------------------------
 
 .. automodule:: bundesliga.utils.utils
@@ -17,7 +17,7 @@ bundesliga.utils.utils module
    :undoc-members:
    :show-inheritance:
 
-bundesliga.utils.validation module
+Validation module
 ----------------------------------
 
 .. automodule:: bundesliga.utils.validation
