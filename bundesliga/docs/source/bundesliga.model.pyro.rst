@@ -14,7 +14,7 @@ pyro\_model
    :members:
    :undoc-members:
    :show-inheritance:
-   :no-index:
+
 
 pyro\_parameters
 ---------------------------------------------
@@ -31,4 +31,4 @@ pyro\_simple\_model
    :members:
    :undoc-members:
    :show-inheritance:
-   :no-index:
+

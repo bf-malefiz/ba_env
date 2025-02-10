@@ -98,10 +98,12 @@ pyro:
     _overrides:
       model: "simple"  # Use the "simple" model variant.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
-  # Configuration for the "simple" Pyro model.
+  # Configuration for the "simple2" Pyro model.
   simple2:
     _overrides:
-      model: "simple"  # Use the "simple" model variant.
+      model: "simple2"  # Use the "simple" model variant.
+      model_config:
+        betas: [0.8, 0.8]  # Beta parameters for the optimizer.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
   # Configuration for the "toto" Pyro model.
   toto:
