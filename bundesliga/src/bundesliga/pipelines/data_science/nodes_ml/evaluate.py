@@ -226,37 +226,6 @@ def aggregate_model_metrics(
     return mean_model_metrics, nested_run_name
 
 
-@validate_dataframe(
-    df_arg_name="predictions",
-    required_columns=["home_goals", "away_goals"],
-    allow_empty=False,
-)
-def determine_winner(predictions: pd.DataFrame) -> pd.DataFrame:
-    """
-    Determines the winner of a match based on predicted goal values.
-
-    This function evaluates each match by comparing predicted home and away goals, and assigns a match outcome
-    ("home", "away", or "tie") accordingly. The result is appended as a new column "winner" to the predictions DataFrame.
-
-    Args:
-        predictions (pd.DataFrame): A DataFrame containing predicted goals with columns "home_goals" and "away_goals".
-
-    Returns:
-        pd.DataFrame: The modified DataFrame including a new "winner" column indicating the predicted match outcome.
-    """
-
-    def get_winner(row):
-        if row["home_goals"] > row["away_goals"]:
-            return "home"
-        elif row["home_goals"] < row["away_goals"]:
-            return "away"
-        else:
-            return "tie"
-
-    predictions["winner"] = predictions.apply(get_winner, axis=1)
-    return predictions
-
-
 def true_result(df_row):
     """
     Determines the true match result from a row of actual goal data.
@@ -267,15 +236,15 @@ def true_result(df_row):
         df_row (pd.Series): A row from a DataFrame containing "home_goals" and "away_goals".
 
     Returns:
-        str: "home" if the home team wins, "away" if the away team wins, or "tie" if both teams score equally.
+        int: 0 if the home team wins, 1 if the away team wins, or 2 if both teams score equally.
     """
     # todo: could be simplified by using the column from the dataframe directly
     if df_row["home_goals"] > df_row["away_goals"]:
-        return "home"
+        return 0
     elif df_row["home_goals"] < df_row["away_goals"]:
-        return "away"
+        return 1
     else:
-        return "tie"
+        return 2
 
 
 def predicted_result(probs_row):
@@ -289,7 +258,10 @@ def predicted_result(probs_row):
         probs_row (pd.Series): A row containing predicted probabilities with keys "home", "away", and "tie".
 
     Returns:
-        str: The predicted outcome ("home", "away", or "tie") based on the maximum probability.
+        int: The predicted outcome ("home"=0, "away"=1, or "tie"=2) based on the maximum probability.
     """
-    # probs_row = { "home": ..., "away": ..., "tie": ... }
-    return probs_row.idxmax()
+    max_label = probs_row.idxmax()
+    # Convert the column label to its integer position
+    max_index = probs_row.index.get_loc(max_label)
+
+    return max_index
