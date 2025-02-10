@@ -46,7 +46,9 @@ def init_model(
         case "pymc":
             match model:
                 case "simple":
-                    return pm_simple.SimplePymcModel(model_options, team_lexicon)
+                    return pm_simple.SimplePymcModel(
+                        model_options=model_options, team_lexicon=team_lexicon
+                    )
                 case "toto":
                     try:
                         kwargs["toto"]
@@ -58,7 +60,13 @@ def init_model(
         case "pyro":
             match model:
                 case "simple":
-                    return pyro_simple.SimplePyroModel(team_lexicon, model_options)
+                    return pyro_simple.SimplePyroModel(
+                        model_options=model_options, team_lexicon=team_lexicon
+                    )
+                case "simple2":
+                    return pyro_simple.SimplePyroModel(
+                        model_options=model_options, team_lexicon=team_lexicon
+                    )
                 case "toto":
                     raise NotImplementedError("Pyro-toto not implemented.")
 

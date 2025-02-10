@@ -21,16 +21,18 @@ class SimplePyroModel(PyroModel):
         prior_diff (float): A prior value for the difference in team offensive strengths.
     """
 
-    def __init__(self, team_lexicon, parameters, prior_diff=np.log(1.5)) -> None:
+    def __init__(
+        self, model_options: dict, team_lexicon: pd.DataFrame, prior_diff=np.log(1.5)
+    ) -> None:
         """
         Initializes the SimplePyroModel with team lexicon, parameters, and a prior difference.
 
         Args:
             team_lexicon (dict): A dictionary mapping team names to unique IDs.
-            parameters (dict): Configuration parameters for the model.
+            model_options (dict): Configuration parameters for the model.
             prior_diff (float): A prior value for the difference in team offensive strengths.
         """
-        super().__init__(team_lexicon, parameters)
+        super().__init__(team_lexicon=team_lexicon, model_options=model_options)
         self.prior_diff = prior_diff
         self.parameter_module = FootballParameters(
             nb_teams=len(self.team_lexicon), prior_diff=self.prior_diff
