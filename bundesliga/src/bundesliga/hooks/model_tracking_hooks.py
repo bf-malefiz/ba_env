@@ -122,20 +122,6 @@ class ModelTrackingHooks:
             out_name = node._outputs
             eval_results = outputs[out_name]
 
-            # Prepare the metrics for logging
-            results = {
-                "home_prob": eval_results["home_prob"],
-                "away_prob": eval_results["away_prob"],
-                "tie_prob": eval_results["tie_prob"],
-                "rmse_home": eval_results["rmse_home"],
-                "mae_home": eval_results["mae_home"],
-                "rmse_away": eval_results["rmse_away"],
-                "mae_away": eval_results["mae_away"],
-                "neg_log_likelihood": eval_results["neg_log_likelihood"],
-                "brier_score": eval_results["brier_score"],
-                "rps": eval_results["rps"],
-            }
-
             # Create a run name for MLflow
             run_name = (
                 f"Solorun - engine: {engine} | model: {model} | season: {season} | "
@@ -158,12 +144,10 @@ class ModelTrackingHooks:
                             "run": "solo",
                             "seed": settings.SEED,
                             "run_id": run.info.run_id,
-                            "ground_truth": eval_results["ground_truth"],
-                            "predicted_result": eval_results["predicted_result"],
                         }
                     )
 
-                    mlflow.log_metrics(results)
+                    mlflow.log_metrics(eval_results)
                     mlflow.set_tags(
                         {
                             "match": match,
@@ -178,7 +162,7 @@ class ModelTrackingHooks:
         if "aggregate_dataset_metrics" in node._func_name:
             # Get the evaluation results from the node outputs
             out_names = node._outputs
-            mean_metrics = outputs[out_names[0]]
+            ds_mean_metrics = outputs[out_names[0]]
             nested_run_name = outputs[out_names[1]]
 
             # Log metrics and parameters to MLflow
@@ -188,7 +172,7 @@ class ModelTrackingHooks:
                     run_name=nested_run_name,
                     nested=True,
                 ) as run:
-                    mlflow.log_metrics(mean_metrics)
+                    mlflow.log_metrics(ds_mean_metrics)
                     mlflow.log_params(
                         {
                             "season": tags[0],
@@ -201,7 +185,7 @@ class ModelTrackingHooks:
         if "aggregate_model_metrics" in node._func_name:
             # Get the evaluation results from the node outputs
             out_names = node._outputs
-            mean_metrics = outputs[out_names[0]]
+            model_mean_metrics = outputs[out_names[0]]
             nested_run_name = outputs[out_names[1]]
 
             # Log metrics and parameters to MLflow
@@ -211,7 +195,7 @@ class ModelTrackingHooks:
                     run_name=nested_run_name,
                     nested=True,
                 ) as run:
-                    mlflow.log_metrics(mean_metrics)
+                    mlflow.log_metrics(model_mean_metrics)
                     mlflow.log_params(
                         {
                             "pipeline": tags[0],
