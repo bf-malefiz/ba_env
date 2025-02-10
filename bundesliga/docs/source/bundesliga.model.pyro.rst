@@ -1,4 +1,4 @@
-bundesliga.model.pyro package
+Pyro
 =============================
 
 .. automodule:: bundesliga.model.pyro
