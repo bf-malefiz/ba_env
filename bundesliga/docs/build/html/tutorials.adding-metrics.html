@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hooks package &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
+  <title>Adding additional Metrics to MLflow &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=345afb5f" />
@@ -20,8 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="model package" href="bundesliga.model.html" />
-    <link rel="prev" title="bundesliga package" href="bundesliga.html" /> 
+    <link rel="prev" title="Adding Models to the Pipeline" href="tutorials.adding-model.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,15 +44,15 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="bundesliga.html#src-module">Src module</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">hooks package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#module-bundesliga.hooks.model_tracking_hooks">model_tracking_hooks</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks</span></code></a><ul>
-<li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
-<li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
-<li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
-<li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.html#src-module">Src module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.hooks.html">hooks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html#module-bundesliga.hooks.model_tracking_hooks">model_tracking_hooks</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -187,13 +186,13 @@
 <li class="toctree-l2"><a class="reference internal" href="bundesliga.html#module-bundesliga.settings">settings module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="tutorials.environment.html">Setting up the Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.defining-project-settings.html">Defining Project Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.run.html">Running a Kedro Pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.visualizing-results.html">Visualizing results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials.adding-model.html">Adding Models to the Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.adding-metrics.html">Adding additional Metrics to MLflow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Adding additional Metrics to MLflow</a></li>
 </ul>
 </li>
 </ul>
@@ -212,10 +211,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="bundesliga.html">bundesliga package</a></li>
-      <li class="breadcrumb-item active">hooks package</li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Adding additional Metrics to MLflow</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/bundesliga.hooks.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/tutorials.adding-metrics.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -223,80 +222,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-bundesliga.hooks">
-<span id="hooks-package"></span><h1>hooks package<a class="headerlink" href="#module-bundesliga.hooks" title="Link to this heading"></a></h1>
-<p>bundesliga</p>
-<section id="module-bundesliga.hooks.model_tracking_hooks">
-<span id="model-tracking-hooks"></span><h2>model_tracking_hooks<a class="headerlink" href="#module-bundesliga.hooks.model_tracking_hooks" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bundesliga.hooks.model_tracking_hooks.</span></span><span class="sig-name descname"><span class="pre">ModelTrackingHooks</span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A collection of Kedro hooks for tracking machine learning models using MLflow.</p>
-<p>This class implements various Kedro hooks to integrate MLflow tracking into the Kedro pipeline.
-It logs datasets, parameters, metrics, and tags at different stages of the pipeline execution.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None">
-<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded">
-<span class="sig-name descname"><span class="pre">after_dataset_loaded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded" title="Link to this definition"></a></dt>
-<dd><p>Hook implementation called after a dataset is loaded.</p>
-<p>This method performs post-processing once a dataset is loaded into the pipeline. It inspects the node’s
-tags to determine the appropriate pipeline context. If the current active MLflow run’s name does not match
-the determined pipeline tag, the method ends and deletes the current run, then starts a new MLflow run
-with the proper run name and description. Additionally, if the dataset name contains the substring “vectorize”,
-the dataset (assumed to be in a pandas DataFrame format) is converted into an MLflow dataset object and logged
-as an input for MLflow tracking.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset_name</strong> (<em>str</em>) – The identifier of the dataset that was loaded, which may include hints (like “vectorize”)
-for further processing.</p></li>
-<li><p><strong>data</strong> (<em>Any</em>) – The actual dataset loaded which will be logged if it meets the criteria.</p></li>
-<li><p><strong>node</strong> (<em>Node</em>) – The Kedro node responsible for loading the dataset, whose tags are used to determine the appropriate pipeline context.</p></li>
-</ul>
+  <section id="adding-additional-metrics-to-mlflow">
+<h1>Adding additional Metrics to MLflow<a class="headerlink" href="#adding-additional-metrics-to-mlflow" title="Link to this heading"></a></h1>
+<p>The framework provides a modular design that allows you to easily add new metrics to the pipeline. The steps below outline how to add a new metrics to the framework and integrate them easily into the existing pipeline.</p>
+<ol class="arabic simple">
+<li><p><strong>Create a new metric</strong>:</p></li>
+</ol>
+<p>Create a new function for your metric in <a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils" title="bundesliga.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bundesliga.utils</span></code></a> and import it into the <a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml" title="bundesliga.pipelines.data_science.nodes_ml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bundesliga.pipelines.data_science.nodes_ml</span></code></a> module.</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Add the metric to an existing evaluation function</strong>:</p></li>
+</ol>
+<p>Depending on your evluation function you need to add the metric to the corresponding function. You have 3 options to do so.</p>
+<dl class="simple">
+<dt><strong>`evaluate_match` function</strong>:</dt><dd><p>This allows you to evaluate the metric for each match. The data you will get is match specific.</p>
+</dd>
+<dt><strong>`aggregate_dataset_metrics` function</strong>:</dt><dd><p>This allows you to evaluate the metric for the whole dataset. The data you will get is dataset specific.</p>
+</dd>
+<dt><strong>`aggregate_model_metrics` function</strong>:</dt><dd><p>This allows you to evaluate the metric for the whole model. The data you will get is model specific.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run">
-<span class="sig-name descname"><span class="pre">after_node_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run">
-<span class="sig-name descname"><span class="pre">before_pipeline_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Pipeline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CatalogProtocol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run" title="Link to this definition"></a></dt>
-<dd><p>Hook implementation called before the pipeline starts running.</p>
-<p>This method is designed to ensure that any previously active MLflow run is properly terminated
-before a new pipeline execution begins. It checks for an active MLflow run, and if one is found,
-it ends and deletes the run to prevent interference with the new pipeline run’s tracking information.</p>
-<p>This method becomes opsolete when <a class="reference external" href="https://github.com/Galileo-Galilei/kedro-mlflow/issues/623">https://github.com/Galileo-Galilei/kedro-mlflow/issues/623</a> is resolved.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>run_params</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – A collection of parameters and settings associated with the pipeline run.</p></li>
-<li><p><strong>pipeline</strong> (<em>Pipeline</em>) – The Kedro pipeline object that is scheduled to run, containing the defined nodes.</p></li>
-<li><p><strong>catalog</strong> (<em>CatalogProtocol</em>) – The data catalog that provides configuration details for all datasets used in the pipeline.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
+<p>Now add your metric into the output dictionary of the corresponding function and your metric will be logged by MLflow automaticly.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="bundesliga.html" class="btn btn-neutral float-left" title="bundesliga package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="bundesliga.model.html" class="btn btn-neutral float-right" title="model package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tutorials.adding-model.html" class="btn btn-neutral float-left" title="Adding Models to the Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
