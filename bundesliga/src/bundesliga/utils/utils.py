@@ -259,7 +259,11 @@ def get_probability(row: pd.Series) -> float:
     Returns:
         float: The predicted probability for the true outcome.
     """
-    return row[row["true_result"]]
+    # Define the order of outcomes corresponding to 0, 1, 2
+    outcomes = ["home", "away", "tie"]
+    # Get the column name corresponding to the true result (0 => 'home', 1 => 'away', 2 => 'tie')
+    true_column = outcomes[int(row["true_result"])]
+    return row[true_column]
 
 
 def rmse_mae(
