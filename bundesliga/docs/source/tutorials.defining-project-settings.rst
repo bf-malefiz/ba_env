@@ -1,3 +1,5 @@
+.. _tutorials-defining-project-settings:
+
 Defining Project Settings
 =========================
 
@@ -15,7 +17,7 @@ This tutorial guides you through setting up the project-related configurations b
 3. **Choose Engine and Model**: In `settings.py`, modify the `DYNAMIC_PIPELINES_MAPPING` dictionary to include or exclude desired engines and models.
 
 .. literalinclude:: ../../src/bundesliga/settings.py
-    :lines: 56-59
+    :lines: 78-82
     :language: python
 
 
