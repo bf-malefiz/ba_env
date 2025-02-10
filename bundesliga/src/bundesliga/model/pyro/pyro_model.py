@@ -38,7 +38,7 @@ class PyroModel(FootballModel):
         sampler_config (dict): Configuration parameters for the sampler.
     """
 
-    def __init__(self, team_lexicon: pd.DataFrame, model_options: dict) -> None:
+    def __init__(self, model_options: dict, team_lexicon: pd.DataFrame) -> None:
         """
         Initializes the PyroModel with team lexicon and configuration parameters.
 
