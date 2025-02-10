@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bundesliga.pipelines.data_science package &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="bundesliga.pipelines.data_science.nodes_ml package" href="bundesliga.pipelines.data_science.nodes_ml.html" />
+    <link rel="prev" title="bundesliga.pipelines.data_processing.nodes_etl package" href="bundesliga.pipelines.data_processing.nodes_etl.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BA - Bayesian Model Evaluation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">bundesliga</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bundesliga.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html">bundesliga.hooks package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#module-bundesliga.hooks.model_tracking_hooks">bundesliga.hooks.model_tracking_hooks module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.html">bundesliga.model package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.model.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pymc.html">bundesliga.model.pymc package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#bundesliga-model-pymc-pymc-model-module">bundesliga.model.pymc.pymc_model module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#bundesliga-model-pymc-pymc-simple-model-module">bundesliga.model.pymc.pymc_simple_model module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#bundesliga-model-pymc-pymc-toto-model-module">bundesliga.model.pymc.pymc_toto_model module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html">bundesliga.model.pyro package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga-model-pyro-pyro-model-module">bundesliga.model.pyro.pyro_model module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_parameters">bundesliga.model.pyro.pyro_parameters module</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_parameters.FootballParameters"><code class="docutils literal notranslate"><span class="pre">FootballParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga-model-pyro-pyro-simple-model-module">bundesliga.model.pyro.pyro_simple_model module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.model.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.model.html#bundesliga-model-base-footballmodel-module">bundesliga.model.base_footballmodel module</a></li>
+</ul>
+</li>
+<li class="toctree-l4 current"><a class="reference internal" href="bundesliga.pipelines.html">bundesliga.pipelines package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="bundesliga.pipelines.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.pipelines.data_processing.html">bundesliga.pipelines.data_processing package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_processing.nodes_etl.html">bundesliga.pipelines.data_processing.nodes_etl package</a><ul>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_processing.nodes_etl.html#submodules">Submodules</a></li>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_processing.nodes_etl.html#module-bundesliga.pipelines.data_processing.nodes_etl.nodes">bundesliga.pipelines.data_processing.nodes_etl.nodes module</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_processing.nodes_etl.html#bundesliga.pipelines.data_processing.nodes_etl.nodes.build_team_lexicon"><code class="docutils literal notranslate"><span class="pre">build_team_lexicon()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_processing.nodes_etl.html#bundesliga.pipelines.data_processing.nodes_etl.nodes.get_goal_results"><code class="docutils literal notranslate"><span class="pre">get_goal_results()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_processing.nodes_etl.html#bundesliga.pipelines.data_processing.nodes_etl.nodes.vectorize_data"><code class="docutils literal notranslate"><span class="pre">vectorize_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#module-bundesliga.pipelines.data_processing.pipeline">bundesliga.pipelines.data_processing.pipeline module</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.pipeline.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6 current"><a class="current reference internal" href="#">bundesliga.pipelines.data_science package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#bundesliga.pipelines.data_science.create_model_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_definition_node()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#bundesliga.pipelines.data_science.create_subpipeline_for_match"><code class="docutils literal notranslate"><span class="pre">create_subpipeline_for_match()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#bundesliga.pipelines.data_science.create_walk_forward_pipeline"><code class="docutils literal notranslate"><span class="pre">create_walk_forward_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#bundesliga.pipelines.data_science.eval_dataset_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_dataset_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#bundesliga.pipelines.data_science.eval_model_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_model_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#bundesliga.pipelines.data_science.ml_pipeline"><code class="docutils literal notranslate"><span class="pre">ml_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html">bundesliga.pipelines.data_science.nodes_ml package</a><ul>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#submodules">Submodules</a></li>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.evaluate">bundesliga.pipelines.data_science.nodes_ml.evaluate module</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_dataset_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_dataset_metrics()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_model_metrics()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner"><code class="docutils literal notranslate"><span class="pre">determine_winner()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match"><code class="docutils literal notranslate"><span class="pre">evaluate_match()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.predicted_result"><code class="docutils literal notranslate"><span class="pre">predicted_result()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.true_result"><code class="docutils literal notranslate"><span class="pre">true_result()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.train_model">bundesliga.pipelines.data_science.nodes_ml.train_model module</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.init_model"><code class="docutils literal notranslate"><span class="pre">init_model()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.predict_goals"><code class="docutils literal notranslate"><span class="pre">predict_goals()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-bundesliga.pipelines.data_science.pipeline">bundesliga.pipelines.data_science.pipeline module</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.create_model_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_definition_node()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.create_model_eval_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_eval_definition_node()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.create_subpipeline_for_match"><code class="docutils literal notranslate"><span class="pre">create_subpipeline_for_match()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.create_walk_forward_pipeline"><code class="docutils literal notranslate"><span class="pre">create_walk_forward_pipeline()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.eval_dataset_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_dataset_pipeline()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.eval_model_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_model_pipeline()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#bundesliga.pipelines.data_science.pipeline.ml_pipeline"><code class="docutils literal notranslate"><span class="pre">ml_pipeline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html">bundesliga.utils package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.utils">bundesliga.utils.utils module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_goal_distribution"><code class="docutils literal notranslate"><span class="pre">get_goal_distribution()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_probability"><code class="docutils literal notranslate"><span class="pre">get_probability()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_teams"><code class="docutils literal notranslate"><span class="pre">get_teams()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.merge_dicts"><code class="docutils literal notranslate"><span class="pre">merge_dicts()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.split_time_data"><code class="docutils literal notranslate"><span class="pre">split_time_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.validation">bundesliga.utils.validation module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.validation.validate_dataframe"><code class="docutils literal notranslate"><span class="pre">validate_dataframe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#module-bundesliga.pipeline_registry">bundesliga.pipeline_registry module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.build_engine_pipelines"><code class="docutils literal notranslate"><span class="pre">build_engine_pipelines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.read_matchlength_from_data"><code class="docutils literal notranslate"><span class="pre">read_matchlength_from_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.register_pipelines"><code class="docutils literal notranslate"><span class="pre">register_pipelines()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#module-bundesliga.settings">bundesliga.settings module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BA - Bayesian Model Evaluation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">bundesliga</a></li>
+          <li class="breadcrumb-item"><a href="bundesliga.html">bundesliga package</a></li>
+          <li class="breadcrumb-item"><a href="bundesliga.pipelines.html">bundesliga.pipelines package</a></li>
+      <li class="breadcrumb-item active">bundesliga.pipelines.data_science package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bundesliga.pipelines.data_science.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-bundesliga.pipelines.data_science">
+<span id="bundesliga-pipelines-data-science-package"></span><h1>bundesliga.pipelines.data_science package<a class="headerlink" href="#module-bundesliga.pipelines.data_science" title="Link to this heading"></a></h1>
+<p>This is a boilerplate pipeline ‘data_science’
+generated using Kedro 0.19.10</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.create_model_definition_node">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.</span></span><span class="sig-name descname"><span class="pre">create_model_definition_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Node</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.create_model_definition_node" title="Link to this definition"></a></dt>
+<dd><p>Creates a model definition node for eval_dataset_pipeline.</p>
+<p>This node generates a dictionary containing the model definition parameters such as the engine,
+variant, dataset name, and seed. The output of this node is used downstream to configure model
+training and evaluation nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>str</em>) – The probabilistic programming engine (e.g., “pymc” or “pyro”).</p></li>
+<li><p><strong>variant</strong> (<em>str</em>) – The model variant (e.g., “simple”, “toto”).</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset being processed. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with keys “engine”, “variant”, “dataset_name”, and “seed”.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.create_subpipeline_for_match">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.</span></span><span class="sig-name descname"><span class="pre">create_subpipeline_for_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.create_subpipeline_for_match" title="Link to this definition"></a></dt>
+<dd><p>Creates a subpipeline for processing a single match.</p>
+<dl class="simple">
+<dt>The subpipeline includes nodes for:</dt><dd><ul class="simple">
+<li><p>Identifying the match.</p></li>
+<li><p>Splitting the vectorized data into training and testing sets.</p></li>
+<li><p>Initializing the model.</p></li>
+<li><p>Training the model.</p></li>
+<li><p>Predicting goals.</p></li>
+<li><p>Evaluating the model’s performance.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match</strong> (<em>int</em>) – The match index for which the subpipeline is created.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the subworkflow for a single match.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.create_walk_forward_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.</span></span><span class="sig-name descname"><span class="pre">create_walk_forward_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.create_walk_forward_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates a walk-forward pipeline that iterates over a sequence of matches.</p>
+<p>This function constructs a pipeline that sequentially processes matches from start_match to last_match.
+It combines subpipelines for individual matches using the sum operator, resulting in a unified pipeline
+that applies the walk-forward evaluation approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_match</strong> (<em>int</em>) – The index of the first match to process.</p></li>
+<li><p><strong>last_match</strong> (<em>int</em>) – The index of the last match to process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the walk-forward evaluation workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.eval_dataset_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.</span></span><span class="sig-name descname"><span class="pre">eval_dataset_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setting</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.eval_dataset_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates an evaluation pipeline for a dataset over a range of matches for various engines and variants.</p>
+<p>This pipeline aggregates evaluation metrics for individual matches within a dataset. For each combination
+of engine and model variant specified in the setting, it creates a subpipeline that collects metrics from
+each match and then aggregates them using the ‘aggregate_dataset_metrics’ node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_match</strong> (<em>int</em>) – The starting match index for evaluation.</p></li>
+<li><p><strong>last_match</strong> (<em>int</em>) – The ending match index for evaluation.</p></li>
+<li><p><strong>setting</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – An iterable of tuples specifying the engine and variant combinations.</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset to be processed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the aggregated dataset evaluation workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.eval_model_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.</span></span><span class="sig-name descname"><span class="pre">eval_model_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.eval_model_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates an evaluation pipeline to aggregate model metrics across datasets.</p>
+<p>This pipeline collects dataset-level metrics for a given engine and model variant from all datasets
+specified in the settings, then aggregates these metrics using the ‘aggregate_model_metrics’ node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>str</em>) – The probabilistic programming engine (e.g., “pymc” or “pyro”).</p></li>
+<li><p><strong>variant</strong> (<em>str</em>) – The model variant (e.g., “simple”, “toto”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the model evaluation aggregation workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.ml_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.</span></span><span class="sig-name descname"><span class="pre">ml_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.ml_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates a machine learning pipeline for training and evaluating a model using a walk-forward approach.</p>
+<p>This pipeline integrates the walk-forward pipeline with input datasets and model configuration parameters.
+It processes the team lexicon and vectorized data, and routes them to the appropriate nodes for model
+initialization, training, prediction, and evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_match</strong> (<em>int</em>) – The starting match index for the walk-forward evaluation.</p></li>
+<li><p><strong>last_match</strong> (<em>int</em>) – The ending match index for the walk-forward evaluation.</p></li>
+<li><p><strong>variant</strong> (<em>str</em>) – The model variant to be used (e.g., “simple”, “toto”).</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset being processed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the machine learning workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html">bundesliga.pipelines.data_science.nodes_ml package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.evaluate">bundesliga.pipelines.data_science.nodes_ml.evaluate module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_dataset_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_dataset_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_model_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner"><code class="docutils literal notranslate"><span class="pre">determine_winner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match"><code class="docutils literal notranslate"><span class="pre">evaluate_match()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.predicted_result"><code class="docutils literal notranslate"><span class="pre">predicted_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.true_result"><code class="docutils literal notranslate"><span class="pre">true_result()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.train_model">bundesliga.pipelines.data_science.nodes_ml.train_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.init_model"><code class="docutils literal notranslate"><span class="pre">init_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.predict_goals"><code class="docutils literal notranslate"><span class="pre">predict_goals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-bundesliga.pipelines.data_science.pipeline">
+<span id="bundesliga-pipelines-data-science-pipeline-module"></span><h2>bundesliga.pipelines.data_science.pipeline module<a class="headerlink" href="#module-bundesliga.pipelines.data_science.pipeline" title="Link to this heading"></a></h2>
+<p>Module: pipeline.py</p>
+<dl class="simple">
+<dt>Summary:</dt><dd><p>This module defines Kedro pipelines for machine learning model training and evaluation
+for football match prediction. The pipelines include nodes for creating model definitions,
+training, prediction, evaluation, and aggregation of metrics across datasets and models.
+It supports a walk-forward evaluation approach over multiple matches.</p>
+</dd>
+<dt>Dependencies:</dt><dd><ul class="simple">
+<li><p>kedro.pipeline (Pipeline, node, pipeline)</p></li>
+<li><p>bundesliga.settings</p></li>
+<li><p>bundesliga.utils.utils (split_time_data)</p></li>
+<li><p>.nodes_ml.evaluate (aggregate_dataset_metrics, aggregate_model_metrics, evaluate_match)</p></li>
+<li><p>.nodes_ml.train_model (init_model, predict_goals, train)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.create_model_definition_node">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">create_model_definition_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Node</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.create_model_definition_node" title="Link to this definition"></a></dt>
+<dd><p>Creates a model definition node for eval_dataset_pipeline.</p>
+<p>This node generates a dictionary containing the model definition parameters such as the engine,
+variant, dataset name, and seed. The output of this node is used downstream to configure model
+training and evaluation nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>str</em>) – The probabilistic programming engine (e.g., “pymc” or “pyro”).</p></li>
+<li><p><strong>variant</strong> (<em>str</em>) – The model variant (e.g., “simple”, “toto”).</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset being processed. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with keys “engine”, “variant”, “dataset_name”, and “seed”.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.create_model_eval_definition_node">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">create_model_eval_definition_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Node</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.create_model_eval_definition_node" title="Link to this definition"></a></dt>
+<dd><p>Creates a model evaluation definition node for eval_model_pipeline.</p>
+<p>This node generates a dictionary containing evaluation configuration parameters for a given engine
+and model variant, including the random seed. The output is used to aggregate evaluation metrics
+across datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> – The probabilistic programming engine (e.g., “pymc” or “pyro”).</p></li>
+<li><p><strong>variant</strong> – The model variant (e.g., “simple”, “toto”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with keys “engine”, “variant”, and “seed”.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.create_subpipeline_for_match">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">create_subpipeline_for_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.create_subpipeline_for_match" title="Link to this definition"></a></dt>
+<dd><p>Creates a subpipeline for processing a single match.</p>
+<dl class="simple">
+<dt>The subpipeline includes nodes for:</dt><dd><ul class="simple">
+<li><p>Identifying the match.</p></li>
+<li><p>Splitting the vectorized data into training and testing sets.</p></li>
+<li><p>Initializing the model.</p></li>
+<li><p>Training the model.</p></li>
+<li><p>Predicting goals.</p></li>
+<li><p>Evaluating the model’s performance.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match</strong> (<em>int</em>) – The match index for which the subpipeline is created.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the subworkflow for a single match.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.create_walk_forward_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">create_walk_forward_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.create_walk_forward_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates a walk-forward pipeline that iterates over a sequence of matches.</p>
+<p>This function constructs a pipeline that sequentially processes matches from start_match to last_match.
+It combines subpipelines for individual matches using the sum operator, resulting in a unified pipeline
+that applies the walk-forward evaluation approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_match</strong> (<em>int</em>) – The index of the first match to process.</p></li>
+<li><p><strong>last_match</strong> (<em>int</em>) – The index of the last match to process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the walk-forward evaluation workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.eval_dataset_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">eval_dataset_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setting</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.eval_dataset_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates an evaluation pipeline for a dataset over a range of matches for various engines and variants.</p>
+<p>This pipeline aggregates evaluation metrics for individual matches within a dataset. For each combination
+of engine and model variant specified in the setting, it creates a subpipeline that collects metrics from
+each match and then aggregates them using the ‘aggregate_dataset_metrics’ node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_match</strong> (<em>int</em>) – The starting match index for evaluation.</p></li>
+<li><p><strong>last_match</strong> (<em>int</em>) – The ending match index for evaluation.</p></li>
+<li><p><strong>setting</strong> (<em>list</em><em>[</em><em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – An iterable of tuples specifying the engine and variant combinations.</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset to be processed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the aggregated dataset evaluation workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.eval_model_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">eval_model_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.eval_model_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates an evaluation pipeline to aggregate model metrics across datasets.</p>
+<p>This pipeline collects dataset-level metrics for a given engine and model variant from all datasets
+specified in the settings, then aggregates these metrics using the ‘aggregate_model_metrics’ node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>str</em>) – The probabilistic programming engine (e.g., “pymc” or “pyro”).</p></li>
+<li><p><strong>variant</strong> (<em>str</em>) – The model variant (e.g., “simple”, “toto”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the model evaluation aggregation workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.pipeline.ml_pipeline">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.pipeline.</span></span><span class="sig-name descname"><span class="pre">ml_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Pipeline</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.pipeline.ml_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Creates a machine learning pipeline for training and evaluating a model using a walk-forward approach.</p>
+<p>This pipeline integrates the walk-forward pipeline with input datasets and model configuration parameters.
+It processes the team lexicon and vectorized data, and routes them to the appropriate nodes for model
+initialization, training, prediction, and evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_match</strong> (<em>int</em>) – The starting match index for the walk-forward evaluation.</p></li>
+<li><p><strong>last_match</strong> (<em>int</em>) – The ending match index for the walk-forward evaluation.</p></li>
+<li><p><strong>variant</strong> (<em>str</em>) – The model variant to be used (e.g., “simple”, “toto”).</p></li>
+<li><p><strong>dataset_name</strong> (<em>str</em>) – The name of the dataset being processed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Kedro pipeline object representing the machine learning workflow.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bundesliga.pipelines.data_processing.nodes_etl.html" class="btn btn-neutral float-left" title="bundesliga.pipelines.data_processing.nodes_etl package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bundesliga.pipelines.data_science.nodes_ml.html" class="btn btn-neutral float-right" title="bundesliga.pipelines.data_science.nodes_ml package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Philipp Dahlke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
