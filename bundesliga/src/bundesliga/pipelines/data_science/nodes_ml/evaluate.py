@@ -13,6 +13,7 @@ Dependencies:
     - bundesliga.utils.validation: validate_dataframe
 """
 
+import numpy as np
 import pandas as pd
 
 from bundesliga.model.base_footballmodel import FootballModel
@@ -73,7 +74,6 @@ def evaluate_match(
         "home_prob": toto_probs["home"].values[0],
         "away_prob": toto_probs["away"].values[0],
         "tie_prob": toto_probs["tie"].values[0],
-        "toto_probs": toto_probs,
         "rmse_home": rmse_home,
         "mae_home": mae_home,
         "rmse_away": rmse_away,
@@ -121,8 +121,36 @@ def aggregate_dataset_metrics(
         lambda row: row["predicted_result"] == row["ground_truth"], axis=1
     )
 
-    # Now compute the mean for each metric. You can either compute them individually:
+    def calculate_day_accuracies(df: pd.DataFrame) -> list[float]:
+        """Calculates the accuracy for each day in a DataFrame of match predictions.
+
+        This helper function processes a DataFrame of match predictions in pairs of 9 rows and calculates the accuracy
+
+        Args:
+            df (pd.DataFrame): A DataFrame containing columns "predicted_result" and "ground_truth".
+
+        Returns:
+            list[float]: The mean accuracy across all days in the DataFrame.
+        """
+        day_accuracies = []
+
+        for i in range(0, len(df) - 1, 9):
+            # Select the current pair of rows
+            day = df.iloc[i : i + 9]
+            # Count the number of correct predictions in the pair
+            correct = (day["predicted_result"] == day["ground_truth"]).sum()
+            # Calculate accuracy for the pair divided by the number of matches (includes if there are less than 9 matches)
+            accuracy = correct / len(day)
+            day_accuracies.append(accuracy)
+
+        return day_accuracies
+
+    day_accuracies = calculate_day_accuracies(
+        all_match_metrics[["predicted_result", "ground_truth"]]
+    )
+
     mean_accuracy = all_match_metrics["correct"].mean()
+    day_acc = np.mean(day_accuracies)
     mean_rmse_home = all_match_metrics["rmse_home"].mean()
     mean_mae_home = all_match_metrics["mae_home"].mean()
     mean_rmse_away = all_match_metrics["rmse_away"].mean()
@@ -133,6 +161,7 @@ def aggregate_dataset_metrics(
 
     mean_metrics = {
         "accuracy": mean_accuracy,
+        "day_accuracy": day_acc,
         "rmse_home": mean_rmse_home,
         "mae_home": mean_mae_home,
         "rmse_away": mean_rmse_away,
@@ -174,6 +203,7 @@ def aggregate_model_metrics(
 
     nested_run_name = f"Model Metrics | engine={engine} | model={variant} "
     mean_accuracy = all_dataset_metrics["accuracy"].mean()
+    mean_day_accuracy = all_dataset_metrics["day_accuracy"].mean()
     mean_rmse_home = all_dataset_metrics["rmse_home"].mean()
     mean_mae_home = all_dataset_metrics["mae_home"].mean()
     mean_rmse_away = all_dataset_metrics["rmse_away"].mean()
@@ -184,6 +214,7 @@ def aggregate_model_metrics(
 
     mean_model_metrics = {
         "accuracy": mean_accuracy,
+        "day_accuracy": mean_day_accuracy,
         "rmse_home": mean_rmse_home,
         "mae_home": mean_mae_home,
         "rmse_away": mean_rmse_away,
