@@ -20,14 +20,12 @@
 model_options:
   model: ""  # The type of model to use (e.g., "simple", "toto").
   engine: ""  # The engine to use for the model (e.g., "pymc", "pyro").
-  start_match: 0  # The starting day for the data.
-  last_match: null  # The number of days to walk forward in the data.
-  test_size: 0.2  # The proportion of data to use for testing.
+  start_match: 1  # The starting day for the data.
+  last_match: 5  # Last match to consider for predicting. Choose null for predicting on the whole dataset.
 
   # Model-specific configuration options.
   model_config: # Define in model-specific config.
   sampler_config: # Define in model-specific config.
-      random_seed: 42  # Random seed for reproducibility.
 
 # -------------------------------
 # Pipeline-Specific Configuration (PyMC)
@@ -100,7 +98,11 @@ pyro:
     _overrides:
       model: "simple"  # Use the "simple" model variant.
     model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
-
+  # Configuration for the "simple" Pyro model.
+  simple2:
+    _overrides:
+      model: "simple"  # Use the "simple" model variant.
+    model_options: ${merge:${merge:${...model_options},${.._overrides_base}},${._overrides}}
   # Configuration for the "toto" Pyro model.
   toto:
     _overrides:
