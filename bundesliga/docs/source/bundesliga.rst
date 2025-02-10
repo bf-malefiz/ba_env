@@ -1,12 +1,12 @@
 bundesliga package
 ==================
 
-.. automodule:: bundesliga
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. .. automodule:: bundesliga
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:
 
-Subpackages
+Src module
 -----------
 
 .. toctree::
@@ -17,10 +17,10 @@ Subpackages
    bundesliga.pipelines
    bundesliga.utils
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-bundesliga.pipeline\_registry module
+pipeline\_registry module
 ------------------------------------
 
 .. automodule:: bundesliga.pipeline_registry
@@ -28,7 +28,7 @@ bundesliga.pipeline\_registry module
    :undoc-members:
    :show-inheritance:
 
-bundesliga.settings module
+settings module
 --------------------------
 
 .. automodule:: bundesliga.settings

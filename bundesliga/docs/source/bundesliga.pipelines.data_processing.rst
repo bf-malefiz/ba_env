@@ -1,4 +1,4 @@
-bundesliga.pipelines.data\_processing package
+data\_processing
 =============================================
 
 .. automodule:: bundesliga.pipelines.data_processing
@@ -14,13 +14,13 @@ Subpackages
 
    bundesliga.pipelines.data_processing.nodes_etl
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-bundesliga.pipelines.data\_processing.pipeline module
------------------------------------------------------
+.. data\_processing pipeline
+.. -----------------------------------------------------
 
-.. automodule:: bundesliga.pipelines.data_processing.pipeline
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. .. automodule:: bundesliga.pipelines.data_processing.pipeline
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:

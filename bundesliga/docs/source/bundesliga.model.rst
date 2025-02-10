@@ -1,4 +1,4 @@
-bundesliga.model package
+model package
 ========================
 
 .. automodule:: bundesliga.model
@@ -15,10 +15,10 @@ Subpackages
    bundesliga.model.pymc
    bundesliga.model.pyro
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-base\_footballmodel module
+Abstract FootballModel
 -------------------------------------------
 
 .. automodule:: bundesliga.model.base_footballmodel

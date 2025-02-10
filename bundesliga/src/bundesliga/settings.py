@@ -4,7 +4,9 @@ There is no need to edit this file unless you want to change values
 from the Kedro defaults or add new Models. For further information, including these default values, see
 https://docs.kedro.org/en/stable/kedro_project_setup/settings.html.
 
-**`DYNAMIC_PIPELINES_MAPPING`**: Specifies the type of engine and model used. \ni.e.: {"pyro": ["simple", "toto"]}
+**SEED**: Set the random seed for reproducibility. \n
+**DYNAMIC_PIPELINES_MAPPING**: Specifies the type of engine and model used. \n
+i.e.: {"pyro": ["simple", "toto"]}
 """
 
 from pathlib import Path
