@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bundesliga.pipelines.data_processing.nodes_etl package &mdash; BA - Bayesian Model Evaluation 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="bundesliga.pipelines.data_science package" href="bundesliga.pipelines.data_science.html" />
+    <link rel="prev" title="bundesliga.pipelines.data_processing package" href="bundesliga.pipelines.data_processing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BA - Bayesian Model Evaluation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">bundesliga</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="bundesliga.html">bundesliga package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bundesliga.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.hooks.html">bundesliga.hooks package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#module-bundesliga.hooks.model_tracking_hooks">bundesliga.hooks.model_tracking_hooks module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.model.html">bundesliga.model package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.model.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pymc.html">bundesliga.model.pymc package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#bundesliga-model-pymc-pymc-model-module">bundesliga.model.pymc.pymc_model module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#bundesliga-model-pymc-pymc-simple-model-module">bundesliga.model.pymc.pymc_simple_model module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pymc.html#bundesliga-model-pymc-pymc-toto-model-module">bundesliga.model.pymc.pymc_toto_model module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.model.pyro.html">bundesliga.model.pyro package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga-model-pyro-pyro-model-module">bundesliga.model.pyro.pyro_model module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#module-bundesliga.model.pyro.pyro_parameters">bundesliga.model.pyro.pyro_parameters module</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga.model.pyro.pyro_parameters.FootballParameters"><code class="docutils literal notranslate"><span class="pre">FootballParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.model.pyro.html#bundesliga-model-pyro-pyro-simple-model-module">bundesliga.model.pyro.pyro_simple_model module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.model.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.model.html#bundesliga-model-base-footballmodel-module">bundesliga.model.base_footballmodel module</a></li>
+</ul>
+</li>
+<li class="toctree-l4 current"><a class="reference internal" href="bundesliga.pipelines.html">bundesliga.pipelines package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="bundesliga.pipelines.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l6 current"><a class="reference internal" href="bundesliga.pipelines.data_processing.html">bundesliga.pipelines.data_processing package</a><ul class="current">
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
+<li class="toctree-l7 current"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l8 current"><a class="current reference internal" href="#">bundesliga.pipelines.data_processing.nodes_etl package</a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l9"><a class="reference internal" href="#module-bundesliga.pipelines.data_processing.nodes_etl.nodes">bundesliga.pipelines.data_processing.nodes_etl.nodes module</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="#bundesliga.pipelines.data_processing.nodes_etl.nodes.build_team_lexicon"><code class="docutils literal notranslate"><span class="pre">build_team_lexicon()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="#bundesliga.pipelines.data_processing.nodes_etl.nodes.get_goal_results"><code class="docutils literal notranslate"><span class="pre">get_goal_results()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="#bundesliga.pipelines.data_processing.nodes_etl.nodes.vectorize_data"><code class="docutils literal notranslate"><span class="pre">vectorize_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#module-bundesliga.pipelines.data_processing.pipeline">bundesliga.pipelines.data_processing.pipeline module</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.pipeline.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.pipelines.data_science.html">bundesliga.pipelines.data_science package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_model_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_definition_node()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_subpipeline_for_match"><code class="docutils literal notranslate"><span class="pre">create_subpipeline_for_match()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_walk_forward_pipeline"><code class="docutils literal notranslate"><span class="pre">create_walk_forward_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.eval_dataset_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_dataset_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.eval_model_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_model_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.ml_pipeline"><code class="docutils literal notranslate"><span class="pre">ml_pipeline()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html">bundesliga.pipelines.data_science.nodes_ml package</a><ul>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#submodules">Submodules</a></li>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.evaluate">bundesliga.pipelines.data_science.nodes_ml.evaluate module</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_dataset_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_dataset_metrics()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_model_metrics()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner"><code class="docutils literal notranslate"><span class="pre">determine_winner()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match"><code class="docutils literal notranslate"><span class="pre">evaluate_match()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.predicted_result"><code class="docutils literal notranslate"><span class="pre">predicted_result()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.true_result"><code class="docutils literal notranslate"><span class="pre">true_result()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.train_model">bundesliga.pipelines.data_science.nodes_ml.train_model module</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.init_model"><code class="docutils literal notranslate"><span class="pre">init_model()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.predict_goals"><code class="docutils literal notranslate"><span class="pre">predict_goals()</span></code></a></li>
+<li class="toctree-l10"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.train_model.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#submodules">Submodules</a></li>
+<li class="toctree-l7"><a class="reference internal" href="bundesliga.pipelines.data_science.html#module-bundesliga.pipelines.data_science.pipeline">bundesliga.pipelines.data_science.pipeline module</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.create_model_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_definition_node()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.create_model_eval_definition_node"><code class="docutils literal notranslate"><span class="pre">create_model_eval_definition_node()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.create_subpipeline_for_match"><code class="docutils literal notranslate"><span class="pre">create_subpipeline_for_match()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.create_walk_forward_pipeline"><code class="docutils literal notranslate"><span class="pre">create_walk_forward_pipeline()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.eval_dataset_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_dataset_pipeline()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.eval_model_pipeline"><code class="docutils literal notranslate"><span class="pre">eval_model_pipeline()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.pipeline.ml_pipeline"><code class="docutils literal notranslate"><span class="pre">ml_pipeline()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html">bundesliga.utils package</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.utils">bundesliga.utils.utils module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_goal_distribution"><code class="docutils literal notranslate"><span class="pre">get_goal_distribution()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_probability"><code class="docutils literal notranslate"><span class="pre">get_probability()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_teams"><code class="docutils literal notranslate"><span class="pre">get_teams()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.merge_dicts"><code class="docutils literal notranslate"><span class="pre">merge_dicts()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.split_time_data"><code class="docutils literal notranslate"><span class="pre">split_time_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.validation">bundesliga.utils.validation module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.validation.validate_dataframe"><code class="docutils literal notranslate"><span class="pre">validate_dataframe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#module-bundesliga.pipeline_registry">bundesliga.pipeline_registry module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.build_engine_pipelines"><code class="docutils literal notranslate"><span class="pre">build_engine_pipelines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.read_matchlength_from_data"><code class="docutils literal notranslate"><span class="pre">read_matchlength_from_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.html#bundesliga.pipeline_registry.register_pipelines"><code class="docutils literal notranslate"><span class="pre">register_pipelines()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bundesliga.html#module-bundesliga.settings">bundesliga.settings module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BA - Bayesian Model Evaluation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">bundesliga</a></li>
+          <li class="breadcrumb-item"><a href="bundesliga.html">bundesliga package</a></li>
+          <li class="breadcrumb-item"><a href="bundesliga.pipelines.html">bundesliga.pipelines package</a></li>
+          <li class="breadcrumb-item"><a href="bundesliga.pipelines.data_processing.html">bundesliga.pipelines.data_processing package</a></li>
+      <li class="breadcrumb-item active">bundesliga.pipelines.data_processing.nodes_etl package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bundesliga.pipelines.data_processing.nodes_etl.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-bundesliga.pipelines.data_processing.nodes_etl">
+<span id="bundesliga-pipelines-data-processing-nodes-etl-package"></span><h1>bundesliga.pipelines.data_processing.nodes_etl package<a class="headerlink" href="#module-bundesliga.pipelines.data_processing.nodes_etl" title="Link to this heading"></a></h1>
+<p>bundesliga</p>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-bundesliga.pipelines.data_processing.nodes_etl.nodes">
+<span id="bundesliga-pipelines-data-processing-nodes-etl-nodes-module"></span><h2>bundesliga.pipelines.data_processing.nodes_etl.nodes module<a class="headerlink" href="#module-bundesliga.pipelines.data_processing.nodes_etl.nodes" title="Link to this heading"></a></h2>
+<p>Module: data_processing</p>
+<dl class="simple">
+<dt>Summary:</dt><dd><p>Functions for processing football match data to build a team lexicon, extract goal results,
+and vectorize the data for modeling.</p>
+</dd>
+<dt>Dependencies:</dt><dd><ul class="simple">
+<li><p>numpy as np</p></li>
+<li><p>pandas as pd</p></li>
+<li><p>bundesliga.utils.validation.validate_dataframe</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_processing.nodes_etl.nodes.build_team_lexicon">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_processing.nodes_etl.nodes.</span></span><span class="sig-name descname"><span class="pre">build_team_lexicon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_processing.nodes_etl.nodes.build_team_lexicon" title="Link to this definition"></a></dt>
+<dd><p>Builds a team lexicon (mapping of team names to unique indices) from the input DataFrame.</p>
+<p>This function extracts unique team names from the “HomeTeam” column and assigns each team
+a unique index. The resulting lexicon is a DataFrame with team names as the index and
+their corresponding indices as values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing match data with a “HomeTeam” column.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A DataFrame representing the team lexicon, with team names as the index</dt><dd><p>and their corresponding indices as values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_processing.nodes_etl.nodes.get_goal_results">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_processing.nodes_etl.nodes.</span></span><span class="sig-name descname"><span class="pre">get_goal_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lexicon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_processing.nodes_etl.nodes.get_goal_results" title="Link to this definition"></a></dt>
+<dd><p>Extracts goal results from the input DataFrame and maps team names to their indices.</p>
+<p>This function validates that the goal columns contain numerical values, checks for valid match entries
+(e.g., ensuring that a team does not play against itself and that goal values are non-negative), and then
+maps team names to their unique indices using the provided team lexicon. It returns a DataFrame containing
+goal results as tuples for home and away teams.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing match data with “HomeTeam”, “AwayTeam”, and goal columns.</p></li>
+<li><p><strong>lexicon</strong> (<em>pd.DataFrame</em>) – The team lexicon mapping team names to unique indices.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A DataFrame with two columns:</dt><dd><ul class="simple">
+<li><p>”home_goals”: Tuples of (home_team_index, away_team_index, home goals).</p></li>
+<li><p>”away_goals”: Tuples of (home_team_index, away_team_index, away goals).</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If non-numerical values are detected in the goal columns, if a match has the same team
+    for both home and away, or if negative goal values are present.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.pipelines.data_processing.nodes_etl.nodes.vectorize_data">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_processing.nodes_etl.nodes.</span></span><span class="sig-name descname"><span class="pre">vectorize_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">goals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_processing.nodes_etl.nodes.vectorize_data" title="Link to this definition"></a></dt>
+<dd><p>Vectorizes the goal results into a structured DataFrame.</p>
+<p>This function processes the tuples in the “home_goals” and “away_goals” columns to extract individual
+components (team indices and goals scored), calculates the match outcome (toto) based on the goals, and
+constructs a new DataFrame with separate columns for home team index, away team index, home goals, away goals,
+and the match result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>goals</strong> (<em>pd.DataFrame</em>) – A DataFrame containing goal results with columns “home_goals” and “away_goals”.
+Each entry is a tuple of (home_team_index, away_team_index, goals).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A structured DataFrame with columns:</dt><dd><ul class="simple">
+<li><p>”home_id”: Home team index.</p></li>
+<li><p>”away_id”: Away team index.</p></li>
+<li><p>”home_goals”: Goals scored by the home team.</p></li>
+<li><p>”away_goals”: Goals scored by the away team.</p></li>
+<li><p>”toto”: Match outcome (0 for draw, 1 for home win, 2 for away win).</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the required columns (“home_goals”, “away_goals”) are missing.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bundesliga.pipelines.data_processing.html" class="btn btn-neutral float-left" title="bundesliga.pipelines.data_processing package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bundesliga.pipelines.data_science.html" class="btn btn-neutral float-right" title="bundesliga.pipelines.data_science package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Philipp Dahlke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
