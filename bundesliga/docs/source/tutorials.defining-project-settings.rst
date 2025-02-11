@@ -40,3 +40,9 @@ This tutorial guides you through setting up the project-related configurations b
 .. literalinclude:: ../../conf/base/parameters.yml
     :lines: 50-59
     :language: yaml
+
+1. **Choose an Experiment name**: In `mlflow.yml`, modify the Experiment name variable to set the name of the experiment in MLflow.
+
+.. literalinclude:: ../../conf/local/mlflow.yml
+    :lines: 36-37
+    :language: yaml
