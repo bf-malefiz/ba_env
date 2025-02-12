@@ -15,7 +15,7 @@ Key Features
 * **MLflow Tracking**: Integrates with MLflow to track experiments, log parameters, metrics, and artifacts, facilitating model comparison and reproducibility.
 * **Modular Design**: Provides a flexible and extensible framework for incorporating various Bayesian models and evaluation metrics.
 * **Data Validation**: Includes data validation checks to ensure data integrity and consistency throughout the pipeline.
-* **Comprehensive Metrics**: Offers a wide range of evaluation metrics, including but not limited to, negative log-likelihood, Brier score, ranked probability score (RPS), root mean squared error (RMSE), and mean absolute error (MAE).
+* **Comprehensive Metrics**: Offers a wide range of evaluation metrics and incorperates easily extensible custom metrics which will log in MLflow automaticly.
 
 Getting Started
 ---------------
@@ -43,8 +43,13 @@ Contributions to the framework and documentation are welcome! Please see the con
 
 License
 -------
+This project is licensed under the MIT License. All code and documentation is free to use,
+modify, and distribute as long as proper attribution is provided.
+
 .. toctree::
    bundesliga
    tutorials
-   :maxdepth: 3
+   license
+   :maxdepth: 4
    :caption: Contents:
+
