@@ -128,8 +128,9 @@ def eval_dataset_pipeline(
                         inputs=[f"{engine}.{dataset_name}.{variant}.modeldefinitions"]
                         + match_metrics_inputs,
                         outputs=[
-                            f"{engine}.{dataset_name}.{variant}.dataset_metrics",
+                            f"{engine}.{dataset_name}.{variant}.mean_metrics",
                             f"{engine}.{dataset_name}.{variant}.nested_run_name",
+                            f"{engine}.{dataset_name}.{variant}.matchday_metrics",
                         ],
                         name=f"{engine}.{dataset_name}.{variant}.aggregate_dataset_metrics_node",
                         tags=[engine, variant, dataset_name],
@@ -156,7 +157,7 @@ def eval_model_pipeline(engine: str, variant: str) -> Pipeline:
         Pipeline: A Kedro pipeline object representing the model evaluation aggregation workflow.
     """
     match_metrics_inputs = [
-        f"{engine}.{dataset_name}.{variant}.dataset_metrics"
+        f"{engine}.{dataset_name}.{variant}.mean_metrics"
         for dataset_name in settings.DATASETS
     ]
     pipe_collection = []
@@ -281,6 +282,7 @@ def create_subpipeline_for_match(match: int) -> Pipeline:
                 inputs={
                     "team_lexicon": "team_lexicon",
                     "model_options": "params:model_options",
+                    # "toto": f"toto_{match}",
                 },
                 outputs=f"init_model_{match}",
                 name=f"init_model_node_{match}",
@@ -291,7 +293,6 @@ def create_subpipeline_for_match(match: int) -> Pipeline:
                     "model": f"init_model_{match}",
                     "train_data": f"train_data_{match}",
                     "model_options": "params:model_options",
-                    # "toto": f"toto_{match}",
                 },
                 outputs=f"model_{match}",
                 name=f"fit_node_{match}",

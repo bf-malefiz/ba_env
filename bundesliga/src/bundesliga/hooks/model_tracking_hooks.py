@@ -164,6 +164,7 @@ class ModelTrackingHooks:
             out_names = node._outputs
             ds_mean_metrics = outputs[out_names[0]]
             nested_run_name = outputs[out_names[1]]
+            matchday_metrics = outputs[out_names[2]]
 
             # Log metrics and parameters to MLflow
             active_run = mlflow.active_run()
@@ -173,6 +174,12 @@ class ModelTrackingHooks:
                     nested=True,
                 ) as run:
                     mlflow.log_metrics(ds_mean_metrics)
+
+                    # Log the entire history of metrics for each matchday
+                    for match, row in matchday_metrics.iterrows():
+                        metrics_dict = row.to_dict()
+                        mlflow.log_metrics(metrics=metrics_dict, step=match)
+
                     mlflow.log_params(
                         {
                             "season": tags[0],
