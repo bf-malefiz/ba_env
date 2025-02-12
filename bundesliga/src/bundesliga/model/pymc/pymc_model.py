@@ -54,14 +54,15 @@ class PymcModel(ModelBuilder, FootballModel):
             team_lexicon (Optional[Dict], optional): Mapping of team identifiers to their corresponding values.
         """
         if "model_config" in model_options:
-            self.model_config.update(model_options["model_config"])
+            self.model_config = model_options["model_config"]
         else:
             self.model_config = self.get_default_model_config()
-
+            print("Initializing with default model config")
         if "sampler_config" in model_options:
-            self.sampler_config.update(model_options["model_config"])
+            self.sampler_config = model_options["sampler_config"]
         else:
             self.sampler_config = self.get_default_sampler_config()
+            print("Initializing with default sampler config")
 
         self.team_lexicon = team_lexicon
         super().__init__(self.model_config, self.sampler_config)
@@ -112,7 +113,7 @@ class PymcModel(ModelBuilder, FootballModel):
         match_length = len(self.model_coords["match"])
         new_match_range = np.arange(input_length) + match_length
         dummy = np.ones(shape=(1, 2), dtype=int)
-
+        dummy_toto = np.ones(len(new_match_range), dtype=int)
         with self.model:
             self.model_coords["match"] = new_match_range
             pm.set_data(
@@ -137,6 +138,13 @@ class PymcModel(ModelBuilder, FootballModel):
                         "y": ["home_goals", "away_goals"],
                     },
                 )
+                if "toto_data" in self.model.named_vars:
+                    pm.set_data(
+                        {"toto_data": dummy_toto},
+                        coords={
+                            "match": new_match_range,
+                        },
+                    )
 
     @staticmethod
     def get_default_model_config() -> dict:
@@ -232,18 +240,10 @@ class PymcModel(ModelBuilder, FootballModel):
             y (Union[pd.Series, np.ndarray]): Target data for the model.
         """
 
-        def _get_teams(df: pd.DataFrame) -> np.array:
-            teams, uniques = pd.factorize(
-                X[["home_id", "away_id"]].values.flatten(), sort=True
-            )
-
-            return teams, uniques
-
         if isinstance(y, pd.Series | np.ndarray):
             y = y.tolist()
 
         self.model_coords = {
-            # "team": _get_teams(X)[1],
             "team": self.team_lexicon.index,
             "match": np.arange(len(X)),
             "X": ["home_id", "away_id"],
@@ -267,8 +267,7 @@ class PymcModel(ModelBuilder, FootballModel):
             idata: The inference data object containing the results of the training.
         """
         goals = y.apply(lambda row: (row["home_goals"], row["away_goals"]), axis=1)
-        toto = y["toto"].values
-
+        self.toto = y["toto"].values
         idata = self.fit(
             X=X,
             y=goals,

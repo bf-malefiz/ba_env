@@ -2,6 +2,7 @@ import pandas as pd
 import xarray as xr
 
 import bundesliga.model.pymc.pymc_simple_model as pm_simple
+import bundesliga.model.pymc.pymc_toto_model as pm_toto
 import bundesliga.model.pyro.pyro_simple_model as pyro_simple
 from bundesliga.model.base_footballmodel import FootballModel
 from bundesliga.utils.validation import validate_dataframe
@@ -50,13 +51,11 @@ def init_model(
                         model_options=model_options, team_lexicon=team_lexicon
                     )
                 case "toto":
-                    try:
-                        kwargs["toto"]
-                    except KeyError:
-                        raise ValueError(
-                            "pm_toto.TotoModel requires 'toto' as keyword argument."
-                        )
-                    raise NotImplementedError("Pymc-toto not implemented.")
+                    return pm_toto.TotoModel(
+                        model_options=model_options,
+                        team_lexicon=team_lexicon,
+                        # toto=kwargs["toto"],
+                    )
         case "pyro":
             match model:
                 case "simple":
