@@ -31,12 +31,15 @@ class TotoModel(PymcModel):
         version (str): The version identifier of the Totomodel implementation.
     """
 
-    # def __init__(
-    #     self, model_config=None, sampler_config=None, team_lexicon=None, toto=None
-    # ):
-    #     self.team_lexicon = team_lexicon
-    #     self.toto = toto
-    #     super().__init__(model_config, sampler_config)
+    def __init__(
+        self,
+        model_options,
+        team_lexicon=None,
+        toto=None,
+    ):
+        self.team_lexicon = team_lexicon
+        self.toto = toto
+        super().__init__(model_options, team_lexicon)
 
     # Give the model a name
     _model_type = "Toto_FootballModel"
@@ -64,34 +67,34 @@ class TotoModel(PymcModel):
             **kwargs: Additional keyword arguments for customizing the model configuration, if necessary.
         """
 
-        # self._generate_and_preprocess_model_data(X, goals)
+        if isinstance(X, pd.DataFrame):
+            X = X[["home_id", "away_id"]]
+
+        y = y.values if isinstance(y, pd.Series) else y
+        self._generate_and_preprocess_model_data(X, y)
 
         with pm.Model(coords=self.model_coords) as self.model:
             # //////////////////////////////////////////////
 
             x_data_home = pm.Data(
                 "x_data_home",
-                X["home_id"].values,
+                self.X["home_id"].values,
                 dims="match",
             )
             x_data_away = pm.Data(
                 "x_data_away",
-                X["away_id"].values,
+                self.X["away_id"].values,
                 dims="match",
             )
-            y_data_home = pm.Data(
-                "y_data_home",
-                y["home_goals"].values,
-                dims="match",
+            y_data = pm.Data(
+                "y_data",
+                self.y,
+                dims=["match", "y"],
             )
-            y_data_away = pm.Data(
-                "y_data_away",
-                y["away_goals"].values,
-                dims="match",
-            )
+
             toto_data = pm.Data(
                 "toto_data",
-                y["toto"].values,
+                self.toto,
                 dims="match",
             )
             # prior parameters
@@ -100,27 +103,38 @@ class TotoModel(PymcModel):
             prior_offence_defence_diff_params = prior_params["offence_defence_diff"]
             prior_home_advantage_params = prior_params["home_advantage"]
             weights = prior_params["weights"]
+
+            score_tau = prior_score_params["tau"]
+            score_mu = prior_score_params["mu"]
+
+            offence_defence_diff_tau = prior_offence_defence_diff_params["tau"]
+            offence_defence_diff_mu = prior_offence_defence_diff_params["mu"]
+
+            home_advantage_tau = prior_home_advantage_params["tau"]
+            home_advantage_mu = prior_home_advantage_params["mu"]
+
+            # softmax regression weights for winner predicton:
+            w_mu = tuple(weights.get("mu", (0.0, 0.0, 0.0)))
+
             # priors
             score = pm.Normal(
                 "score",
-                tau=prior_score_params.get("tau"),
-                mu=prior_score_params.get("mu"),
+                tau=score_tau,
+                mu=score_mu,
                 dims="team",
             )
             offence_defence_diff = pm.Normal(
                 "offence_defence_diff",
-                tau=prior_offence_defence_diff_params.get("tau"),
-                mu=prior_offence_defence_diff_params.get("mu"),
+                tau=offence_defence_diff_tau,
+                mu=offence_defence_diff_mu,
                 dims="team",
             )
             home_advantage = pm.Normal(
                 "home_advantage",
-                tau=prior_home_advantage_params.get("tau"),
-                mu=prior_home_advantage_params.get("mu"),
+                tau=home_advantage_tau,
+                mu=home_advantage_mu,
             )
 
-            # softmax regression weights for winner predicton:
-            w_mu = tuple(weights.get("mu", (0.0, 0.0, 0.0)))
             weights = pm.Normal(
                 "weights",
                 mu=w_mu,
@@ -137,12 +151,14 @@ class TotoModel(PymcModel):
 
             mu_home = pm.math.exp(offence_home - defence_away)
             mu_away = pm.math.exp(offence_away - defence_home)
+            mu = pm.math.stack([mu_home, mu_away], axis=-1)
             # toDo: ungenutzte variablen?
             # home_value = pm.math.switch(mu_home < min_mu, min_mu, mu_home)
             # away_value = pm.math.switch(mu_away < min_mu, min_mu, mu_away)
 
-            pm.Poisson("home_goals", observed=y_data_home, mu=mu_home, dims="match")
-            pm.Poisson("away_goals", observed=y_data_away, mu=mu_away, dims="match")
+            # pm.Poisson("home_goals", observed=y_data_home, mu=mu_home, dims="match")
+            # pm.Poisson("away_goals", observed=y_data_away, mu=mu_away, dims="match")
+            pm.Poisson("goals", observed=y_data, mu=mu, dims=["match", "y"])
 
             home_away_score_diff = score_home - score[x_data_away]
             home_away_score_diff = home_away_score_diff.reshape((-1, 1)).repeat(
@@ -151,4 +167,4 @@ class TotoModel(PymcModel):
 
             pred = pm.math.exp(home_away_score_diff * weights)
             pred = (pred.T / pm.math.sum(pred, axis=1)).T
-            pm.Categorical("toto", p=pred, observed=toto_data)
+            pm.Categorical("toto", p=pred, observed=toto_data, dims="match")
