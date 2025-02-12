@@ -154,5 +154,5 @@
     type: MemoryDataset  # Dataset type for in-memory data.
 "{engine}.{dataset_name}.{variant}.aggregated_metrics":
     type: MemoryDataset  # Dataset type for in-memory data.
-"{engine}.{dataset_name}.{variant}.dataset_metrics":
+"{engine}.{dataset_name}.{variant}.mean_metrics":
     type: MemoryDataset  # Dataset type for in-memory data.
