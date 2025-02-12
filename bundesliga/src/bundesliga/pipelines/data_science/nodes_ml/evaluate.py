@@ -9,7 +9,8 @@ Summary:
 Dependencies:
     - numpy as np
     - pandas as pd
-    - bundesliga.utils.utils: brier_score, log_likelihood, rmse_mae, rps
+    - bundesliga.utils.utils: calculate_day_accuracies, calculate_day_metrics
+    - bundesliga.utils.metrics: brier_score, log_likelihood, rmse_mae, rps
     - bundesliga.utils.validation: validate_dataframe
 """
 
@@ -17,13 +18,15 @@ import numpy as np
 import pandas as pd
 
 from bundesliga.model.base_footballmodel import FootballModel
-from bundesliga.utils.utils import (
+from bundesliga.utils.metrics import (
     brier_score,
-    calculate_day_accuracies,
-    calculate_day_metrics,
     log_likelihood,
     rmse_mae,
     rps,
+)
+from bundesliga.utils.utils import (
+    calculate_day_accuracies,
+    calculate_day_metrics,
 )
 from bundesliga.utils.validation import validate_dataframe
 
