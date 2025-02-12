@@ -299,3 +299,50 @@ def rmse_mae(
     mae_away = np.mean(np.abs(errors_away))
 
     return rmse_home, mae_home, rmse_away, mae_away
+
+
+def calculate_day_accuracies(df: pd.DataFrame) -> list[float]:
+    """Calculates the accuracy for each day in a DataFrame of match predictions.
+
+    This helper function processes a DataFrame of match predictions in pairs of 9 rows and calculates the accuracy
+
+    Args:
+        df (pd.DataFrame): A DataFrame containing columns "predicted_result" and "ground_truth".
+
+    Returns:
+        list[float]: The mean accuracy across all days in the DataFrame.
+    """
+    day_accuracies = []
+
+    for i in range(0, len(df) - 1, 9):
+        # Select the current pair of rows
+        day = df.iloc[i : i + 9]
+        # Count the number of correct predictions in the pair
+        correct = (day["predicted_result"] == day["ground_truth"]).sum()
+        # Calculate accuracy for the pair divided by the number of matches (includes if there are less than 9 matches)
+        accuracy = correct / len(day)
+        day_accuracies.append(accuracy)
+
+    return day_accuracies
+
+
+def calculate_day_metrics(df: pd.DataFrame) -> pd.DataFrame:
+    """Calculates the metrics for each day in a DataFrame.
+
+    This helper function processes a DataFrame of match metrics in pairs of 9 rows and calculates the mean metric value
+
+    Args:
+        df (pd.DataFrame): A DataFrame containing columns of metrics.
+
+    Returns:
+        pd.DataFrame: The mean metrics across all days in the DataFrame.
+    """
+    day_metrics = []
+
+    for i in range(0, len(df) - 1, 9):
+        # Select the current pair of rows
+        day = df.iloc[i : i + 9]
+
+        day_metrics.append(day.mean())
+
+    return pd.DataFrame(day_metrics)

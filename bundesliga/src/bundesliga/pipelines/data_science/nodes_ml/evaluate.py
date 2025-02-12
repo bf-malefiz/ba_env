@@ -17,7 +17,14 @@ import numpy as np
 import pandas as pd
 
 from bundesliga.model.base_footballmodel import FootballModel
-from bundesliga.utils.utils import brier_score, log_likelihood, rmse_mae, rps
+from bundesliga.utils.utils import (
+    brier_score,
+    calculate_day_accuracies,
+    calculate_day_metrics,
+    log_likelihood,
+    rmse_mae,
+    rps,
+)
 from bundesliga.utils.validation import validate_dataframe
 
 
@@ -121,36 +128,26 @@ def aggregate_dataset_metrics(
         lambda row: row["predicted_result"] == row["ground_truth"], axis=1
     )
 
-    def calculate_day_accuracies(df: pd.DataFrame) -> list[float]:
-        """Calculates the accuracy for each day in a DataFrame of match predictions.
-
-        This helper function processes a DataFrame of match predictions in pairs of 9 rows and calculates the accuracy
-
-        Args:
-            df (pd.DataFrame): A DataFrame containing columns "predicted_result" and "ground_truth".
-
-        Returns:
-            list[float]: The mean accuracy across all days in the DataFrame.
-        """
-        day_accuracies = []
-
-        for i in range(0, len(df) - 1, 9):
-            # Select the current pair of rows
-            day = df.iloc[i : i + 9]
-            # Count the number of correct predictions in the pair
-            correct = (day["predicted_result"] == day["ground_truth"]).sum()
-            # Calculate accuracy for the pair divided by the number of matches (includes if there are less than 9 matches)
-            accuracy = correct / len(day)
-            day_accuracies.append(accuracy)
-
-        return day_accuracies
-
-    day_accuracies = calculate_day_accuracies(
+    accuracies_per_matchday = calculate_day_accuracies(
         all_match_metrics[["predicted_result", "ground_truth"]]
     )
+    matchday_metrics = calculate_day_metrics(
+        all_match_metrics[
+            [
+                "rmse_home",
+                "mae_home",
+                "rmse_away",
+                "mae_away",
+                "neg_log_likelihood",
+                "brier_score",
+                "rps",
+            ]
+        ],
+    )
+    matchday_metrics["day_accuracy"] = accuracies_per_matchday
 
     mean_accuracy = all_match_metrics["correct"].mean()
-    day_acc = np.mean(day_accuracies)
+    mean_day_accuracy = np.mean(accuracies_per_matchday)
     mean_rmse_home = all_match_metrics["rmse_home"].mean()
     mean_mae_home = all_match_metrics["mae_home"].mean()
     mean_rmse_away = all_match_metrics["rmse_away"].mean()
@@ -160,18 +157,18 @@ def aggregate_dataset_metrics(
     mean_rps = all_match_metrics["rps"].mean()
 
     mean_metrics = {
-        "accuracy": mean_accuracy,
-        "day_accuracy": day_acc,
-        "rmse_home": mean_rmse_home,
-        "mae_home": mean_mae_home,
-        "rmse_away": mean_rmse_away,
-        "mae_away": mean_mae_away,
-        "neg_log_likelihood": mean_neg_log_likelihood,
-        "brier_score": mean_brier_score,
-        "rps": mean_rps,
+        "accuracy_mean": mean_accuracy,
+        "day_accuracy_mean": mean_day_accuracy,
+        "rmse_home_mean": mean_rmse_home,
+        "mae_home_mean": mean_mae_home,
+        "rmse_away_mean": mean_rmse_away,
+        "mae_away_mean": mean_mae_away,
+        "neg_log_likelihood_mean": mean_neg_log_likelihood,
+        "brier_score_mean": mean_brier_score,
+        "rps_mean": mean_rps,
     }
 
-    return mean_metrics, nested_run_name
+    return mean_metrics, nested_run_name, matchday_metrics
 
 
 def aggregate_model_metrics(
@@ -202,15 +199,15 @@ def aggregate_model_metrics(
     all_dataset_metrics = pd.DataFrame(kwargs[1:])
 
     nested_run_name = f"Model Metrics | engine={engine} | model={variant} "
-    mean_accuracy = all_dataset_metrics["accuracy"].mean()
-    mean_day_accuracy = all_dataset_metrics["day_accuracy"].mean()
-    mean_rmse_home = all_dataset_metrics["rmse_home"].mean()
-    mean_mae_home = all_dataset_metrics["mae_home"].mean()
-    mean_rmse_away = all_dataset_metrics["rmse_away"].mean()
-    mean_mae_away = all_dataset_metrics["mae_away"].mean()
-    mean_neg_log_likelihood = all_dataset_metrics["neg_log_likelihood"].mean()
-    mean_brier_score = all_dataset_metrics["brier_score"].mean()
-    mean_rps = all_dataset_metrics["rps"].mean()
+    mean_accuracy = all_dataset_metrics["accuracy_mean"].mean()
+    mean_day_accuracy = all_dataset_metrics["day_accuracy_mean"].mean()
+    mean_rmse_home = all_dataset_metrics["rmse_home_mean"].mean()
+    mean_mae_home = all_dataset_metrics["mae_home_mean"].mean()
+    mean_rmse_away = all_dataset_metrics["rmse_away_mean"].mean()
+    mean_mae_away = all_dataset_metrics["mae_away_mean"].mean()
+    mean_neg_log_likelihood = all_dataset_metrics["neg_log_likelihood_mean"].mean()
+    mean_brier_score = all_dataset_metrics["brier_score_mean"].mean()
+    mean_rps = all_dataset_metrics["rps_mean"].mean()
 
     mean_model_metrics = {
         "accuracy": mean_accuracy,
