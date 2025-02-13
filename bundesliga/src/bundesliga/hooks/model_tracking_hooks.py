@@ -2,8 +2,6 @@ from typing import Any
 
 import mlflow
 from kedro.framework.hooks import hook_impl
-from kedro.io import CatalogProtocol
-from kedro.pipeline import Pipeline
 from kedro.pipeline.node import Node
 
 
@@ -19,37 +17,11 @@ class ModelTrackingHooks:
     """
 
     @hook_impl
-    def before_pipeline_run(
-        self, run_params: (dict[str, Any]), pipeline: Pipeline, catalog: CatalogProtocol
-    ) -> None:
-        """
-        Hook implementation called before the pipeline starts running.
-
-        This method is designed to ensure that any previously active MLflow run is properly terminated
-        before a new pipeline execution begins. It checks for an active MLflow run, and if one is found,
-        it ends and deletes the run to prevent interference with the new pipeline run's tracking information.
-
-        This method becomes opsolete when https://github.com/Galileo-Galilei/kedro-mlflow/issues/623 is resolved.
-
-        Args:
-            run_params (dict[str, Any]): A collection of parameters and settings associated with the pipeline run.
-            pipeline (Pipeline): The Kedro pipeline object that is scheduled to run, containing the defined nodes.
-            catalog (CatalogProtocol): The data catalog that provides configuration details for all datasets used in the pipeline.
-        """
-        run = mlflow.active_run()
-        mlflow.end_run()
-        mlflow.delete_run(run.info.run_id)
-
-    @hook_impl
     def after_dataset_loaded(self, dataset_name: str, data: Any, node: Node) -> None:
         """
         Hook implementation called after a dataset is loaded.
 
-        This method performs post-processing once a dataset is loaded into the pipeline. It inspects the node's
-        tags to determine the appropriate pipeline context. If the current active MLflow run's name does not match
-        the determined pipeline tag, the method ends and deletes the current run, then starts a new MLflow run
-        with the proper run name and description. Additionally, if the dataset name contains the substring "vectorize",
-        the dataset (assumed to be in a pandas DataFrame format) is converted into an MLflow dataset object and logged
+        This method performs post-processing once a dataset is loaded into the pipeline. If the dataset name contains the substring "vectorize", the dataset (assumed to be in a pandas DataFrame format) is converted into an MLflow dataset object and logged
         as an input for MLflow tracking.
 
         Args:
@@ -58,29 +30,6 @@ class ModelTrackingHooks:
             data (Any): The actual dataset loaded which will be logged if it meets the criteria.
             node (Node): The Kedro node responsible for loading the dataset, whose tags are used to determine the appropriate pipeline context.
         """
-        from bundesliga import settings
-
-        pipeline_tag = ""
-
-        if "__default__" in node.tags:
-            pipeline_tag = "__default__"
-        else:
-            pipeline_tag = next(
-                (
-                    tag
-                    for tag in node.tags
-                    if tag in settings.DYNAMIC_PIPELINES_MAPPING.keys()
-                ),
-                None,
-            )
-        run = mlflow.active_run()
-        if run is not None and run.info.run_name != pipeline_tag:
-            mlflow.end_run()
-            mlflow.delete_run(run.info.run_id)
-            mlflow.start_run(
-                run_name=pipeline_tag,
-                description=f"Main Run for CLI instantiated pipeline: {pipeline_tag}",
-            )
 
         if "vectorize" in dataset_name:
             pd_dataset = mlflow.data.from_pandas(data, name=dataset_name)
