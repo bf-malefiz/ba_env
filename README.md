@@ -1,127 +1,62 @@
-# bundesliga
+# ⚽ Bundesliga Match Prediction Framework
 
 [![Powered by Kedro](https://img.shields.io/badge/powered_by-kedro-ffc900?logo=kedro)](https://kedro.org)
+[![MLflow](https://img.shields.io/badge/tracking-mlflow-%23d36135)](https://mlflow.org)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 
-## Overview
+A modular framework for probabilistic football match predictions, built with **Kedro** for pipeline orchestration and **MLflow** for experiment tracking. Developed as part of a B.Sc. thesis at HTW Berlin.
 
-This is your new Kedro project with Kedro-Viz setup, which was generated using `kedro 0.19.10`.
+![Pipeline Visualization](docs/source/_static/pipeline_viz.png)
 
-Take a look at the [Kedro documentation](https://docs.kedro.org) to get started.
+## 📖 Overview
 
-## How to install dependencies
+This repository contains a reproducible machine learning system for:
+- **Probabilistic modeling** of football matches using PyMC and Pyro
+- **Walk-Forward Validation** for time-series predictions
+- **Modular architecture** to compare different engines/models
+- **Experiment tracking** with metrics visualization
+- **End-to-end pipeline** from data processing to model evaluation
 
-First create your new conda environment and activate it. We use this to already install pymc dependencies.
+## 🚀 Quick Start
 
-```
-conda create -c conda-forge -n your_env "pymc>=5"
-conda activate your_env
-```
+### Installation
+```bash
+# Create conda environment with PyMC dependencies
+conda create -c conda-forge -n bl-prediction "pymc>=5" pyro-ppl
+conda activate bl-prediction
 
-To install the required dependencies, run:
-
-```
+# Install project requirements
 pip install -r requirements.txt
 ```
 
-## How to run the Kedro pipeline
+### Run Pipelines
+```bash
+# Train models (all engines)
+kedro run
 
-First build neccessary files by running the etl pipeline:
-
-```
-kedro run --pipeline "etl"
-```
-
-After you can run either the whole pipeline with all engines defined in the settings.py (DYNAMIC_PIPELINES_MAPPING) or use the name to run it respectivly.
-
-```
-kedro run | kedro run --pipeline "pymc"
+# Run specific engine (e.g., Pyro)
+kedro run --pipeline "pyro"
 ```
 
-To define how many models and samples you want to draw go into parameters.py.
-
-Options:
--   start_day = startingpoint for the model in the season to learn
--   walk_forward = how many models the pipeline should initiate and train
-i.e start_day = 30 and walk_forward=2 will train and predict on match 30,31,32
-
-## Visualize kedro pipeline and evaluations
-
-To visualize the pipeline open kedro-viz in terminal. This will open your browser automatically.
-
-```
+### Visualize Results
+```bash
+# Pipeline structure (http://localhost:4141/)
 kedro viz
-```
 
-To visualize the runs and logged metrics open the mlflow ui.
-
-```
+# Experiment metrics (http://localhost:5000)
 mlflow ui
 ```
 
-located at http://localhost:5000/ after starting the ui in your terminal.
+## 🔧 Configuration
+Configure models and parameters in:
+- `conf/base/parameters.yml` - Model hyperparameters
+- `conf/base/datasets_list.yml` - Data sources
+- `settings.py` - Engine/model registry
 
-<!-- 
-## How to test your Kedro project
+## 📚 Documentation
+For detailed usage, architecture, and extension guide:  
+📘 **[See Documentation](bundesliga/docs/build/html/index.html)**
 
-Have a look at the files `src/tests/test_run.py` and `src/tests/pipelines/data_science/test_pipeline.py` for instructions on how to write your tests. Run the tests as follows:
-
-```
-pytest
-```
-
-To configure the coverage threshold, look at the `.coveragerc` file. -->
-<!-- 
-## Project dependencies
-
-To see and update the dependency requirements for your project use `requirements.txt`. Install the project requirements with `pip install -r requirements.txt`.
-
-[Further information about project dependencies](https://docs.kedro.org/en/stable/kedro_project_setup/dependencies.html#project-specific-dependencies)
-
-## How to work with Kedro and notebooks
-
-> Note: Using `kedro jupyter` or `kedro ipython` to run your notebook provides these variables in scope: `catalog`, `context`, `pipelines` and `session`.
->
-> Jupyter, JupyterLab, and IPython are already included in the project requirements by default, so once you have run `pip install -r requirements.txt` you will not need to take any extra steps before you use them.
-
-### Jupyter
-To use Jupyter notebooks in your Kedro project, you need to install Jupyter:
-
-```
-pip install jupyter
-```
-
-After installing Jupyter, you can start a local notebook server:
-
-```
-kedro jupyter notebook
-```
-
-### JupyterLab
-To use JupyterLab, you need to install it:
-
-```
-pip install jupyterlab
-```
-
-You can also start JupyterLab:
-
-```
-kedro jupyter lab
-```
-
-### IPython
-And if you want to run an IPython session:
-
-```
-kedro ipython
-```
-
-### How to ignore notebook output cells in `git`
-To automatically strip out all output cell contents before committing to `git`, you can use tools like [`nbstripout`](https://github.com/kynan/nbstripout). For example, you can add a hook in `.git/config` with `nbstripout --install`. This will run `nbstripout` before anything is committed to `git`.
-
-> *Note:* Your output cells will be retained locally.
-
-[Further information about using notebooks for experiments within Kedro projects](https://docs.kedro.org/en/develop/notebooks_and_ipython/kedro_and_notebooks.html).
-## Package your Kedro project
-
-[Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/tutorial/package_a_project.html). -->
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](bundesliga/docs/build/html/license.html) file for details.
