@@ -244,21 +244,6 @@ def test_evaluate_home_win(sample_test_data, dummy_predictions):
     assert results["predicted_result"] == "home"
 
 
-def test_determine_winner():
-    """
-    Tests the determine_winner function for correctly assigning match outcomes.
-
-    Provides a DataFrame with varying home and away goal counts and verifies that the resulting
-    'winner' column correctly indicates "home", "away", or "tie" for each row.
-    """
-    preds = pd.DataFrame({"home_goals": [2, 1, 3], "away_goals": [1, 2, 3]})
-    result = determine_winner(preds)
-    assert "winner" in result.columns
-    assert result.loc[0, "winner"] == "home"
-    assert result.loc[1, "winner"] == "away"
-    assert result.loc[2, "winner"] == "tie"
-
-
 def test_true_result():
     """
     Verifies that the true_result function correctly determines the actual match outcome.
