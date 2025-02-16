@@ -53,9 +53,9 @@
 <li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
 <li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
 <li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
-<li class="toctree-l6"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l5"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.append_csv_artifact"><code class="docutils literal notranslate"><span class="pre">append_csv_artifact()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -133,7 +133,6 @@
 <li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.evaluate">evaluate</a><ul>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_dataset_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_dataset_metrics()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_model_metrics()</span></code></a></li>
-<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner"><code class="docutils literal notranslate"><span class="pre">determine_winner()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match"><code class="docutils literal notranslate"><span class="pre">evaluate_match()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.predicted_result"><code class="docutils literal notranslate"><span class="pre">predicted_result()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.true_result"><code class="docutils literal notranslate"><span class="pre">true_result()</span></code></a></li>
@@ -157,17 +156,22 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html">utils package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.utils">Utils module</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_accuracies"><code class="docutils literal notranslate"><span class="pre">calculate_day_accuracies()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_metrics"><code class="docutils literal notranslate"><span class="pre">calculate_day_metrics()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_goal_distribution"><code class="docutils literal notranslate"><span class="pre">get_goal_distribution()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_probability"><code class="docutils literal notranslate"><span class="pre">get_probability()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_teams"><code class="docutils literal notranslate"><span class="pre">get_teams()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.merge_dicts"><code class="docutils literal notranslate"><span class="pre">merge_dicts()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.split_time_data"><code class="docutils literal notranslate"><span class="pre">split_time_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.metrics">Metrics module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.validation">Validation module</a><ul>
@@ -196,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorials.adding-metrics.html">Adding additional Metrics to MLflow</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
         </div>
@@ -244,11 +249,7 @@ It logs datasets, parameters, metrics, and tags at different stages of the pipel
 <dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded">
 <span class="sig-name descname"><span class="pre">after_dataset_loaded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded" title="Link to this definition"></a></dt>
 <dd><p>Hook implementation called after a dataset is loaded.</p>
-<p>This method performs post-processing once a dataset is loaded into the pipeline. It inspects the node’s
-tags to determine the appropriate pipeline context. If the current active MLflow run’s name does not match
-the determined pipeline tag, the method ends and deletes the current run, then starts a new MLflow run
-with the proper run name and description. Additionally, if the dataset name contains the substring “vectorize”,
-the dataset (assumed to be in a pandas DataFrame format) is converted into an MLflow dataset object and logged
+<p>This method performs post-processing once a dataset is loaded into the pipeline. If the dataset name contains the substring “vectorize”, the dataset (assumed to be in a pandas DataFrame format) is converted into an MLflow dataset object and logged
 as an input for MLflow tracking.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -267,25 +268,22 @@ for further processing.</p></li>
 <span class="sig-name descname"><span class="pre">after_node_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run">
-<span class="sig-name descname"><span class="pre">before_pipeline_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Pipeline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catalog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CatalogProtocol</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None" title="bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run" title="Link to this definition"></a></dt>
-<dd><p>Hook implementation called before the pipeline starts running.</p>
-<p>This method is designed to ensure that any previously active MLflow run is properly terminated
-before a new pipeline execution begins. It checks for an active MLflow run, and if one is found,
-it ends and deletes the run to prevent interference with the new pipeline run’s tracking information.</p>
-<p>This method becomes opsolete when <a class="reference external" href="https://github.com/Galileo-Galilei/kedro-mlflow/issues/623">https://github.com/Galileo-Galilei/kedro-mlflow/issues/623</a> is resolved.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bundesliga.hooks.model_tracking_hooks.append_csv_artifact">
+<span class="sig-prename descclassname"><span class="pre">bundesliga.hooks.model_tracking_hooks.</span></span><span class="sig-name descname"><span class="pre">append_csv_artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ActiveRun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifact_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bundesliga.hooks.model_tracking_hooks.append_csv_artifact" title="Link to this definition"></a></dt>
+<dd><p>Appends new_data (a pandas DataFrame) to an existing CSV artifact.
+If the artifact does not exist yet, new_data is logged as the initial artifact.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>run_params</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – A collection of parameters and settings associated with the pipeline run.</p></li>
-<li><p><strong>pipeline</strong> (<em>Pipeline</em>) – The Kedro pipeline object that is scheduled to run, containing the defined nodes.</p></li>
-<li><p><strong>catalog</strong> (<em>CatalogProtocol</em>) – The data catalog that provides configuration details for all datasets used in the pipeline.</p></li>
+<li><p><strong>run</strong> (<em>mlflow.ActiveRun</em>) – The active MLflow run.</p></li>
+<li><p><strong>new_data</strong> (<em>pd.DataFrame</em>) – New data to append.</p></li>
+<li><p><strong>artifact_filename</strong> (<em>str</em>) – The filename of the CSV artifact (e.g., “results.csv”).</p></li>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
