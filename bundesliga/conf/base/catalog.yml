@@ -131,16 +131,15 @@
 
 # Reporting datasets contain final results and metrics for analysis.
 
-"{variant}.{dataset}.results":
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataset  # Dataset type for MLflow artifacts.
-  dataset:
-    type: pandas.CSVDataset  # Underlying dataset type (CSV).
-    filepath: data/08_reporting/{dataset}/{variant}/results.csv  # Path to the CSV file.
-    save_args:
-      mode: "a"  # Append mode for saving the CSV file.
-    metadata:
-      kedro-viz:
-        layer: reporting  # Layer in the data pipeline.
+"{engine}.{variant}.results":
+  type: pandas.CSVDataset  # Underlying dataset type (CSV).
+  filepath: data/08_reporting/{engine}/{variant}/results.csv  # Path to the CSV file.
+  save_args:
+      index: False
+      mode: "a"
+  metadata:
+    kedro-viz:
+      layer: reporting  # Layer in the data pipeline.
 
 # -------------------------------
 # Additional Datasets (Commented Out)
