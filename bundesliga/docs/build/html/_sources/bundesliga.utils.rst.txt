@@ -17,6 +17,14 @@ Utils module
    :undoc-members:
    :show-inheritance:
 
+Metrics module
+-----------------------------
+
+.. automodule:: bundesliga.utils.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Validation module
 ----------------------------------
 

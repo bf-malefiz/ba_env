@@ -53,9 +53,9 @@
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
-<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.append_csv_artifact"><code class="docutils literal notranslate"><span class="pre">append_csv_artifact()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -133,7 +133,6 @@
 <li class="toctree-l8"><a class="reference internal" href="#module-bundesliga.pipelines.data_science.nodes_ml.evaluate">evaluate</a><ul>
 <li class="toctree-l9"><a class="reference internal" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_dataset_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_dataset_metrics()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_model_metrics()</span></code></a></li>
-<li class="toctree-l9"><a class="reference internal" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner"><code class="docutils literal notranslate"><span class="pre">determine_winner()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match"><code class="docutils literal notranslate"><span class="pre">evaluate_match()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.predicted_result"><code class="docutils literal notranslate"><span class="pre">predicted_result()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.true_result"><code class="docutils literal notranslate"><span class="pre">true_result()</span></code></a></li>
@@ -157,17 +156,22 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html">utils package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.utils">Utils module</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_accuracies"><code class="docutils literal notranslate"><span class="pre">calculate_day_accuracies()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_metrics"><code class="docutils literal notranslate"><span class="pre">calculate_day_metrics()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_goal_distribution"><code class="docutils literal notranslate"><span class="pre">get_goal_distribution()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_probability"><code class="docutils literal notranslate"><span class="pre">get_probability()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_teams"><code class="docutils literal notranslate"><span class="pre">get_teams()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.merge_dicts"><code class="docutils literal notranslate"><span class="pre">merge_dicts()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.split_time_data"><code class="docutils literal notranslate"><span class="pre">split_time_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.metrics">Metrics module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.validation">Validation module</a><ul>
@@ -196,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorials.adding-metrics.html">Adding additional Metrics to MLflow</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
         </div>
@@ -239,7 +244,8 @@ and determine match outcomes.</p>
 <dt>Dependencies:</dt><dd><ul class="simple">
 <li><p>numpy as np</p></li>
 <li><p>pandas as pd</p></li>
-<li><p>bundesliga.utils.utils: brier_score, log_likelihood, rmse_mae, rps</p></li>
+<li><p>bundesliga.utils.utils: calculate_day_accuracies, calculate_day_metrics</p></li>
+<li><p>bundesliga.utils.metrics: brier_score, log_likelihood, rmse_mae, rps</p></li>
 <li><p>bundesliga.utils.validation: validate_dataframe</p></li>
 </ul>
 </dd>
@@ -303,25 +309,6 @@ accuracy, RMSE, MAE, negative log likelihood, brier score, and RPS.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner">
-<span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.nodes_ml.evaluate.</span></span><span class="sig-name descname"><span class="pre">determine_winner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner" title="Link to this definition"></a></dt>
-<dd><p>Determines the winner of a match based on predicted goal values.</p>
-<p>This function evaluates each match by comparing predicted home and away goals, and assigns a match outcome
-(“home”, “away”, or “tie”) accordingly. The result is appended as a new column “winner” to the predictions DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>predictions</strong> (<em>pd.DataFrame</em>) – A DataFrame containing predicted goals with columns “home_goals” and “away_goals”.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The modified DataFrame including a new “winner” column indicating the predicted match outcome.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match">
 <span class="sig-prename descclassname"><span class="pre">bundesliga.pipelines.data_science.nodes_ml.evaluate.</span></span><span class="sig-name descname"><span class="pre">evaluate_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FootballModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match" title="Link to this definition"></a></dt>
 <dd><p>Evaluates the performance of a football match prediction model for a single match.</p>
@@ -361,10 +348,10 @@ to the highest probability.</p>
 <dd class="field-odd"><p><strong>probs_row</strong> (<em>pd.Series</em>) – A row containing predicted probabilities with keys “home”, “away”, and “tie”.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The predicted outcome (“home”, “away”, or “tie”) based on the maximum probability.</p>
+<dd class="field-even"><p>The predicted outcome (“home”=0, “away”=1, or “tie”=2) based on the maximum probability.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,10 +366,10 @@ to the highest probability.</p>
 <dd class="field-odd"><p><strong>df_row</strong> (<em>pd.Series</em>) – A row from a DataFrame containing “home_goals” and “away_goals”.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>“home” if the home team wins, “away” if the away team wins, or “tie” if both teams score equally.</p>
+<dd class="field-even"><p>0 if the home team wins, 1 if the away team wins, or 2 if both teams score equally.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>

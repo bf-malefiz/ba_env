@@ -50,9 +50,9 @@
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.None"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.None</span></code></a></li>
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_dataset_loaded"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_dataset_loaded()</span></code></a></li>
 <li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.after_node_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.after_node_run()</span></code></a></li>
-<li class="toctree-l6"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run"><code class="docutils literal notranslate"><span class="pre">ModelTrackingHooks.before_pipeline_run()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.append_csv_artifact"><code class="docutils literal notranslate"><span class="pre">append_csv_artifact()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -130,7 +130,6 @@
 <li class="toctree-l8"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#module-bundesliga.pipelines.data_science.nodes_ml.evaluate">evaluate</a><ul>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_dataset_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_dataset_metrics()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics"><code class="docutils literal notranslate"><span class="pre">aggregate_model_metrics()</span></code></a></li>
-<li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner"><code class="docutils literal notranslate"><span class="pre">determine_winner()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.evaluate_match"><code class="docutils literal notranslate"><span class="pre">evaluate_match()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.predicted_result"><code class="docutils literal notranslate"><span class="pre">predicted_result()</span></code></a></li>
 <li class="toctree-l9"><a class="reference internal" href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.true_result"><code class="docutils literal notranslate"><span class="pre">true_result()</span></code></a></li>
@@ -154,17 +153,22 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="bundesliga.utils.html">utils package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.utils">Utils module</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_accuracies"><code class="docutils literal notranslate"><span class="pre">calculate_day_accuracies()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_metrics"><code class="docutils literal notranslate"><span class="pre">calculate_day_metrics()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_goal_distribution"><code class="docutils literal notranslate"><span class="pre">get_goal_distribution()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_probability"><code class="docutils literal notranslate"><span class="pre">get_probability()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.get_teams"><code class="docutils literal notranslate"><span class="pre">get_teams()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.merge_dicts"><code class="docutils literal notranslate"><span class="pre">merge_dicts()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
 <li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.utils.split_time_data"><code class="docutils literal notranslate"><span class="pre">split_time_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.metrics">Metrics module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.brier_score"><code class="docutils literal notranslate"><span class="pre">brier_score()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.log_likelihood"><code class="docutils literal notranslate"><span class="pre">log_likelihood()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rmse_mae"><code class="docutils literal notranslate"><span class="pre">rmse_mae()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rps"><code class="docutils literal notranslate"><span class="pre">rps()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="bundesliga.utils.html#bundesliga.utils.metrics.rps_3"><code class="docutils literal notranslate"><span class="pre">rps_3()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="bundesliga.utils.html#module-bundesliga.utils.validation">Validation module</a><ul>
@@ -193,6 +197,7 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorials.adding-metrics.html">Adding additional Metrics to MLflow</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
         </div>
@@ -225,7 +230,6 @@
  <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
- | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
@@ -253,15 +257,15 @@
 </li>
       <li><a href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.aggregate_model_metrics">aggregate_model_metrics() (in module bundesliga.pipelines.data_science.nodes_ml.evaluate)</a>
 </li>
+      <li><a href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.append_csv_artifact">append_csv_artifact() (in module bundesliga.hooks.model_tracking_hooks)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bundesliga.hooks.html#bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks.before_pipeline_run">before_pipeline_run() (bundesliga.hooks.model_tracking_hooks.ModelTrackingHooks method)</a>
-</li>
-      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.brier_score">brier_score() (in module bundesliga.utils.utils)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.metrics.brier_score">brier_score() (in module bundesliga.utils.metrics)</a>
 </li>
       <li><a href="bundesliga.html#bundesliga.pipeline_registry.build_engine_pipelines">build_engine_pipelines() (in module bundesliga.pipeline_registry)</a>
 </li>
@@ -403,6 +407,13 @@
 </li>
       </ul></li>
       <li>
+    bundesliga.utils.metrics
+
+      <ul>
+        <li><a href="bundesliga.utils.html#module-bundesliga.utils.metrics">module</a>
+</li>
+      </ul></li>
+      <li>
     bundesliga.utils.utils
 
       <ul>
@@ -422,23 +433,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_model_definition_node">create_model_definition_node() (in module bundesliga.pipelines.data_science)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_accuracies">calculate_day_accuracies() (in module bundesliga.utils.utils)</a>
 </li>
-      <li><a href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.create_pipeline">create_pipeline() (in module bundesliga.pipelines.data_processing)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.calculate_day_metrics">calculate_day_metrics() (in module bundesliga.utils.utils)</a>
+</li>
+      <li><a href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_model_definition_node">create_model_definition_node() (in module bundesliga.pipelines.data_science)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="bundesliga.pipelines.data_processing.html#bundesliga.pipelines.data_processing.create_pipeline">create_pipeline() (in module bundesliga.pipelines.data_processing)</a>
+</li>
       <li><a href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_subpipeline_for_match">create_subpipeline_for_match() (in module bundesliga.pipelines.data_science)</a>
 </li>
       <li><a href="bundesliga.pipelines.data_science.html#bundesliga.pipelines.data_science.create_walk_forward_pipeline">create_walk_forward_pipeline() (in module bundesliga.pipelines.data_science)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="D">D</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bundesliga.pipelines.data_science.nodes_ml.html#bundesliga.pipelines.data_science.nodes_ml.evaluate.determine_winner">determine_winner() (in module bundesliga.pipelines.data_science.nodes_ml.evaluate)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -504,7 +511,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.log_likelihood">log_likelihood() (in module bundesliga.utils.utils)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.metrics.log_likelihood">log_likelihood() (in module bundesliga.utils.metrics)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -562,6 +569,8 @@
 </li>
         <li><a href="bundesliga.utils.html#module-bundesliga.utils">bundesliga.utils</a>
 </li>
+        <li><a href="bundesliga.utils.html#module-bundesliga.utils.metrics">bundesliga.utils.metrics</a>
+</li>
         <li><a href="bundesliga.utils.html#module-bundesliga.utils.utils">bundesliga.utils.utils</a>
 </li>
         <li><a href="bundesliga.utils.html#module-bundesliga.utils.validation">bundesliga.utils.validation</a>
@@ -609,11 +618,11 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.rmse_mae">rmse_mae() (in module bundesliga.utils.utils)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.metrics.rmse_mae">rmse_mae() (in module bundesliga.utils.metrics)</a>
 </li>
-      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.rps">rps() (in module bundesliga.utils.utils)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.metrics.rps">rps() (in module bundesliga.utils.metrics)</a>
 </li>
-      <li><a href="bundesliga.utils.html#bundesliga.utils.utils.rps_3">rps_3() (in module bundesliga.utils.utils)</a>
+      <li><a href="bundesliga.utils.html#bundesliga.utils.metrics.rps_3">rps_3() (in module bundesliga.utils.metrics)</a>
 </li>
   </ul></td>
 </tr></table>
