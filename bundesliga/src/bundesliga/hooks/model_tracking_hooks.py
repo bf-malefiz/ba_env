@@ -1,6 +1,9 @@
+import os
+import tempfile
 from typing import Any
 
 import mlflow
+import pandas as pd
 from kedro.framework.hooks import hook_impl
 from kedro.pipeline.node import Node
 
@@ -143,14 +146,17 @@ class ModelTrackingHooks:
             out_names = node._outputs
             model_mean_metrics = outputs[out_names[0]]
             nested_run_name = outputs[out_names[1]]
+            results = outputs[out_names[2]]
 
             # Log metrics and parameters to MLflow
             active_run = mlflow.active_run()
+
+            append_csv_artifact(active_run, results, "results.csv")
             if active_run is not None:
                 with mlflow.start_run(
                     run_name=nested_run_name,
                     nested=True,
-                ) as run:
+                ) as childrun:
                     mlflow.log_metrics(model_mean_metrics)
                     mlflow.log_params(
                         {
@@ -160,3 +166,48 @@ class ModelTrackingHooks:
                             "seed": settings.SEED,
                         }
                     )
+
+
+def append_csv_artifact(
+    run: mlflow.ActiveRun, new_data: pd.DataFrame, artifact_filename: str
+):
+    """
+    Appends new_data (a pandas DataFrame) to an existing CSV artifact.
+    If the artifact does not exist yet, new_data is logged as the initial artifact.
+
+    Parameters:
+        new_data (pd.DataFrame): New data to append.
+        artifact_filename (str): The filename of the CSV artifact (e.g., "data.csv").
+    """
+    run_id = run.info.run_id
+
+    # Create a temporary directory for artifact operations.
+    tmp_dir = tempfile.mkdtemp()
+    local_artifact_path = os.path.join(tmp_dir, artifact_filename)
+
+    try:
+        existing_artifact_path = mlflow.artifacts.download_artifacts(
+            run_id=run_id, artifact_path=artifact_filename
+        )
+        existing_data = pd.read_csv(existing_artifact_path)
+        print("Existing artifact found. Appending new data.")
+    except Exception as e:
+        print("Artifact not found, starting with new data.")
+        existing_data = pd.DataFrame()
+
+    # Append the new data
+    if not existing_data.empty:
+        combined_data = pd.concat([existing_data, new_data], ignore_index=True)
+    else:
+        combined_data = new_data
+
+    # Save the combined DataFrame to the temporary CSV file.
+    combined_data.to_csv(local_artifact_path, index=False)
+
+    # Log the updated CSV artifact. Note that MLflow artifacts are immutable,
+    # so this will log a new version of the artifact.
+    mlflow.log_artifact(
+        local_artifact_path, artifact_path=""
+    )  # logging at the root artifact directory
+
+    print(f"Updated artifact '{artifact_filename}' has been logged.")

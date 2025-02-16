@@ -174,6 +174,7 @@ def eval_model_pipeline(engine: str, variant: str) -> Pipeline:
                     outputs=[
                         f"{engine}.{variant}.model_metrics",
                         f"{engine}.{variant}.nested_run_name",
+                        f"{engine}.{variant}.results",
                     ],
                     name=f"{engine}.{variant}.model_metrics_node",
                     tags=[engine, variant],
@@ -282,7 +283,6 @@ def create_subpipeline_for_match(match: int) -> Pipeline:
                 inputs={
                     "team_lexicon": "team_lexicon",
                     "model_options": "params:model_options",
-                    # "toto": f"toto_{match}",
                 },
                 outputs=f"init_model_{match}",
                 name=f"init_model_node_{match}",
