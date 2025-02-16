@@ -7,7 +7,6 @@
 
 A modular framework for probabilistic football match predictions, built with **Kedro** for pipeline orchestration and **MLflow** for experiment tracking. Developed as part of a B.Sc. thesis at HTW Berlin.
 
-![Pipeline Visualization](docs/source/_static/pipeline_viz.png)
 
 ## 📖 Overview
 
