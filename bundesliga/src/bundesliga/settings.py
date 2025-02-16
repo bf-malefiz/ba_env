@@ -77,7 +77,7 @@ CONFIG_LOADER_ARGS = {
 
 # Define the mapping for dynamic pipelines
 DYNAMIC_PIPELINES_MAPPING = {
-    "pymc": ["simple"],
+    "pymc": ["simple", "toto"],
     "pyro": ["simple", "simple2"],
 }
 
