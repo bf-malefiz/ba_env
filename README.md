@@ -56,6 +56,7 @@ Configure models and parameters in:
 ## 📚 Documentation
 For detailed usage, architecture, and extension guide:  
 📘 **[See Documentation - htmlpreview](http://htmlpreview.github.io/?https://github.com/bf-malefiz/ba_env/blob/main/bundesliga/docs/build/html/index.html)**
+
 For a better experience download the documentation and open it localy
 
 ## 📜 License
