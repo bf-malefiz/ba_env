@@ -175,9 +175,10 @@ def append_csv_artifact(
     Appends new_data (a pandas DataFrame) to an existing CSV artifact.
     If the artifact does not exist yet, new_data is logged as the initial artifact.
 
-    Parameters:
+    Args:
+        run (mlflow.ActiveRun): The active MLflow run.
         new_data (pd.DataFrame): New data to append.
-        artifact_filename (str): The filename of the CSV artifact (e.g., "data.csv").
+        artifact_filename (str): The filename of the CSV artifact (e.g., "results.csv").
     """
     run_id = run.info.run_id
 
