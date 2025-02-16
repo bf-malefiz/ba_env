@@ -223,7 +223,18 @@ def aggregate_model_metrics(
         "brier_score": mean_brier_score,
         "rps": mean_rps,
     }
-    return mean_model_metrics, nested_run_name
+
+    results = mean_model_metrics.copy()
+    results.update(
+        {
+            "engine": engine,
+            "variant": variant,
+            "seed": seed,
+        }
+    )
+    results = pd.DataFrame.from_dict([results])
+
+    return mean_model_metrics, nested_run_name, results
 
 
 def true_result(df_row):
