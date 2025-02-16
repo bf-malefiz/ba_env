@@ -55,7 +55,8 @@ Configure models and parameters in:
 
 ## 📚 Documentation
 For detailed usage, architecture, and extension guide:  
-📘 **[See Documentation](http://htmlpreview.github.io/?https://github.com/bf-malefiz/ba_env/blob/main/bundesliga/docs/build/html/index.html)**
+📘 **[See Documentation - htmlpreview](http://htmlpreview.github.io/?https://github.com/bf-malefiz/ba_env/blob/main/bundesliga/docs/build/html/index.html)**
+For a better experience download the documentation and open it localy
 
 ## 📜 License
 This project is licensed under the MIT License - see the [LICENSE](bundesliga/docs/build/html/license.html) file for details.
