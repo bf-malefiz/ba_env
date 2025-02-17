@@ -8,6 +8,11 @@
 A modular framework for probabilistic football match predictions, built with **Kedro** for pipeline orchestration and **MLflow** for experiment tracking. Developed as part of a B.Sc. thesis at HTW Berlin.
 
 
+ <a href="https://github.com/bf-malefiz/ba_env/blob/main/fig/final/architecture.jpg?raw=true" target="_blank">
+  <img src="https://github.com/bf-malefiz/ba_env/blob/main/fig/final/architecture.jpg?raw=true" alt="drawing" width="400"/>
+
+ </a>
+
 ## 📖 Overview
 
 This repository contains a reproducible machine learning system for:
@@ -56,8 +61,11 @@ Configure models and parameters in:
 ## 📚 Documentation
 For detailed usage, architecture, and extension guide:  
 📘 **[See Documentation - htmlpreview](http://htmlpreview.github.io/?https://github.com/bf-malefiz/ba_env/blob/main/bundesliga/docs/build/html/index.html)**
-
 For a better experience download the documentation and open it localy
+
+
+<img src="https://github.com/bf-malefiz/ba_env/blob/main/fig/final/docu.jpg?raw=true" alt="drawing" width="700"/>
+
 
 ## 📜 License
 This project is licensed under the MIT License - see the [LICENSE](bundesliga/docs/build/html/license.html) file for details.
