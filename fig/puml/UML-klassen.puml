@@ -1,0 +1,65 @@
+@startuml UML-Klassen
+
+' Abstrakte Basisklasse
+abstract class FootballModel {
+  +train(X: DataFrame, y: Series, **kwargs): void
+  +predict_toto_probabilities(predictions: DataFrame, **kwargs): np.ndarray
+  #_validate_output(output: np.ndarray): void
+}
+
+' Modell Builder als allgemeine Basis für PymcModel
+abstract class ModelBuilder {
+  +train(X: DataFrame, y: Series): InferenceData
+  #_data_setter(X: DataFrame, y: Series): void
+}
+
+' Pyro Engine und ihre Modelle
+class PyroModel extends FootballModel {
+  -team_lexicon: dict
+  -model_config: dict
+  -sampler_config: dict
+  +train(X: DataFrame, y: Series, parameters: dict): void
+  +get_probs_winner_from_goal_results(goals_of_team_1, goals_of_team_2): np.ndarray
+  +predict_toto_probabilities(predictions: DataFrame, **kwargs): np.ndarray
+}
+
+class SimplePyroModel extends PyroModel {
+  -prior_diff: float
+  +predict_goals(test_data: DataFrame): DataFrame
+  +get_diffs(team_1, team_2, num_games: int): Tuple[np.ndarray, np.ndarray]
+  +get_model(): callable
+  +get_guide(): callable
+}
+
+' PymcModel erbt von ModelBuilder und FootballModel
+class PymcModel extends ModelBuilder, FootballModel {
+  -model_config: dict
+  -sampler_config: dict
+  +output_var: str
+  +_serializable_model_config: dict
+
+  #_data_setter(X: DataFrame, y: Series): void
+  #_generate_and_preprocess_model_data(X: DataFrame, y: Series): void
+  #_save_input_params(idata): void
+  +build_model(X: DataFrame, y: Series): void
+  +get_default_model_config(): dict
+  +get_default_sampler_config(): dict
+  +train(X: DataFrame, y: Series): InferenceData
+  +predict_goals(test_data: DataFrame): DataFrame
+  +predict_toto_probabilities(predictions: DataFrame): np.ndarray
+
+
+}
+
+class SimplePymcModel extends PymcModel {
+  +build_model(X: DataFrame, y: Series): void
+}
+legend right
+| Zeichen | Feld-Icon | Methoden-Icon | Sichtbarkeit |
+| -      | <color:#E74C3C>▢</color>            | <color:#E74C3C>■</color>            | **private** |
+| #      | <color:#F1C40F>◇</color>            | <color:#F1C40F>◆</color>            | **protected** |
+| ~      | <color:#3498DB>△</color>            | <color:#3498DB>▲</color>            | **package-private** |
+| +      | <color:#2ECC71>○</color>            | <color:#2ECC71>●</color>            | **public** |
+endlegend
+
+@enduml

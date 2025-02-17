@@ -1,0 +1,54 @@
+@startuml
+
+actor Client
+
+control "create_pipeline" as CP
+participant "build_team_lexicon" as BT
+participant "get_goal_results" as GG
+participant "vectorize_data" as VD
+participant "pipeline_base" as PL_Base
+boundary "settings.DATASETS" as DS
+participant "pipeline_dataset" as PL_Dataset
+
+' Aufruf der Funktion mit den entsprechenden Parametern
+Client -> CP : call create_pipeline(kwargs: dict<String,Any>)
+activate CP
+
+' Aufruf der einzelnen Nodes innerhalb der Basis-Pipeline:
+CP -> BT : build_team_lexicon(input: CSV: DataFrame)
+activate BT
+BT --> CP : team_lexicon: DataFrame
+deactivate BT
+
+CP -> GG : get_goal_results(input: CSV: DataFrame,\n team_lexicon: DataFrame)
+activate GG
+GG --> CP : goals: DataFrame
+deactivate GG
+
+CP -> VD : vectorize_data(input: goals: DataFrame)
+activate VD
+VD --> CP : vectorized_data: DataFrame
+deactivate VD
+
+' Erstellung der Basis-Pipeline, die die drei Nodes umfasst
+CP -> PL_Base : create base pipeline(\n nodes: list<Node> = [build_team_lexicon,\n  get_goal_results,\n  vectorize_data])
+PL_Base --> CP : data_processing: Pipeline
+
+' Zugriff auf die Datenkonfiguration
+CP -> DS : read DATASETS: list<String>
+DS --> CP : datasets_list: list<String>
+
+' Für jeden Datensatz wird eine Subpipeline erzeugt
+alt for each dataset in datasets_list
+  loop for each dataset in datasets_list
+    CP -> PL_Dataset : wrap data_processing(\n namespace: dataset_name: String,\n tags: {pipeline_name: "ETL", dataset: dataset_name}:dict<String,String>)
+    PL_Dataset --> CP : dataset_pipeline: Pipeline
+  end
+end
+
+' Kombination aller dataset-spezifischen Pipelines
+CP -> CP : combine all dataset_pipelines: Pipeline
+CP --> Client : return combined pipeline: Pipeline
+
+deactivate CP
+@enduml

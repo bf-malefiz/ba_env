@@ -1,0 +1,81 @@
+@startuml
+
+actor Client
+
+control "register_pipelines" as RP
+boundary "load_config" as LC
+participant "create_etl_pipeline" as CET
+control "build_engine_pipelines" as BEP
+boundary "settings" as S 
+participant "pipeline_wrapper" as PW
+participant "pipeline_combinator" as PC
+
+' Aufruf der Funktion register_pipelines
+Client -> RP : call register_pipelines() : dict<String, Pipeline>
+activate RP
+
+' Laden der Konfiguration
+RP -> LC : load_config() : ConfigDict
+activate LC
+LC --> RP : parameters: dict<String, Any>
+deactivate LC
+
+' Extrahieren der benötigten Parameter
+RP -> RP : extract start_match: int\nand last_match: int\nfrom parameters["model_options"]
+
+' Erzeugen des ETL-Pipelines
+RP -> CET : create_etl_pipeline() : Pipeline
+activate CET
+CET --> RP : etl_pipeline: Pipeline
+deactivate CET
+
+RP -> RP : pipeline_dict = { "etl": etl_pipeline }
+  
+' Zugriff auf Settings-Daten
+RP -> S : get DYNAMIC_PIPELINES_MAPPING : dict<String, list<String>>
+S --> RP : dynamic_mapping: dict<String, list<String>>
+
+RP -> S : get DATASETS : list<String>
+S --> RP : datasets: list<String>
+
+' Iteration über jede Engine in dynamic_mapping
+loop for each (engine: String, variants: list<String>) in dynamic_mapping
+    RP -> BEP : build_engine_pipelines(engine: String,\n variants: list<String>,\n start_match: int,\n last_match: int) : Pipeline
+    activate BEP
+    BEP --> RP : engine_pipeline: Pipeline
+    deactivate BEP
+    
+    ' Kombination des ETL-Pipelines mit der engine-spezifischen Pipeline
+    RP -> PC : combine(etl_pipeline: Pipeline,\n engine_pipeline: Pipeline) : Pipeline
+    activate PC
+    PC --> RP : combined_pipeline: Pipeline
+    deactivate PC
+    
+    ' Wrapper um die kombinierte Pipeline mit Tags
+    RP -> PW : wrap(combined_pipeline: Pipeline,\n tags: dict<String,String> = {pipeline_name: "_" + engine}) : Pipeline
+    activate PW
+    PW --> RP : wrapped_pipeline: Pipeline
+    deactivate PW
+    
+    RP -> RP : pipeline_dict[engine] = wrapped_pipeline
+    RP -> RP : default_pipelines += engine_pipeline
+end
+
+' Kombination aller engine-Pipelines zu einer Default-Pipeline
+RP -> PC : combine(default_pipelines: Pipeline,\n etl_pipeline: Pipeline) : Pipeline
+activate PC
+PC --> RP : default_pipeline: Pipeline
+deactivate PC
+
+' Wrapper um die Default-Pipeline
+RP -> PW : wrap(default_pipeline: Pipeline,\n tags: dict<String,String> = {pipeline_name: "__default__"}) : Pipeline
+activate PW
+PW --> RP : wrapped_default_pipeline: Pipeline
+deactivate PW
+
+RP -> RP : pipeline_dict["__default__"] = wrapped_default_pipeline
+
+RP --> Client : return pipeline_dict : dict<String, Pipeline>
+deactivate RP
+
+@enduml

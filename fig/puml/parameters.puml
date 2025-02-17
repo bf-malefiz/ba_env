@@ -1,0 +1,42 @@
+@startyaml parameters
+
+model_options:
+  model: ""
+  engine: ""
+  start_day: 20
+  walk_forward: 100
+  test_size: 0.2
+  model_config: null
+  sampler_config: 
+    random_seed: 42
+pymc:
+  _overrides_base:
+    engine: "pymc"
+    model_config: ""
+    sampler_config:
+      chains: 2
+      draws: 10000
+      tune: 1000
+      target_accept: 0.9
+  simple:
+    _overrides:
+      model: "simple"
+      model_config:prior_params{...}
+    model_options: ${merge:...}
+  ...:...
+pyro:
+  _overrides_base:
+    engine: "pyro"
+    model_config:
+      betas: [0.95, 0.999]
+      learning_rate: 0.005
+      prior_diff: 1.5
+  simple:
+    _overrides:
+      model: "simple"
+      model_config:...
+    model_options: ${merge:...}
+  ...:...
+    
+...:...
+@endyaml

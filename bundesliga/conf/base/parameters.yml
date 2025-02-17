@@ -21,7 +21,7 @@ model_options:
   model: ""  # The type of model to use (e.g., "simple", "toto").
   engine: ""  # The engine to use for the model (e.g., "pymc", "pyro").
   start_match: 1  # The starting day for the data.
-  last_match: 5  # Last match to consider for predicting. Choose null for predicting on the whole dataset.
+  last_match: null  # Last match to consider for predicting. Choose null for predicting on the whole dataset.
 
   # Model-specific configuration options.
   model_config: # Define in model-specific config.

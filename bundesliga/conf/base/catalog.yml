@@ -134,9 +134,13 @@
 "{engine}.{variant}.results":
   type: pandas.CSVDataset  # Underlying dataset type (CSV).
   filepath: data/08_reporting/{engine}/{variant}/results.csv  # Path to the CSV file.
+  fs_args:
+    open_args_save: 
+      mode: "a" 
   save_args:
       index: False
       mode: "a"
+      lineterminator: "\n"
   metadata:
     kedro-viz:
       layer: reporting  # Layer in the data pipeline.

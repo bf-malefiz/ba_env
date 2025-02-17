@@ -1,0 +1,42 @@
+@startuml Datenfluss
+
+package "Datenquellen" {
+  [CSV-Daten (Rohdaten)]
+}
+
+package "Kedro Pipelines" {
+  [ETL-Pipeline]
+  [ML-Pipeline]
+  [Evaluations-Pipeline]
+}
+
+package "Datenoutputs" {
+  [Strukturierte Daten]
+  [Trainierte Modelle]
+  [Berichte]
+}
+
+package "Tracking & Logging" {
+  [MLFlow]
+}
+
+
+
+package "Visualisierung" {
+  [Berichtsvisualisierung]
+}
+[CLI (Kedro)] -> [Kedro Pipelines]
+[Datenquellen] --> [Kedro Pipelines]
+[ETL-Pipeline] --> [Strukturierte Daten]
+[Strukturierte Daten] --> [ML-Pipeline]
+[ML-Pipeline] --> [Trainierte Modelle]
+[Trainierte Modelle] --> [Evaluations-Pipeline]
+[Evaluations-Pipeline] --> [Berichte]
+[ML-Pipeline] -> [MLFlow]
+[Evaluations-Pipeline] -> [MLFlow]
+[Berichte] --> [Berichtsvisualisierung]
+
+
+
+
+@enduml

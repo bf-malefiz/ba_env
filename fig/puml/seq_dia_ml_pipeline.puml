@@ -1,0 +1,83 @@
+@startuml
+title Sequence Diagram for ml_pipeline
+
+actor Client
+
+control "ml_pipeline" as ML
+control "create_walk_forward_pipeline" as WF
+control "create_subpipeline_for_match" as SP
+participant "pipeline_wrapper" as PW
+
+' Die einzelnen Nodes als symbolische Schritte:
+participant "match_node" as MN
+participant "split_node" as SN
+participant "init_model_node" as IN
+participant "fit_node" as FN
+participant "predict_node" as PN
+participant "evaluate_node" as EN
+
+== Aufruf der ml_pipeline ==
+Client -> ML : call ml_pipeline(start_match: int,\n last_match: int,\n variant: String,\n dataset_name: String)
+activate ML
+
+ML -> WF : create_walk_forward_pipeline(start_match: int,\n last_match: int)
+activate WF
+
+' Iteration über jeden Match:
+loop for each match in [start_match, last_match]
+    WF -> SP : create_subpipeline_for_match(match: int)
+    activate SP
+
+    ' Erzeugen des Match-Identifiers:
+    SP -> MN : execute lambda() with parameter (match: int)
+    activate MN
+    MN --> SP : return "match_{match}" : String
+    deactivate MN
+
+    ' Aufteilung der Daten in Training und Test:
+    SP -> SN : split_time_data(vectorized_data: DataFrame,\n current_match: String)
+    activate SN
+    SN --> SP : return (train_data_{match}: DataFrame, test_data_{match}: DataFrame)
+    deactivate SN
+
+    ' Initialisierung des Modells:
+    SP -> IN : init_model(team_lexicon: DataFrame,\n model_options: dict)
+    activate IN
+    IN --> SP : return init_model_{match} : Model
+    deactivate IN
+
+    ' Training des Modells:
+    SP -> FN : train(model: Model,\n train_data: DataFrame,\n model_options: dict)
+    activate FN
+    FN --> SP : return model_{match} : Model
+    deactivate FN
+
+    ' Vorhersage der Tore:
+    SP -> PN : predict_goals(model: Model,\n test_data: DataFrame)
+    activate PN
+    PN --> SP : return predictions_{match} : Predictions
+    deactivate PN
+
+    ' Evaluation:
+    SP -> EN : evaluate_match(model: Model,\n test_data: DataFrame,\n predictions: Predictions)
+    activate EN
+    EN --> SP : return metrics_{match} : Metrics
+    deactivate EN
+
+    SP --> WF : return subpipeline for match
+    deactivate SP
+end
+
+WF --> ML : return combined walk-forward pipeline
+deactivate WF
+
+' Kapselung der Walk-Forward-Pipeline in die ML-Pipeline:
+ML -> PW : wrap pipeline with inputs {team_lexicon: DataFrame, vectorized_data: DataFrame},\n parameters {model_options: dict},\n namespace: (dataset_name.variant: String),\n tags: [variant: String, dataset_name: String]
+activate PW
+PW --> ML : return base ML pipeline
+deactivate PW
+
+ML --> Client : return combined ML pipeline
+deactivate ML
+
+@enduml

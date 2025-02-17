@@ -1,0 +1,10 @@
+@startuml data_science
+
+start
+group create_pipeline
+  :build_team_lexicon();
+  :get_goal_results();
+  :vectorize_data();
+end group
+
+stop

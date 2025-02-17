@@ -1,0 +1,88 @@
+@startuml architektur
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+AddRelTag("sync", $textColor="black", $lineColor="black", $lineStyle = DashedLine())
+
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/devicons/python.puml
+!include $ICONURL/devicons/msql_server.puml
+!include $ICONURL/font-awesome-6/users.puml
+!include $ICONURL/devicons2/flask_original.puml
+!include $ICONURL/devicons2/yaml.puml
+!include $ICONURL/devicons2/bash.puml
+
+AddRelTag("service1", $textColor="red")
+
+Person(user, "Data Scientist / Entwickler", "Nutzt das System, um Modelle zu trainieren und zu evaluieren.")
+
+Container(doc, "Dokumentation", "Sphinx", "Stellt die Systemdokumentation zur Verfügung.",$sprite="python")    
+
+
+System_Boundary(MLSystem, "BA - Bayesian Model Evaluation Framework") {
+    Container(cli, "CLI", "Kommandozeilen-Schnittstelle", "Nutzer interagiert über die Kommandozeile.",$sprite="bash")
+
+    Component(dsPipe, "data_science", "Python", "Pipeline zur Koordination von Training und Evaluierung.",$sprite="python")
+    Component(etlPipe, "data_processing", "Python", "Pipeline zur Koordination der ETL Prozesse.",$sprite="python")
+            
+    Container(utils, "Utilities", "Python", "Stellt Hilfsmethoden für das gesamte Framework bereit.",$sprite="python") {
+        Component(val, "Validation", "Python", "Stellt einen Decorator zur Validierung von DataFrames.")
+        Component(metric, "Metrics", "Python", "Methoden zur Berechnung von Metriken.")
+        Component(utilComp, "Utilities", "Python", "Hilfsmethoden.")
+            }
+    Container(model, "Model", "Python", "Modellierungsmodul das die implementierte\n abstrakte FootballModel-Klasse und explizite Modelle bereitstellt.",$sprite="python"){
+        Component(pymc, "PyMC", "Python", "Stellt Implementationen der PyMC Modelle bereit.")
+        Component(pyro, "Pyro", "Python", "Stellt Implementationen der Pyro Modelle bereit.")
+            }
+
+
+    Component(modelHook, "Model-Tracking-Hooks", "Python", "Hooks die in den Kedro Prozess eingreifen.",$sprite="python")
+        
+
+    Component(registry, "Pipeline-Registry", "Python", "Verwaltet die registrierten Pipelines data_processing und data_science.",$sprite="python")
+
+    Container(mlflow, "MLFlow", "Tracking- und Logging-Tool", $descr="Protokolliert Experimente.",$sprite="flask_original")
+
+
+    Component(conf, "conf", "YAML", "Legt die Modell und lokalen Parameter fest .",$sprite="yaml")
+    Component(settingsComp, "settings", "Python", "Legt die globalen Einstellungen des Runners fest.",$sprite="python")
+            
+    
+    ContainerDb(filesystem, "Dateisystem", "local", "Speichert Rohdaten, verarbeitete Daten und Ergebnisartefakte.")
+
+
+}
+Rel_D(user, cli, "Startet Trainings- und Evaluationsjobs", "CLI / Notebook")
+Rel_R(user, doc, "Liest die Systemdokumentation", "Webbrowser")
+Rel_D(cli, registry, "Startet","register_pipelines")
+Rel_L(modelHook, dsPipe, "Liest","nodes.output")
+Rel_R(modelHook, mlflow, "Protokolliert","nodes.output")
+Rel_D(registry,dsPipe, "Instanziert","Pipelines")
+Rel_D(registry,etlPipe, "Instanziert","Pipelines")
+Rel_R(registry,filesystem, "Liest","CSV")
+
+Rel_U(etlPipe, filesystem, "Liest & Schreibt","DataCatalog")
+Rel_U(dsPipe, filesystem, "Liest  & Schreibt","DataCatalog")
+
+Rel_L(registry,settingsComp, "Importiert","DYNAMIC_PIPELINES_MAPPING,\nDATASETS")
+Rel_D(registry,utilComp, "Importiert","load_config")
+
+
+Rel_D(utilComp, conf, "Liest","parameters")
+Rel_D(dsPipe, utilComp, "Importiert","split_time_data")
+Rel_D(dsPipe, metric, "Importiert","Metriken")
+
+
+
+Rel_L(etlPipe, settingsComp, "Importiert","DATASETS")
+Rel_L(dsPipe, settingsComp, "Importiert","DATASETS,\nSEED")
+
+
+
+Rel_U(dsPipe,pymc, "Instanziert","PymcModel")
+Rel_R(dsPipe,pyro, "Instanziert","PyroModel")
+
+
+Rel_D(dsPipe,val, "Importiert","Decorator")
+Rel_D(etlPipe,val, "Importiert","Decorator")
+SHOW_LEGEND()
+@enduml

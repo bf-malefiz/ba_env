@@ -1,0 +1,13 @@
+@startuml data_science
+
+start
+group create_subpipeline_for_match
+  :lambda(str(match));
+  :split_time_data();
+  :init_model();
+  :train();
+  :predict_goals();
+  :evaluate_match();
+end group
+
+stop
