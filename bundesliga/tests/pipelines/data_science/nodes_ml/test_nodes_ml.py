@@ -32,8 +32,6 @@ Referenced Components:
         Calls the model to generate goal predictions.
     - **evaluate_match**:
         Computes performance metrics such as accuracy.
-    - **determine_winner**:
-        Determines match outcomes ("home", "away", "tie") based on predicted goal tallies.
     - **true_result**:
         Identifies the actual match outcome given the real final score.
     - **predicted_result**:
@@ -80,7 +78,6 @@ import pytest
 from bundesliga.model.pymc.pymc_simple_model import SimplePymcModel
 from bundesliga.model.pyro.pyro_simple_model import SimplePyroModel
 from bundesliga.pipelines.data_science.nodes_ml.evaluate import (
-    determine_winner,
     evaluate_match,
     predicted_result,
     true_result,
@@ -239,9 +236,9 @@ def test_evaluate_home_win(sample_test_data, dummy_predictions):
     mock_model = MagicMock()
     mock_model.predict_toto_probabilities.return_value = np.array([[0.6, 0.2, 0.2]])
     results = evaluate_match(
-        mock_model, match=1, test_data=sample_test_data, predictions=dummy_predictions
+        mock_model, test_data=sample_test_data, predictions=dummy_predictions
     )
-    assert results["predicted_result"] == "home"
+    assert results["predicted_result"] == 0
 
 
 def test_true_result():
@@ -254,9 +251,9 @@ def test_true_result():
     row_home_win = pd.Series({"home_goals": 3, "away_goals": 1})
     row_away_win = pd.Series({"home_goals": 1, "away_goals": 4})
     row_tie = pd.Series({"home_goals": 2, "away_goals": 2})
-    assert true_result(row_home_win) == "home"
-    assert true_result(row_away_win) == "away"
-    assert true_result(row_tie) == "tie"
+    assert true_result(row_home_win) == 0
+    assert true_result(row_away_win) == 1
+    assert true_result(row_tie) == 2
 
 
 def test_predicted_result():
@@ -269,6 +266,6 @@ def test_predicted_result():
     probs_home = pd.Series({"home": 0.5, "away": 0.3, "tie": 0.2})
     probs_away = pd.Series({"home": 0.3, "away": 0.6, "tie": 0.1})
     probs_tie = pd.Series({"home": 0.2, "away": 0.2, "tie": 0.6})
-    assert predicted_result(probs_home) == "home"
-    assert predicted_result(probs_away) == "away"
-    assert predicted_result(probs_tie) == "tie"
+    assert predicted_result(probs_home) == 0
+    assert predicted_result(probs_away) == 1
+    assert predicted_result(probs_tie) == 2

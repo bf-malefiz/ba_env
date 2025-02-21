@@ -213,7 +213,6 @@ class TestCreateSubpipelineForMatch:
         # Check that each expected dataset is in evaluate_node.inputs
         required_inputs = [
             f"model_{match}",
-            f"match_{match}",
             f"test_data_{match}",
             f"predictions_{match}",
         ]
