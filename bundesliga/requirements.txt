@@ -19,3 +19,5 @@ pymc-experimental
 pytest
 pytest-cov
 kedro-docker
+sphinx
+sphinx-rtd-theme

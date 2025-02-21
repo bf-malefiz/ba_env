@@ -16,3 +16,19 @@ To install the required dependencies, run:
 .. code-block:: bash
     
     > pip install -r requirements.txt
+
+Add mlflow default config file to your project.:
+
+.. code-block:: bash
+    
+    > kedro mlflow init
+
+For testing the environment or building docs make sure to install the project as a package:
+
+.. code-block:: bash
+    
+    > pip install -e .
+    > pytest
+    
+    > cd docs 
+    > make html

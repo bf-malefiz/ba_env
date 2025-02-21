@@ -240,6 +240,18 @@ First create your new conda environment and activate it. We use this to install 
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </pre></div>
 </div>
+<p>Add mlflow default config file to your project.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>kedro<span class="w"> </span>mlflow<span class="w"> </span>init
+</pre></div>
+</div>
+<p>For testing the environment or building docs make sure to install the project as a package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+&gt;<span class="w"> </span>pytest
+
+&gt;<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>docs
+&gt;<span class="w"> </span>make<span class="w"> </span>html
+</pre></div>
+</div>
 </section>
 
 
