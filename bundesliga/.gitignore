@@ -13,7 +13,7 @@ data/**
 
 # except their sub-folders
 !data/01_raw/
-
+!data/08_reporting/**
 
 # keep files in data/01_raw/football-datasets
 !data/01_raw/football-datasets/
